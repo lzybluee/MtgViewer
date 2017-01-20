@@ -188,7 +188,7 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(Menu.NONE, 0, 1, "All");
         menu.add(Menu.NONE, 1, 2, "Modern");
-        menu.add(Menu.NONE, 2, 3, "Ancient");
+        menu.add(Menu.NONE, 2, 3, "Search");
         menu.add(Menu.NONE, 3, 4, "Shuffle");
         menu.add(Menu.NONE, 4, 5, "Numerical");
         menu.add(Menu.NONE, 5, 6, "Select");
@@ -201,14 +201,14 @@ public class MainActivity extends Activity {
         menu.add(Menu.NONE, 12, 13, "Promo");
         menu.add(Menu.NONE, 13, 14, "Special");
         menu.add(Menu.NONE, 14, 15, "Vanguard");
-        for (int i = 0; i < CardAnalyzer.SetList.length; i++) {
-            menu.add(Menu.NONE, i + 15, i + 16, CardAnalyzer.SetList[i][0]);
+        for (int i = 0; i < CardParser.SetList.length; i++) {
+            menu.add(Menu.NONE, i + 15, i + 16, CardParser.SetList[i][0]);
         }
         for (int i = 0; i < mMiscSets.length; i++) {
             if (i == 0)
-                menu.add(Menu.NONE, i + CardAnalyzer.SetList.length + 15, i + CardAnalyzer.SetList.length + 16, "Misc");
+                menu.add(Menu.NONE, i + CardParser.SetList.length + 15, i + CardParser.SetList.length + 16, "Misc");
             else
-                menu.add(Menu.NONE, i + CardAnalyzer.SetList.length + 15, i + CardAnalyzer.SetList.length + 16,
+                menu.add(Menu.NONE, i + CardParser.SetList.length + 15, i + CardParser.SetList.length + 16,
                         mMiscSets[i].substring(mMiscSets[i].lastIndexOf("/") + 1));
         }
         return super.onCreateOptionsMenu(menu);
@@ -223,7 +223,9 @@ public class MainActivity extends Activity {
         } else if (n == 1) {
             init("Modern");
         } else if (n == 2) {
-            init("Ancient");
+            Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+            startActivity(intent);
+            finish();
         } else if (n == 3) {
             mShuffle = true;
             Toast.makeText(this, "Shuffle", Toast.LENGTH_SHORT).show();
@@ -261,10 +263,10 @@ public class MainActivity extends Activity {
             init("Special");
         } else if (n == 14) {
             init("Vanguard");
-        } else if (n <= 14 + CardAnalyzer.SetList.length) {
-            init(CardAnalyzer.SetList[n - 15][1]);
+        } else if (n <= 14 + CardParser.SetList.length) {
+            init(CardParser.SetList[n - 15][1]);
         } else {
-            init(mMiscSets[n - 15 - CardAnalyzer.SetList.length]);
+            init(mMiscSets[n - 15 - CardParser.SetList.length]);
         }
 
         return false;

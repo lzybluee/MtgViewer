@@ -149,7 +149,7 @@ public class CardParser {
             {"Commander's Arsenal", "Reprint/CMA", "CMA"},
 
             {"Unhinged", "Unset/UNH", "UH"},
-            {"Unglued", "Unset/UGL", "UG"},
+            {"Unglued", "Unset/UGL", "UG"}
     };
 
     public static int rulePage = 0;

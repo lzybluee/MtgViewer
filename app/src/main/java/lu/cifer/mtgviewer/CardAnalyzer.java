@@ -6,339 +6,28 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class ReprintSimpleInfo {
-
-    public int multiverseid;
-    public String set;
-    public String number;
-    public String flavor;
-    public String artist;
-    public String rarity;
-    public String rating;
-    public String votes;
-
-    public String picture;
-
-    public String toString() {
-        return multiverseid + " " + set + " : " + number + " (" + rarity + ") "
-                + artist + " [" + picture + "]" + "\n";
-    }
-}
-
-class CardSimpleInfo {
-
-    public String name;
-    public String otherPart;
-    public int partIndex;
-    public boolean isSplit;
-    public boolean isDoubleFaced;
-    public boolean isFlip;
-
-    public Vector<String> types;
-    public Vector<String> subTypes;
-    public Vector<String> superTypes;
-
-    public String mana;
-    public int converted;
-    public String colorIndicator;
-
-    public String power;
-    public String toughness;
-    public String loyalty;
-
-    public String text;
-
-    public String rules;
-    public Vector<String> legal;
-    public Vector<String> restricted;
-    public Vector<String> banned;
-    public boolean reversed;
-
-    public Vector<ReprintSimpleInfo> reprints;
-
-    public String toString() {
-        StringBuilder str = new StringBuilder();
-        str.append(name + "\n");
-        if (partIndex > 0) {
-            String suffix = "ed";
-            if (Integer.toString(partIndex).endsWith("1")) {
-                suffix = "st";
-            } else if (Integer.toString(partIndex).endsWith("2")) {
-                suffix = "nd";
-            } else if (Integer.toString(partIndex).endsWith("3")) {
-                suffix = "rd";
-            }
-            str.append(partIndex + suffix
-                    + " part of the card, other part is <" + otherPart + ">\n");
-        }
-        if (superTypes.size() > 0) {
-            for (int i = 0; i < superTypes.size(); i++) {
-                str.append(superTypes.get(i));
-                if (i < superTypes.size() - 1) {
-                    str.append(" ");
-                }
-            }
-        }
-        if (types.size() > 0) {
-            if (superTypes.size() > 0) {
-                str.append(" ");
-            }
-            for (int i = 0; i < types.size(); i++) {
-                str.append(types.get(i));
-                if (i < types.size() - 1) {
-                    str.append(" ");
-                }
-            }
-        }
-        if (subTypes.size() > 0) {
-            str.append(" — ");
-            for (int i = 0; i < subTypes.size(); i++) {
-                str.append(subTypes.get(i));
-                if (i < subTypes.size() - 1) {
-                    str.append(" ");
-                }
-            }
-        }
-        if (power != null) {
-            str.append(" " + power);
-        }
-        if (toughness != null) {
-            str.append("/" + toughness);
-        }
-        if (loyalty != null) {
-            str.append(" " + "(Loyalty: " + loyalty + ")");
-        }
-        str.append("\n");
-        if (mana != null) {
-            str.append(mana + " (" + converted + ")" + "\n");
-        }
-        if (colorIndicator != null) {
-            str.append("(Color Indicator: " + colorIndicator + ")\n");
-        }
-        if (text != null) {
-            str.append(text + "\n");
-        }
-        if (rules != null) {
-            str.append(rules + "\n");
-        }
-        if (legal.size() > 0) {
-            str.append("Legal in ");
-            for (int i = 0; i < legal.size(); i++) {
-                str.append(legal.get(i));
-                if (i < legal.size() - 1) {
-                    str.append("/");
-                }
-            }
-            str.append("\n");
-        }
-        if (restricted.size() > 0) {
-            str.append("Restricted in ");
-            for (int i = 0; i < restricted.size(); i++) {
-                str.append(restricted.get(i));
-                if (i < restricted.size() - 1) {
-                    str.append("/");
-                }
-            }
-            str.append("\n");
-        }
-        if (banned.size() > 0) {
-            str.append("Banned in ");
-            for (int i = 0; i < banned.size(); i++) {
-                str.append(banned.get(i));
-                if (i < banned.size() - 1) {
-                    str.append("/");
-                }
-            }
-            str.append("\n");
-        }
-        if (reversed) {
-            str.append("In REVERSED list!\n");
-        }
-        Vector<String> flavors = new Vector<>();
-        for (ReprintSimpleInfo info : reprints) {
-            str.append(info);
-            if (info.flavor != null) {
-                boolean flag = false;
-                for (String s : flavors) {
-                    if (s.equals(info.flavor)) {
-                        flag = true;
-                        break;
-                    }
-                }
-                if (!flag) {
-                    flavors.add(info.flavor);
-                }
-            }
-        }
-        for (String s : flavors) {
-            str.append(s + "\n");
-        }
-
-        return str.toString();
-    }
-}
-
 public class CardAnalyzer {
 
-    public static String[] LegalList = {"Block", "Standard", "Extended",
-            "Modern", "Legacy", "Vintage", "Commander", /* "Classic" */};
+    public static String[] LegalList = {"Block", "Modern", "Legacy", "Vintage", "Commander"};
     public static String[] TypeList = {"Artifact", "Creature", "Enchantment",
             "Instant", "Land", "Planeswalker", "Sorcery", "Tribal"};
-    public static String prefix = "";
-    public static String[][] SetList = {
-            {"Magic Origins", "Modern/ORI", "ORI"},
-            {"Dragons of Tarkir", "Modern/DTK", "DTK"},
-            {"Fate Reforged", "Modern/FRF", "FRF"},
-            {"Khans of Tarkir", "Modern/KTK", "KTK"},
-            {"Magic 2015", "Modern/M15", "M15"},
+    public static String[] SpecialList = {"Plane", "Phenomenon", "Scheme",
+            "Ongoing Scheme", "Conspiracy"};
 
-            {"Journey into Nyx", "Modern/JOU", "JOU"},
-            {"Born of the Gods", "Modern/BNG", "BNG"},
-            {"Theros", "Modern/THS", "THS"},
-            {"Magic 2014", "Modern/M14", "M14"},
-            {"Dragon's Maze", "Modern/DGM", "DGM"},
-            {"Gatecrash", "Modern/GTC", "GTC"},
-            {"Return to Ravnica", "Modern/RTR", "RTR"},
-            {"Magic 2013", "Modern/M13", "M13"},
-            {"Avacyn Restored", "Modern/AVR", "AVR"},
-            {"Dark Ascension", "Modern/DKA", "DKA"},
-            {"Innistrad", "Modern/ISD", "ISD"},
-            {"Magic 2012", "Modern/M12", "M12"},
-            {"New Phyrexia", "Modern/NPH", "NPH"},
-            {"Mirrodin Besieged", "Modern/MBS", "MBS"},
-            {"Scars of Mirrodin", "Modern/SOM", "SOM"},
-            {"Magic 2011", "Modern/M11", "M11"},
-            {"Rise of the Eldrazi", "Modern/ROE", "ROE"},
-            {"Worldwake", "Modern/WWK", "WWK"},
-            {"Zendikar", "Modern/ZEN", "ZEN"},
-            {"Magic 2010", "Modern/M10", "M10"},
-            {"Alara Reborn", "Modern/ARB", "ARB"},
-            {"Conflux", "Modern/CFX", "CFX"},
-            {"Shards of Alara", "Modern/ALA", "ALA"},
-            {"Eventide", "Modern/EVE", "EVE"},
-            {"Shadowmoor", "Modern/SHM", "SHM"},
-            {"Morningtide", "Modern/MOR", "MT"},
-            {"Lorwyn", "Modern/LRW", "LW"},
-            {"Tenth Edition", "Modern/10E", "10E"},
-            {"Future Sight", "Modern/FUT", "FUT"},
-            {"Planar Chaos", "Modern/PLC", "PC"},
-            {"Time Spiral \"Timeshifted\"", "Modern/TSB", "TSTS"},
-            {"Time Spiral", "Modern/TSP", "TS"},
-            {"Coldsnap", "Modern/CSP", "CS"},
-            {"Dissension", "Modern/DIS", "DI"},
-            {"Guildpact", "Modern/GPT", "GP"},
-            {"Ravnica: City of Guilds", "Modern/RAV", "RAV"},
-            {"Ninth Edition", "Modern/9ED", "9E", "9EB"},
-            {"Saviors of Kamigawa", "Modern/SOK", "SOK"},
-            {"Betrayers of Kamigawa", "Modern/BOK", "BOK"},
-            {"Champions of Kamigawa", "Modern/CHK", "CHK"},
-            {"Fifth Dawn", "Modern/5DN", "5DN"},
-            {"Darksteel", "Modern/DST", "DS"},
-            {"Mirrodin", "Modern/MRD", "MI"},
-            {"Eighth Edition", "Modern/8ED", "8E", "8EB"},
-
-            {"Scourge", "Ancient/SCG", "SC"},
-            {"Legions", "Ancient/LGN", "LE"},
-            {"Onslaught", "Ancient/ONS", "ON"},
-            {"Judgment", "Ancient/JUD", "JU"},
-            {"Torment", "Ancient/TOR", "TR"},
-            {"Odyssey", "Ancient/ODY", "OD"},
-            {"Apocalypse", "Ancient/APC", "AP"},
-            {"Seventh Edition", "Ancient/7ED", "7E"},
-            {"Planeshift", "Ancient/PLS", "PS"},
-            {"Invasion", "Ancient/INV", "IN"},
-            {"Prophecy", "Ancient/PCY", "PR"},
-            {"Nemesis", "Ancient/NMS", "NE"},
-            {"Mercadian Masques", "Ancient/MMQ", "MM"},
-            {"Urza's Destiny", "Ancient/UDS", "UD"},
-            {"Classic Sixth Edition", "Ancient/6ED", "6E"},
-            {"Urza's Legacy", "Ancient/ULG", "UL"},
-            {"Urza's Saga", "Ancient/USG", "US"},
-            {"Exodus", "Ancient/EXO", "EX"},
-            {"Stronghold", "Ancient/STH", "SH"},
-            {"Tempest", "Ancient/TMP", "TP"},
-            {"Weatherlight", "Ancient/WTH", "WL"},
-            {"Fifth Edition", "Ancient/5ED", "5E"},
-            {"Visions", "Ancient/VIS", "VI"},
-            {"Mirage", "Ancient/MIR", "MR"},
-            {"Alliances", "Ancient/ALL", "AI"},
-            {"Homelands", "Ancient/HML", "HL"},
-            {"Ice Age", "Ancient/ICE", "IA"},
-            {"Fourth Edition", "Ancient/4ED", "4E"},
-            {"Fallen Empires", "Ancient/FEM", "FE"},
-            {"The Dark", "Ancient/DRK", "DK"},
-            {"Legends", "Ancient/LEG", "LG"},
-            {"Revised Edition", "Ancient/3ED", "RV"},
-            {"Antiquities", "Ancient/ATQ", "AQ"},
-            {"Arabian Nights", "Ancient/ARN", "AN"},
-            {"Unlimited Edition", "Ancient/2ED", "UN"},
-            {"Limited Edition Beta", "Ancient/LEB", "BE"},
-            {"Limited Edition Alpha", "Ancient/LEA", "AL"},
-
-            {"Commander 2014 Edition", "Commander/C14", "C14"},
-            {"Commander 2013 Edition", "Commander/C13", "C13"},
-            {"Commander", "Commander/CMD", "CMD"},
-            {"Planechase 2012 Edition", "Planechase/PC2", "PC2"},
-            {"Planechase", "Planechase/HOP", "PCH"},
-            {"Archenemy", "Archenemy/ARC", "ARC"},
-            {"Conspiracy", "Conspiracy/CNS", "CNS"},
-            {"Portal Three Kingdoms", "Starter/PTK", "P3K"},
-            {"Portal Second Age", "Starter/PO2", "PO2"},
-            {"Portal", "Starter/POR", "PO"},
-            {"Starter 1999", "Starter/S99", "ST"},
-
-            {"Modern Masters 2015 Edition", "Reprint/MM2", "MM2"},
-            {"Modern Masters", "Reprint/MMA", "MMA"},
-            {"Vintage Masters", "Reprint/VMA", "VMA"},
-            {"Eternal Masters", "Reprint/EMA", "EMA"},
-            {"Duel: Kiora vs. Elspeth", "Reprint/DDO", "DDO"},
-            {"Duel: Speed vs. Cunning", "Reprint/DDN", "DDN"},
-            {"Duel: Jace vs Vraska", "Reprint/DDM", "DDM"},
-            {"Duel: Heroes vs Monsters", "Reprint/DDL", "DDL"},
-            {"Duel: Sorin vs Tibalt", "Reprint/DDK", "DDK"},
-            {"Duel: Izzet vs Golgari", "Reprint/DDJ", "DDJ"},
-            {"Duel: Venser vs Koth", "Reprint/DDI", "DDI"},
-            {"Duel: Ajani vs Nicol Bolas", "Reprint/DDH", "DDH"},
-            {"Duel: Knights vs Dragons", "Reprint/DDG", "DDG"},
-            {"Duel: Elspeth vs Tezzeret", "Reprint/DDF", "DDF"},
-            {"Duel: Phyrexia vs Coalition", "Reprint/DDE", "PVC"},
-            {"Duel: Garruk vs Liliana", "Reprint/DDD", "GVL"},
-            {"Duel: Divine vs Demonic", "Reprint/DDC", "DVD"},
-            {"Duel: Jace vs Chandra", "Reprint/DD2", "JVC"},
-            {"Duel: Elves vs Goblins", "Reprint/EVG", "EVG"},
-            {"Premium: Graveborn", "Reprint/PD3", "PD3"},
-            {"Premium: Fire and Lightning", "Reprint/PD2", "PD2"},
-            {"Premium: Slivers", "Reprint/H09", "PDS"},
-
-            {"From the Vault: Angels", "Reprint/V15", "V15"},
-            {"From the Vault: Annihilation", "Reprint/V14", "V14"},
-            {"From the Vault: Twenty", "Reprint/V13", "V13"},
-            {"From the Vault: Realms", "Reprint/V12", "V12"},
-            {"From the Vault: Legends", "Reprint/V11", "FVL"},
-            {"From the Vault: Relics", "Reprint/V10", "FVR"},
-            {"From the Vault: Exiled", "Reprint/V09", "FVE"},
-            {"From the Vault: Dragons", "Reprint/DRB", "FVD"},
-            {"MTGO Masters Edition IV", "Reprint/ME4", "ME4"},
-            {"MTGO Masters Edition III", "Reprint/ME3", "ME3"},
-            {"MTGO Masters Edition II", "Reprint/ME2", "ME2"},
-            {"MTGO Masters Edition", "Reprint/MED", "MED"},
-            {"Chronicles", "Reprint/CHR", "CH"},
-            {"Commander's Arsenal", "Reprint/CMA", "CMA"},
-
-            {"Unhinged", "Unset/UNH", "UH"},
-            {"Unglued", "Unset/UGL", "UG"},
-    };
-    public Hashtable<String, CardSimpleInfo> cardDatabase = new Hashtable<>();
-
-    public CardAnalyzer(String str) {
-        prefix = str;
-        analyzeData();
-    }
+    static String last_name = "";
+    static ReprintInfo last_card = null;
+    static int same_count = 0;
+    static Hashtable<String, CardInfo> cardDatabase = new Hashtable<>();
+    static int reprintCards = 0;
+    static String[] allName;
+    static int[] landIndex = new int[5];
+    static HashMap<String, Integer> cardNameInSet = new HashMap<>();
 
     public static String getEntry(String str, String tag) {
         Pattern pattern = Pattern.compile("<" + tag + ">(.+?)</" + tag + ">",
@@ -350,23 +39,65 @@ public class CardAnalyzer {
         return null;
     }
 
-    public void analyzeData() {
+    private static boolean nearlyEquals(String str1, String str2) {
+        String s1 = str1.toLowerCase().replaceAll("[^a-z0-9]", "");
+        String s2 = str2.toLowerCase().replaceAll("[^a-z0-9]", "");
 
-        File[] dir = new File(prefix + "Oracle/").listFiles();
-
-        for (File file : dir) {
-            processSet(file);
+        if (s1.equals(s2)) {
+            return true;
         }
 
-        String[] allName = new String[cardDatabase.size()];
+        if (s2.length() < s1.length()) {
+            String s = s1;
+            s1 = s2;
+            s2 = s;
+        }
 
-        System.out.println(dir.length + " Sets and " + allName.length
-                + " Cards");
+        int[] array = new int[s1.length()];
+        int count = 0, sum = 0;
+        for (int i = 0; i < s1.length(); i++) {
+            int n;
+            array[i] = -1;
+            if ((n = s2.indexOf(s1.charAt(i))) >= 0) {
+                s2 = s2.substring(0, n) + s2.substring(n + 1);
+                array[i] = n;
+                sum += n;
+                count++;
+            }
+        }
+
+        float avg = (float) sum / (float) count;
+        float power = 0.0f;
+        for (int i = 0; i < s1.length(); i++) {
+            if (array[i] >= 0) {
+                power += (array[i] - avg) * (array[i] - avg);
+            }
+        }
+
+        return s2.length() <= Math.max(8, str2.length() / 8)
+                && Math.sqrt(power / count) <= 8;
+    }
+
+    public static void initData() {
+
+        for (String[] s : CardParser.SetList) {
+            landIndex = new int[5];
+            cardNameInSet = new HashMap<>();
+            for (int i = 2; i < s.length; i++) {
+                processSet(new File(MainActivity.SDPath + "/MTG/Oracle/MtgOracle_" + s[i] + ".txt"));
+            }
+            break; // test
+        }
+
+        allName = new String[cardDatabase.size()];
+
+        System.out.println(CardParser.SetList.length + " Sets and " + allName.length
+                + " Cards" + " (" + reprintCards + " Reprints)");
 
         Enumeration<String> keys = cardDatabase.keys();
         int count = 0;
         while (keys.hasMoreElements()) {
-            CardSimpleInfo info = cardDatabase.get(keys.nextElement());
+            CardInfo info = cardDatabase.get(keys.nextElement());
             allName[count] = info.name;
             count++;
         }
@@ -390,24 +121,15 @@ public class CardAnalyzer {
             }
         }
         allName = temp;
-
-        for (String s : allName) {
-            CardSimpleInfo info = cardDatabase.get(s);
-            System.out.println(info.name);
-            // writer.write(info.toString());
-            // writer.newLine();
-        }
-
     }
 
-    public CardSimpleInfo getNewCard(String str) {
+    public static CardInfo getNewCard(String str) {
         String entry;
 
-        CardSimpleInfo card = new CardSimpleInfo();
-        card.name = getEntry(str, "Name");
+        CardInfo card = new CardInfo();
+        CardInfo otherCard = null;
 
-        card.reprints = new Vector<>();
-        addReprintCard(str, card);
+        card.name = getEntry(str, "Name");
 
         entry = getEntry(str, "OtherPart");
         if (entry != null) {
@@ -420,10 +142,12 @@ public class CardAnalyzer {
                 card.isSplit = true;
             } else if (card.partIndex == 2 && getEntry(str, "ManaCost") == null) {
                 card.isDoubleFaced = true;
-                cardDatabase.get(entry).isDoubleFaced = true;
+                otherCard = cardDatabase.get(entry);
+                otherCard.isDoubleFaced = true;
             } else if (card.partIndex == 2) {
                 card.isFlip = true;
-                cardDatabase.get(entry).isFlip = true;
+                otherCard = cardDatabase.get(entry);
+                otherCard.isFlip = true;
             }
         }
 
@@ -536,67 +260,182 @@ public class CardAnalyzer {
             }
         }
 
-        card.reversed = (getEntry(str, "Reserved") != null);
+        card.reserved = (getEntry(str, "Reserved") != null);
+
+        card.formatedName = card.name;
+
+        if (card.isSplit) {
+            pattern = Pattern.compile("\\((.+?)/(.+?)\\)");
+            matcher = pattern.matcher(card.name);
+            if (matcher.find()) {
+                card.formatedName = matcher.group(1) + "_" + matcher.group(2);
+            }
+        }
+
+        if (card.isFlip || card.isDoubleFaced) {
+            if (card.partIndex == 2) {
+                card.formatedName = card.otherPart + "_" + card.name;
+            }
+        }
+
+        if (card.name.contains("(Who/What/When/Where/Why)")) {
+            card.formatedName = "who_what_when_where_why";
+        }
+
+        card.formatedName = card.formatedName.replaceAll("[',.:!\"?®()]", "")
+                .replaceAll("[- &/]", "_").replaceAll("Æ", "AE")
+                .replaceAll("[âàá]", "a").replaceAll("é", "e")
+                .replaceAll("ö", "o").replaceAll("í", "i")
+                .replaceAll("[ûú]", "u").replaceAll("[^A-Za-z0-9_]", "?")
+                .toLowerCase();
+
+        if (card.isFlip || card.isDoubleFaced) {
+            if (card.partIndex == 2) {
+                otherCard.formatedName = card.formatedName;
+            }
+        }
 
         return card;
     }
 
-    public void addReprintCard(String str, CardSimpleInfo card) {
-        ReprintSimpleInfo reprint = new ReprintSimpleInfo();
+    public static ReprintInfo addReprintCard(String str, CardInfo card) {
+
+        reprintCards++;
+
+        ReprintInfo reprint = new ReprintInfo();
         reprint.set = getEntry(str, "Set");
         reprint.number = getEntry(str, "No");
         reprint.flavor = getEntry(str, "Flavor");
         reprint.artist = getEntry(str, "Artist");
         reprint.rarity = getEntry(str, "Rarity");
-        reprint.multiverseid = Integer.parseInt(getEntry(str, "Multiverseid"));
-        reprint.rating = getEntry(str, "Rating");
-        reprint.votes = getEntry(str, "Votes");
-        for (String[] strs : SetList) {
+        reprint.multiverseid = Long.parseLong(getEntry(str, "Multiverseid"));
+        reprint.watermark = getEntry(str, "Watermark");
+        reprint.rating = Float.parseFloat(getEntry(str, "Rating"));
+        reprint.votes = Integer.parseInt(getEntry(str, "Votes"));
+
+        for (String[] strs : CardParser.SetList) {
             if (reprint.set.equals(strs[0])) {
-                String s = reprint.number;
-                if (s.charAt(s.length() - 1) >= 'a') {
-                    if (s.length() == 2) {
-                        s = "00" + s;
-                    } else if (s.length() == 3) {
-                        s = "0" + s;
-                    }
-                } else {
-                    if (s.length() == 1) {
-                        s = "00" + s;
-                    } else if (s.length() == 2) {
-                        s = "0" + s;
-                    }
-                }
-                reprint.picture = prefix + strs[1] + "/" + s + ".jpg";
-                File file = new File(reprint.picture);
-                if (!file.exists()) {
-                    reprint.picture = prefix + strs[1] + "/" + s + "a.jpg";
-                }
+                reprint.code = strs[1].substring(strs[1].lastIndexOf("/") + 1);
+                reprint.folder = strs[1];
+                reprint.altCode = strs[2];
                 break;
             }
         }
+        if (card.superTypes.size() > 0) {
+            for (String special : SpecialList) {
+                for (String types : card.superTypes) {
+                    if (types.equals(special)) {
+                        reprint.specialType = special;
+                        break;
+                    }
+                }
+            }
+        }
+        if (!card.isInCore) {
+            for (String[] s : CardParser.SetList) {
+                if (reprint.set.equals(s[0])) {
+                    card.isInCore = true;
+                    break;
+                }
+                if (s[0].equals("Limited Edition Alpha")) {
+                    break;
+                }
+            }
+        }
+        if (reprint.multiverseid == 0) {
+            String entry;
+            if (card.name.contains("Who/What/When/Where/Why")) {
+                entry = "Who (Who/What/When/Where/Why)";
+            } else {
+                entry = getEntry(str, "OtherPart");
+            }
+            if (entry != null) {
+                Vector<ReprintInfo> vector = cardDatabase.get(entry).reprints;
+                for (ReprintInfo info : vector) {
+                    if (reprint.set.equals(info.set)) {
+                        reprint.multiverseid = info.multiverseid;
+                        break;
+                    }
+                }
+            }
+        }
+        if (!card.rarityChanged) {
+            Vector<ReprintInfo> vector = card.reprints;
+            for (ReprintInfo info : vector) {
+                if (!info.rarity.equals(reprint.rarity)) {
+                    card.rarityChanged = true;
+                    break;
+                }
+            }
+        }
+        if (reprint.set.equals("Unhinged") || reprint.set.equals("Unglued")) {
+            if (!card.name.equals("Plains") && !card.name.equals("Island")
+                    && !card.name.equals("Swamp")
+                    && !card.name.equals("Mountain")
+                    && !card.name.equals("Forest")) {
+                card.isFun = true;
+            }
+        }
+
+        for (String[] strs : CardParser.SetList) {
+            if (reprint.set.equals(strs[0])) {
+                String number = reprint.number;
+                if (reprint.number.endsWith("a") || reprint.number.endsWith("b")) {
+                    if (reprint.number.length() == 2) {
+                        number = "00" + number;
+                    } else if (reprint.number.length() == 3) {
+                        number = "0" + number;
+                    }
+                } else {
+                    if (reprint.number.length() == 1) {
+                        number = "00" + number;
+                    } else if (reprint.number.length() == 2) {
+                        number = "0" + number;
+                    }
+                }
+                reprint.picture = strs[1] + "/" + number + ".jpg";
+                break;
+            }
+        }
+
         card.reprints.add(reprint);
+
+        return reprint;
     }
 
-    public void processCard(String str) {
+    public static void processCard(String str) {
         String name = getEntry(str, "Name");
 
-        if (cardDatabase.containsKey(name)) {
-            addReprintCard(str, cardDatabase.get(name));
-        } else {
-            cardDatabase.put(name, getNewCard(getEntry(str, "Card")));
+        if (name.equals(last_name) && same_count == 0) {
+            last_card.sameIndex = 1;
         }
+
+        if (cardDatabase.containsKey(name)) {
+            last_card = addReprintCard(str, cardDatabase.get(name));
+        } else {
+            CardInfo card = getNewCard(getEntry(str, "Card"));
+            cardDatabase.put(name, card);
+            card.reprints = new Vector<>();
+            last_card = addReprintCard(str, card);
+        }
+
+        if (name.equals(last_name)) {
+            same_count++;
+            last_card.sameIndex = same_count + 1;
+        } else {
+            same_count = 0;
+        }
+        last_name = name;
     }
 
-    public void processSet(File file) {
-        System.out.println("process file " + file.getAbsolutePath());
+    public static void processSet(File file) {
         BufferedReader reader;
         try {
             reader = new BufferedReader(new FileReader(file));
             String str;
             String card = "";
             while ((str = reader.readLine()) != null) {
-                if (str.equals("")) {
+                if (str.isEmpty()) {
                     processCard(card);
                     card = "";
                 } else {
@@ -606,6 +445,238 @@ public class CardAnalyzer {
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static boolean checkCard(CardInfo card) {
+        return card.name.startsWith("A");
+    }
+
+    public static String[] searchCard() {
+        if (allName == null) {
+            initData();
+        }
+        Vector<String> cards = new Vector<>();
+        for (String name : allName) {
+            CardInfo card = cardDatabase.get(name);
+            if (checkCard(card)) {
+                for (ReprintInfo info : card.reprints) {
+                    cards.add(info.picture);
+                }
+            }
+        }
+        String[] ret = new String[cards.size()];
+        for (int i = 0; i < ret.length; i++) {
+            ret[i] = cards.get(i);
+        }
+        return ret;
+    }
+
+    public static class ReprintInfo {
+
+        public long multiverseid;
+        public float rating;
+        public int votes;
+        public String set;
+        public String code;
+        public String folder;
+        public String altCode;
+        public String number;
+        public String flavor;
+        public String artist;
+        public String rarity;
+        public String watermark;
+        public String specialType;
+
+        public String picture;
+        public int sameIndex;
+
+        public String toString() {
+            return multiverseid + " " + set
+                    + (specialType == null ? "" : " [" + specialType + "]")
+                    + " : " + number + " (" + rarity + ") " + artist + " (" + rating + "|" + votes + ") " + "\n";
+        }
+    }
+
+    public static class CardInfo {
+
+        public String name;
+        public String otherPart;
+        public int partIndex;
+        public boolean isSplit;
+        public boolean isDoubleFaced;
+        public boolean isFlip;
+        public boolean isFun;
+        public boolean isInCore;
+
+        public Vector<String> types;
+        public Vector<String> subTypes;
+        public Vector<String> superTypes;
+
+        public String mana;
+        public int converted;
+        public String colorIndicator;
+
+        public String power;
+        public String toughness;
+        public String loyalty;
+
+        public String text;
+
+        public String rules;
+        public Vector<String> legal;
+        public Vector<String> restricted;
+        public Vector<String> banned;
+        public boolean reserved;
+
+        public Vector<ReprintInfo> reprints;
+        public boolean rarityChanged;
+        public String formatedName;
+
+        public String toString() {
+            StringBuilder str = new StringBuilder();
+            str.append(name + "\n");
+            if (partIndex > 0) {
+                String suffix = "th";
+                if (Integer.toString(partIndex).endsWith("1")) {
+                    suffix = "st";
+                } else if (Integer.toString(partIndex).endsWith("2")) {
+                    suffix = "nd";
+                } else if (Integer.toString(partIndex).endsWith("3")) {
+                    suffix = "rd";
+                }
+                str.append(partIndex + suffix
+                        + " part of the card, other part is <" + otherPart
+                        + ">\n");
+            }
+            if (superTypes.size() > 0) {
+                for (int i = 0; i < superTypes.size(); i++) {
+                    str.append(superTypes.get(i));
+                    if (i < superTypes.size() - 1) {
+                        str.append(" ");
+                    }
+                }
+            }
+            if (types.size() > 0) {
+                if (superTypes.size() > 0) {
+                    str.append(" ");
+                }
+                for (int i = 0; i < types.size(); i++) {
+                    str.append(types.get(i));
+                    if (i < types.size() - 1) {
+                        str.append(" ");
+                    }
+                }
+            }
+            if (subTypes.size() > 0) {
+                str.append(" — ");
+                for (int i = 0; i < subTypes.size(); i++) {
+                    str.append(subTypes.get(i));
+                    if (i < subTypes.size() - 1) {
+                        str.append(" ");
+                    }
+                }
+            }
+            if (power != null) {
+                str.append(" " + power);
+            }
+            if (toughness != null) {
+                str.append("/" + toughness);
+            }
+            if (loyalty != null) {
+                str.append(" " + "(Loyalty: " + loyalty + ")");
+            }
+            str.append("\n");
+            if (mana != null) {
+                str.append(mana + " (" + converted + ")" + "\n");
+            }
+            if (colorIndicator != null) {
+                str.append("(Color Indicator: " + colorIndicator + ")\n");
+            }
+            if (text != null) {
+                str.append(text + "\n");
+            }
+            if (rules != null) {
+                str.append(rules + "\n");
+            }
+            if (legal.size() > 0) {
+                str.append("Legal in ");
+                for (int i = 0; i < legal.size(); i++) {
+                    str.append(legal.get(i));
+                    if (i < legal.size() - 1) {
+                        str.append("/");
+                    }
+                }
+                str.append("\n");
+            }
+            if (restricted.size() > 0) {
+                str.append("Restricted in ");
+                for (int i = 0; i < restricted.size(); i++) {
+                    str.append(restricted.get(i));
+                    if (i < restricted.size() - 1) {
+                        str.append("/");
+                    }
+                }
+                str.append("\n");
+            }
+            if (banned.size() > 0) {
+                str.append("Banned in ");
+                for (int i = 0; i < banned.size(); i++) {
+                    str.append(banned.get(i));
+                    if (i < banned.size() - 1) {
+                        str.append("/");
+                    }
+                }
+                str.append("\n");
+            }
+            if (reserved) {
+                str.append("In RESERVED list!\n");
+            }
+            for (ReprintInfo info : reprints) {
+                if (info.watermark != null) {
+                    str.append("(Watermark: " + info.watermark + ")\n");
+                    break;
+                }
+            }
+            long[] setInfos = new long[reprints.size()];
+            for (int i = 0; i < setInfos.length; i++) {
+                setInfos[i] = reprints.get(i).multiverseid;
+            }
+            Arrays.sort(setInfos);
+            for (long num : setInfos) {
+                for (ReprintInfo info : reprints) {
+                    if (info.set.equals("Media Inserts")) {
+                        continue;
+                    }
+                    if (num == info.multiverseid) {
+                        str.append(info);
+                        break;
+                    }
+                }
+            }
+            Vector<String> flavors = new Vector<>();
+            for (ReprintInfo info : reprints) {
+                if (info.set.equals("Media Inserts")) {
+                    continue;
+                }
+                if (info.flavor != null) {
+                    boolean flag = false;
+                    for (String s : flavors) {
+                        if (nearlyEquals(s, info.flavor)) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (!flag) {
+                        flavors.add(info.flavor);
+                    }
+                }
+            }
+            for (String s : flavors) {
+                str.append(s + "\n");
+            }
+
+            return str.toString();
         }
     }
 }
