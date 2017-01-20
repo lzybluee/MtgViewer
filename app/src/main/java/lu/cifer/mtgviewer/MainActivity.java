@@ -79,10 +79,10 @@ public class MainActivity extends Activity {
         gallery.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                CardAnalyzer.rulePage++;
+                CardParser.rulePage++;
                 Toast.makeText(
                         MainActivity.this,
-                        CardAnalyzer.getCardInfo(mCardPath.get(position), false),
+                        CardParser.getCardInfo(mCardPath.get(position), false),
                         Toast.LENGTH_LONG).show();
             }
         });
@@ -93,7 +93,7 @@ public class MainActivity extends Activity {
                                            int position, long id) {
                 Toast.makeText(
                         MainActivity.this,
-                        CardAnalyzer.getCardInfo(mCardPath.get(position), true),
+                        CardParser.getCardInfo(mCardPath.get(position), true),
                         Toast.LENGTH_LONG).show();
                 return false;
             }
@@ -398,7 +398,7 @@ public class MainActivity extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             urlInfo = "";
-            CardAnalyzer.rulePage = 0;
+            CardParser.rulePage = 0;
             ImageView view = new ImageView(MainActivity.this);
             Bitmap bitmap = BitmapFactory.decodeFile(mCardPath.get(position));
 
