@@ -1,24 +1,10 @@
 package lu.cifer.mtgviewer;
 
 public class LuaScript {
-    static private void luaPushString(String key, String value) {
 
-    }
-
-    static private void luaPushInteger(String key, int value) {
-
-    }
-
-    static private void luaPushBoolean(String key, boolean value) {
-
-    }
-
-    static private void luaPushFloat(String key, float value) {
-
-    }
-
-    static private void luaPushStringArray(String key, String[] value) {
-
+    static {
+        System.loadLibrary("native-lib");
+        initLua();
     }
 
     static private void initCard(CardAnalyzer.CardInfo card, CardAnalyzer.ReprintInfo reprint) {
@@ -65,12 +51,26 @@ public class LuaScript {
         luaPushString("formatedNumber", reprint.formatedNumber);
     }
 
-    static boolean runScript() {
+    public static boolean checkCard(CardAnalyzer.CardInfo card, CardAnalyzer.ReprintInfo reprint) {
+        initCard(card, reprint);
+        System.out.println("lzy:" + card.name);
+        String result = runScript("print('lzy lua:' .. name)");
         return true;
     }
 
-    public static boolean checkCard(CardAnalyzer.CardInfo card, CardAnalyzer.ReprintInfo reprint) {
-        initCard(card, reprint);
-        return runScript();
+    public static native void initLua();
+
+    public static native String runScript(String code);
+
+    public static native void luaPushString(String key, String value);
+
+    public static native void luaPushInteger(String key, int value);
+
+    public static native void luaPushBoolean(String key, boolean value);
+
+    public static native void luaPushFloat(String key, float value);
+
+    static private void luaPushStringArray(String key, String[] value) {
+
     }
 }
