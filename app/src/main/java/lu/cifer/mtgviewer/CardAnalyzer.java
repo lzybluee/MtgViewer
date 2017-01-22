@@ -31,8 +31,11 @@ public class CardAnalyzer {
     static int[] landIndex = new int[5];
     static HashMap<String, Integer> cardNameInSet = new HashMap<>();
     static String wrongCard;
-    static boolean test;
-    static String[] filter;
+    static Vector<String> filter = new Vector<>();
+
+    static {
+        filter.add("Magic Origins");
+    }
 
     public static String getEntry(String str, String tag) {
         Pattern pattern = Pattern.compile("<" + tag + ">(.+?)</" + tag + ">",
@@ -97,22 +100,24 @@ public class CardAnalyzer {
         return name;
     }
 
-    public static void initData() {
+    public static String initData() {
+
+        int setNum = 0;
+        cardDatabase.clear();
+        reprintCards = 0;
 
         for (String[] s : CardParser.SetList) {
             landIndex = new int[5];
             cardNameInSet = new HashMap<>();
-            for (int i = 2; i < s.length; i++) {
-                processSet(new File(MainActivity.SDPath + "/MTG/Oracle/MtgOracle_" + s[i] + ".txt"));
+            if(filter.isEmpty() || filter.contains(s[0])) {
+                for (int i = 2; i < s.length; i++) {
+                    setNum++;
+                    processSet(new File(MainActivity.SDPath + "/MTG/Oracle/MtgOracle_" + s[i] + ".txt"));
+                }
             }
-            if(test)
-                break;
         }
 
         allName = new String[cardDatabase.size()];
-
-        System.out.println(CardParser.SetList.length + " Sets and " + allName.length
-                + " Cards" + " (" + reprintCards + " Reprints)");
 
         Enumeration<String> keys = cardDatabase.keys();
         int count = 0;
@@ -141,6 +146,9 @@ public class CardAnalyzer {
             }
         }
         allName = temp;
+
+        return setNum + " Sets and " + allName.length
+                + " Cards" + " (" + reprintCards + " Reprints)";
     }
 
     public static CardInfo getNewCard(String str) {
@@ -428,19 +436,31 @@ public class CardAnalyzer {
         }
     }
 
-    private static int checkCard(CardInfo card, ReprintInfo reprint, String script) {
-        return LuaScript.checkCard(card, reprint, script);
-    }
-
     public static String getWrongCard() {
         String card = wrongCard;
         wrongCard = null;
         return card;
     }
 
+    public static void setFilter(String sets) {
+        if (sets == null || sets.equals("")) {
+            filter.clear();
+        } else {
+            filter.clear();
+            String[] paths = sets.split("\\|");
+            for(String path : paths) {
+                for (String[] s : CardParser.SetList) {
+                    if(s[1].contains(path)) {
+                        filter.add(s[0]);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     public static String[] searchCard(String script) {
         if (allName == null) {
-            test = true;
             initData();
         }
 
@@ -450,7 +470,7 @@ public class CardAnalyzer {
         for (String name : allName) {
             CardInfo card = cardDatabase.get(name);
             for (ReprintInfo reprint : card.reprints) {
-                int result = checkCard(card, reprint, script);
+                int result = LuaScript.checkCard(card, reprint, script);
                 if (result == 1) {
                     cards.add(reprint);
                 } else if(result == 2) {

@@ -44,8 +44,8 @@ public class SearchActivity extends Activity {
         initButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CardAnalyzer.initData();
-                Toast.makeText(SearchActivity.this, "Done!", Toast.LENGTH_SHORT).show();
+                String ret = CardAnalyzer.initData();
+                Toast.makeText(SearchActivity.this, ret, Toast.LENGTH_SHORT).show();
             }
         });
 

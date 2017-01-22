@@ -144,9 +144,9 @@ public class MainActivity extends Activity {
             return;
         }
 
-        mCardPath = new Vector<>();
+        CardAnalyzer.setFilter(mSets);
 
-        // CardAnalyzer cards = new CardAnalyzer(sdPath + "/MTG/");
+        mCardPath = new Vector<>();
 
         String[] paths = path.split("\\|");
 
