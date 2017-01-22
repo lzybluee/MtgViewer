@@ -224,6 +224,9 @@ public class CardAnalyzer {
                     }
                 }
                 if (!flag) {
+                    if(s.equals("Legendary")) {
+                        card.isLegendary = true;
+                    }
                     card.superTypes.add(s);
                 }
             }
@@ -448,9 +451,9 @@ public class CardAnalyzer {
         } else {
             filter.clear();
             String[] paths = sets.split("\\|");
-            for(String path : paths) {
-                for (String[] s : CardParser.SetList) {
-                    if(s[1].contains(path)) {
+            for (String[] s : CardParser.SetList) {
+                for(String path : paths) {
+                    if (s[1].contains(path)) {
                         filter.add(s[0]);
                         break;
                     }
@@ -534,6 +537,7 @@ public class CardAnalyzer {
         public boolean isSplit;
         public boolean isDoubleFaced;
         public boolean isFlip;
+        public boolean isLegendary;
         public boolean isFun;
         public boolean isInCore;
 

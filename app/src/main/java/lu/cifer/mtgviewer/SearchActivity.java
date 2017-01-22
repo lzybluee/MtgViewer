@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SearchActivity extends Activity {
 
@@ -45,7 +44,7 @@ public class SearchActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String ret = CardAnalyzer.initData();
-                Toast.makeText(SearchActivity.this, ret, Toast.LENGTH_SHORT).show();
+                ((TextView) findViewById(R.id.output)).setText(ret);
             }
         });
 
@@ -95,9 +94,9 @@ public class SearchActivity extends Activity {
                     finish();
                 } else {
                     code.setText("name -> String\notherPart -> String\npartIndex -> Integer\nisSplit -> Boolean\n" +
-                            "isDoubleFaced -> Boolean\nisFlip -> Boolean\nisFun -> Boolean\nisInCore -> Boolean\n" +
-                            "types -> StringArray\nsubTypes -> StringArray\nsuperTypes -> StringArray\nmana -> String\n" +
-                            "converted -> Integer\ncolorIndicator -> String\npower -> String\ntoughness -> String\n" +
+                            "isDoubleFaced -> Boolean\nisFlip -> Boolean\nisLegendary -> Boolean\nisFun -> Boolean\n" +
+                            "isInCore -> Boolean\ntypes -> StringArray\nsubTypes -> StringArray\nsuperTypes -> StringArray\n" +
+                            "mana -> String\nconverted -> Integer\ncolorIndicator -> String\npower -> String\ntoughness -> String\n" +
                             "loyalty -> String\ntext -> String\nrules -> String\nlegal -> StringArray\n" +
                             "restricted -> StringArray\nbanned -> StringArray\nreserved -> Boolean\nrarityChanged -> Boolean\n" +
                             "\nmultiverseid -> Integer\nrating -> Float\nvotes -> Integer\nset -> String\ncode -> String\n" +

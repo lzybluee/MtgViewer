@@ -149,7 +149,13 @@ public class CardParser {
             {"Commander's Arsenal", "Reprint/CMA", "CMA"},
 
             {"Unhinged", "Unset/UNH", "UH"},
-            {"Unglued", "Unset/UGL", "UG"}
+            {"Unglued", "Unset/UGL", "UG"},
+
+            {"Media Inserts", "Special/MBP", "MBP"},
+            {"Conspiracy Conspiracies", "Conspiracy/Conspiracy", "CNS"},
+            {"Archenemy Schemes", "Archenemy/Scheme", "ARC"},
+            {"Planechase Planes", "Planechase/Plane", "PCH"},
+            {"Planechase 2012 Planes", "Planechase/Plane2012", "PC2"},
     };
 
     public static int rulePage = 0;

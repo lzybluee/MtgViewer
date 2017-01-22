@@ -144,7 +144,7 @@ public class MainActivity extends Activity {
             return;
         }
 
-        CardAnalyzer.setFilter(mSets);
+        CardAnalyzer.setFilter(path);
 
         mCardPath = new Vector<>();
 
@@ -205,10 +205,7 @@ public class MainActivity extends Activity {
             menu.add(Menu.NONE, i + 15, i + 16, CardParser.SetList[i][0]);
         }
         for (int i = 0; i < mMiscSets.length; i++) {
-            if (i == 0)
-                menu.add(Menu.NONE, i + CardParser.SetList.length + 15, i + CardParser.SetList.length + 16, "Misc");
-            else
-                menu.add(Menu.NONE, i + CardParser.SetList.length + 15, i + CardParser.SetList.length + 16,
+            menu.add(Menu.NONE, i + CardParser.SetList.length + 15, i + CardParser.SetList.length + 16,
                         mMiscSets[i].substring(mMiscSets[i].lastIndexOf("/") + 1));
         }
         return super.onCreateOptionsMenu(menu);
@@ -321,10 +318,9 @@ public class MainActivity extends Activity {
             }
         }
 
-        mMiscSets = new String[1 + v1.size() + v2.size()];
-        mMiscSets[0] = "Special/MBP";
+        mMiscSets = new String[v1.size() + v2.size()];
 
-        int j = 1;
+        int j = 0;
         for (int i = 0; i < v1.size(); i++) {
             mMiscSets[j] = "/Misc/" + v1.get(i);
             j++;

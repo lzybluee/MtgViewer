@@ -18,6 +18,7 @@ public class LuaScript {
         luaPushBoolean("isFlip", card.isFlip);
         luaPushBoolean("isFun", card.isFun);
         luaPushBoolean("isInCore", card.isInCore);
+        luaPushBoolean("isLegendary", card.isLegendary);
         luaPushStringArray("types", card.types.toArray(new String[card.types.size()]));
         luaPushStringArray("subTypes", card.subTypes.toArray(new String[card.subTypes.size()]));
         luaPushStringArray("superTypes", card.superTypes.toArray(new String[card.superTypes.size()]));
