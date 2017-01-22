@@ -30,7 +30,9 @@ public class CardAnalyzer {
     static String[] allName;
     static int[] landIndex = new int[5];
     static HashMap<String, Integer> cardNameInSet = new HashMap<>();
+    static String wrongCard;
     static boolean test;
+    static String[] filter;
 
     public static String getEntry(String str, String tag) {
         Pattern pattern = Pattern.compile("<" + tag + ">(.+?)</" + tag + ">",
@@ -430,11 +432,19 @@ public class CardAnalyzer {
         return LuaScript.checkCard(card, reprint, script);
     }
 
+    public static String getWrongCard() {
+        String card = wrongCard;
+        wrongCard = null;
+        return card;
+    }
+
     public static String[] searchCard(String script) {
         if (allName == null) {
             test = true;
             initData();
         }
+
+        wrongCard = null;
 
         Vector<ReprintInfo> cards = new Vector<>();
         for (String name : allName) {
@@ -444,6 +454,7 @@ public class CardAnalyzer {
                 if (result == 1) {
                     cards.add(reprint);
                 } else if(result == 2) {
+                    wrongCard = reprint.picture;
                     return null;
                 }
             }

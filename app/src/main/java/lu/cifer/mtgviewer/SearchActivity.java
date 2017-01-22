@@ -61,6 +61,7 @@ public class SearchActivity extends Activity {
                 String[] cards = CardAnalyzer.searchCard(code.getText().toString());
                 output.setText(LuaScript.output);
                 if(cards == null) {
+                    ((Button) findViewById(R.id.help_button)).setText("Show");
                     return;
                 }
                 Bundle bundle = new Bundle();
@@ -84,16 +85,26 @@ public class SearchActivity extends Activity {
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                code.setText("name -> String\notherPart -> String\npartIndex -> Integer\nisSplit -> Boolean\n" +
-                        "isDoubleFaced -> Boolean\nisFlip -> Boolean\nisFun -> Boolean\nisInCore -> Boolean\n" +
-                        "types -> StringArray\nsubTypes -> StringArray\nsuperTypes -> StringArray\nmana -> String\n" +
-                        "converted -> Integer\ncolorIndicator -> String\npower -> String\ntoughness -> String\n" +
-                        "loyalty -> String\ntext -> String\nrules -> String\nlegal -> StringArray\n" +
-                        "restricted -> StringArray\nbanned -> StringArray\nreserved -> Boolean\nrarityChanged -> Boolean\n" +
-                        "\nmultiverseid -> Integer\nrating -> Float\nvotes -> Integer\nset -> String\ncode -> String\n" +
-                        "folder -> String\naltCode -> String\nnumber -> String\nflavor -> String\nartist -> String\n" +
-                        "rarity -> String\nwatermark -> String\nspecialType -> String\npicture -> String\n" +
-                        "sameIndex -> Integer\nformatedNumber -> String");
+                String picture = CardAnalyzer.getWrongCard();
+                if(picture != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putStringArray("pictures", new String[] {picture});
+                    Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    code.setText("name -> String\notherPart -> String\npartIndex -> Integer\nisSplit -> Boolean\n" +
+                            "isDoubleFaced -> Boolean\nisFlip -> Boolean\nisFun -> Boolean\nisInCore -> Boolean\n" +
+                            "types -> StringArray\nsubTypes -> StringArray\nsuperTypes -> StringArray\nmana -> String\n" +
+                            "converted -> Integer\ncolorIndicator -> String\npower -> String\ntoughness -> String\n" +
+                            "loyalty -> String\ntext -> String\nrules -> String\nlegal -> StringArray\n" +
+                            "restricted -> StringArray\nbanned -> StringArray\nreserved -> Boolean\nrarityChanged -> Boolean\n" +
+                            "\nmultiverseid -> Integer\nrating -> Float\nvotes -> Integer\nset -> String\ncode -> String\n" +
+                            "folder -> String\naltCode -> String\nnumber -> String\nflavor -> String\nartist -> String\n" +
+                            "rarity -> String\nwatermark -> String\nspecialType -> String\npicture -> String\n" +
+                            "sameIndex -> Integer\nformatedNumber -> String");
+                }
             }
         });
     }
