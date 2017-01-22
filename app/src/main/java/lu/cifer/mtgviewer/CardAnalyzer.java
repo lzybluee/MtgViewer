@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -78,6 +80,20 @@ public class CardAnalyzer {
                 && Math.sqrt(power / count) <= 8;
     }
 
+    private static String getFormatedNumber(String name, int length) {
+        char c = name.charAt(name.length() - 1);
+        if (c >= '0' && c <= '9') {
+            while (name.length() < length) {
+                name = "0" + name;
+            }
+        } else {
+            while (name.length() < length + 1) {
+                name = "0" + name;
+            }
+        }
+        return name;
+    }
+
     public static void initData() {
 
         for (String[] s : CardParser.SetList) {
@@ -127,7 +143,7 @@ public class CardAnalyzer {
         String entry;
 
         CardInfo card = new CardInfo();
-        CardInfo otherCard = null;
+        CardInfo otherCard;
 
         card.name = getEntry(str, "Name");
 
@@ -262,39 +278,6 @@ public class CardAnalyzer {
 
         card.reserved = (getEntry(str, "Reserved") != null);
 
-        card.formatedName = card.name;
-
-        if (card.isSplit) {
-            pattern = Pattern.compile("\\((.+?)/(.+?)\\)");
-            matcher = pattern.matcher(card.name);
-            if (matcher.find()) {
-                card.formatedName = matcher.group(1) + "_" + matcher.group(2);
-            }
-        }
-
-        if (card.isFlip || card.isDoubleFaced) {
-            if (card.partIndex == 2) {
-                card.formatedName = card.otherPart + "_" + card.name;
-            }
-        }
-
-        if (card.name.contains("(Who/What/When/Where/Why)")) {
-            card.formatedName = "who_what_when_where_why";
-        }
-
-        card.formatedName = card.formatedName.replaceAll("[',.:!\"?®()]", "")
-                .replaceAll("[- &/]", "_").replaceAll("Æ", "AE")
-                .replaceAll("[âàá]", "a").replaceAll("é", "e")
-                .replaceAll("ö", "o").replaceAll("í", "i")
-                .replaceAll("[ûú]", "u").replaceAll("[^A-Za-z0-9_]", "?")
-                .toLowerCase();
-
-        if (card.isFlip || card.isDoubleFaced) {
-            if (card.partIndex == 2) {
-                otherCard.formatedName = card.formatedName;
-            }
-        }
-
         return card;
     }
 
@@ -308,7 +291,7 @@ public class CardAnalyzer {
         reprint.flavor = getEntry(str, "Flavor");
         reprint.artist = getEntry(str, "Artist");
         reprint.rarity = getEntry(str, "Rarity");
-        reprint.multiverseid = Long.parseLong(getEntry(str, "Multiverseid"));
+        reprint.multiverseid = Integer.parseInt(getEntry(str, "Multiverseid"));
         reprint.watermark = getEntry(str, "Watermark");
         reprint.rating = Float.parseFloat(getEntry(str, "Rating"));
         reprint.votes = Integer.parseInt(getEntry(str, "Votes"));
@@ -377,27 +360,20 @@ public class CardAnalyzer {
             }
         }
 
+        if (reprint.specialType == null || reprint.specialType.equals("Conspiracy")) {
+            reprint.formatedNumber = getFormatedNumber(reprint.number, 3);
+        } else {
+            reprint.formatedNumber = getFormatedNumber(reprint.number, 2);
+        }
+
         for (String[] strs : CardParser.SetList) {
             if (reprint.set.equals(strs[0])) {
-                String number = reprint.number;
-                if (reprint.number.endsWith("a") || reprint.number.endsWith("b")) {
-                    if (reprint.number.length() == 2) {
-                        number = "00" + number;
-                    } else if (reprint.number.length() == 3) {
-                        number = "0" + number;
-                    }
-                } else {
-                    if (reprint.number.length() == 1) {
-                        number = "00" + number;
-                    } else if (reprint.number.length() == 2) {
-                        number = "0" + number;
-                    }
-                }
-                reprint.picture = strs[1] + "/" + number + ".jpg";
+                reprint.picture = strs[1] + "/" + reprint.formatedNumber + ".jpg";
                 break;
             }
         }
 
+        reprint.card = card;
         card.reprints.add(reprint);
 
         return reprint;
@@ -448,33 +424,47 @@ public class CardAnalyzer {
         }
     }
 
-    private static boolean checkCard(CardInfo card) {
-        return card.name.startsWith("A");
+    private static boolean checkCard(CardInfo card, ReprintInfo reprint) {
+        return LuaScript.checkCard(card, reprint);
     }
 
     public static String[] searchCard() {
         if (allName == null) {
             initData();
         }
-        Vector<String> cards = new Vector<>();
+
+        Vector<ReprintInfo> cards = new Vector<>();
         for (String name : allName) {
             CardInfo card = cardDatabase.get(name);
-            if (checkCard(card)) {
-                for (ReprintInfo info : card.reprints) {
-                    cards.add(info.picture);
+            for (ReprintInfo reprint : card.reprints) {
+                if (checkCard(card, reprint)) {
+                    cards.add(reprint);
                 }
             }
         }
+
+        Collections.sort(cards, new Comparator<ReprintInfo>() {
+            @Override
+            public int compare(ReprintInfo left, ReprintInfo right) {
+                if (left.set.equals(right.set)) {
+                    return left.formatedNumber.compareTo(right.formatedNumber);
+                }
+                return left.set.compareTo(right.set);
+            }
+        });
+
         String[] ret = new String[cards.size()];
         for (int i = 0; i < ret.length; i++) {
-            ret[i] = cards.get(i);
+            ret[i] = cards.get(i).picture;
         }
         return ret;
     }
 
     public static class ReprintInfo {
 
-        public long multiverseid;
+        public CardInfo card;
+
+        public int multiverseid;
         public float rating;
         public int votes;
         public String set;
@@ -490,6 +480,7 @@ public class CardAnalyzer {
 
         public String picture;
         public int sameIndex;
+        public String formatedNumber;
 
         public String toString() {
             return multiverseid + " " + set
@@ -531,7 +522,6 @@ public class CardAnalyzer {
 
         public Vector<ReprintInfo> reprints;
         public boolean rarityChanged;
-        public String formatedName;
 
         public String toString() {
             StringBuilder str = new StringBuilder();
