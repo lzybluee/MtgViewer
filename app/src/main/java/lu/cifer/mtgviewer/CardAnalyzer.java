@@ -424,11 +424,11 @@ public class CardAnalyzer {
         }
     }
 
-    private static boolean checkCard(CardInfo card, ReprintInfo reprint) {
-        return LuaScript.checkCard(card, reprint);
+    private static int checkCard(CardInfo card, ReprintInfo reprint, String script) {
+        return LuaScript.checkCard(card, reprint, script);
     }
 
-    public static String[] searchCard() {
+    public static String[] searchCard(String script) {
         if (allName == null) {
             initData();
         }
@@ -437,8 +437,11 @@ public class CardAnalyzer {
         for (String name : allName) {
             CardInfo card = cardDatabase.get(name);
             for (ReprintInfo reprint : card.reprints) {
-                if (checkCard(card, reprint)) {
+                int result = checkCard(card, reprint, script);
+                if (result == 1) {
                     cards.add(reprint);
+                } else if(result == 2) {
+                    return null;
                 }
             }
         }

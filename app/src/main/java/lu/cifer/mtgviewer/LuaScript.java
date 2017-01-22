@@ -4,8 +4,10 @@ public class LuaScript {
 
     static {
         System.loadLibrary("native-lib");
-        initLua();
+        initLua(MainActivity.SDPath + "/MTG/Script/global.lua");
     }
+
+    static String output;
 
     static private void initCard(CardAnalyzer.CardInfo card, CardAnalyzer.ReprintInfo reprint) {
         luaPushString("name", card.name);
@@ -51,16 +53,19 @@ public class LuaScript {
         luaPushString("formatedNumber", reprint.formatedNumber);
     }
 
-    public static boolean checkCard(CardAnalyzer.CardInfo card, CardAnalyzer.ReprintInfo reprint) {
-        initCard(card, reprint);
-        System.out.println("lzy:" + card.name);
-        String result = runScript("print('lzy lua:' .. name)");
-        return true;
+    private static String composeScript(String script) {
+        return "function checkCard()\n" + script + "\nend\nif(checkCard()) then\nresult = true\nelse result = false\nend";
     }
 
-    public static native void initLua();
+    public static int checkCard(CardAnalyzer.CardInfo card, CardAnalyzer.ReprintInfo reprint, String script) {
+        initCard(card, reprint);
+        output = runScript(composeScript(script), MainActivity.SDPath + "/MTG/Script/card.lua");
+        return getResult();
+    }
 
-    public static native String runScript(String code);
+    public static native void initLua(String file);
+
+    public static native String runScript(String code, String file);
 
     public static native void luaPushString(String key, String value);
 
@@ -70,7 +75,7 @@ public class LuaScript {
 
     public static native void luaPushFloat(String key, float value);
 
-    static private void luaPushStringArray(String key, String[] value) {
+    public static native void luaPushStringArray(String key, String[] value);
 
-    }
+    public static native int getResult();
 }

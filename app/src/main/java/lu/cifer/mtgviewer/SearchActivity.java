@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 /**
  * Created by cidana on 2017/1/20 020.
@@ -28,7 +29,11 @@ public class SearchActivity extends Activity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String[] cards = CardAnalyzer.searchCard();
+                String[] cards = CardAnalyzer.searchCard("if(mana) then return 1string.find(mana, 'R') else return false end");
+                if(cards == null) {
+                    Toast.makeText(SearchActivity.this, LuaScript.output, Toast.LENGTH_LONG).show();
+                    return;
+                }
                 Bundle bundle = new Bundle();
                 bundle.putStringArray("pictures", cards);
                 Intent intent = new Intent(SearchActivity.this, MainActivity.class);

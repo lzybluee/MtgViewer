@@ -237,8 +237,7 @@ public class CardParser {
                         if (setInfo.equals("")) {
                             MainActivity.urlInfo = "";
                         } else {
-                            MainActivity.urlInfo = "http://magiccards.info/"
-                                    + setInfo + "/en/" + num + ".html";
+                            MainActivity.urlInfo = "http://magiccards.info/" + setInfo + "/en/" + num + ".html";
                         }
                     }
                     isrule = justRule;
