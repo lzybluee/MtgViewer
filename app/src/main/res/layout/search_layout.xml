@@ -5,20 +5,48 @@
     android:background="#222222"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/init_button"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:text="Init" />
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/search_button"
-        android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/init_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Init Database" />
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search!" />
+
+        <Button
+            android:id="@+id/clean_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clean" />
+
+        <Button
+            android:id="@+id/help_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Help" />
+
+    </LinearLayout>
+
+    <TextView
+        android:text="Output"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:text="Search" />
+        android:id="@+id/output" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Code here"
+        android:ems="10"
+        android:id="@+id/code" />
 
 </LinearLayout>

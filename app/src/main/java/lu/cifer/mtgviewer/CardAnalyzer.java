@@ -30,6 +30,7 @@ public class CardAnalyzer {
     static String[] allName;
     static int[] landIndex = new int[5];
     static HashMap<String, Integer> cardNameInSet = new HashMap<>();
+    static boolean test;
 
     public static String getEntry(String str, String tag) {
         Pattern pattern = Pattern.compile("<" + tag + ">(.+?)</" + tag + ">",
@@ -102,7 +103,8 @@ public class CardAnalyzer {
             for (int i = 2; i < s.length; i++) {
                 processSet(new File(MainActivity.SDPath + "/MTG/Oracle/MtgOracle_" + s[i] + ".txt"));
             }
-            break; // test
+            if(test)
+                break;
         }
 
         allName = new String[cardDatabase.size()];
@@ -430,6 +432,7 @@ public class CardAnalyzer {
 
     public static String[] searchCard(String script) {
         if (allName == null) {
+            test = true;
             initData();
         }
 

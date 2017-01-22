@@ -37,9 +37,6 @@ static void loadFile(const char* path) {
         const char *e = lua_tostring(state, -1);
         __android_log_print(ANDROID_LOG_ERROR, "LUA", "Error : %s %s", path, e);
         stream << "Error: " << path << " " << e << endl;
-    } else {
-        __android_log_print(ANDROID_LOG_ERROR, "LUA", "Finished");
-        stream << "Finished" << endl;
     }
 }
 
