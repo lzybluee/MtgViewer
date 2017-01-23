@@ -148,3 +148,8 @@ jstring Java_lu_cifer_mtgviewer_LuaScript_runScript(JNIEnv *env, jobject thiz, j
     std::string ret = stream.str();
     return env->NewStringUTF(ret.c_str());
 }
+
+extern "C"
+void Java_lu_cifer_mtgviewer_LuaScript_closeLua(JNIEnv *env, jobject thiz) {
+    lua_close(state);
+}

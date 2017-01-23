@@ -343,6 +343,8 @@ public class MainActivity extends Activity {
         } else if (System.currentTimeMillis() - mBackPressed <= 1000) {
             saveSelectedSets("");
             super.onBackPressed();
+            LuaScript.closeLua();
+            System.exit(0);
         } else {
             mBackPressed = System.currentTimeMillis();
             Toast.makeText(this, "Press BACK again to quit", Toast.LENGTH_SHORT).show();
