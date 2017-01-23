@@ -110,12 +110,18 @@ public class CardParser {
             {"Portal", "Starter/POR", "PO"},
             {"Starter 1999", "Starter/S99", "ST"},
 
+            {"Media Inserts", "Special/MBP", "MBP"},
+
+            {"Unhinged", "Unset/UNH", "UH"},
+            {"Unglued", "Unset/UGL", "UG"},
+
             {"Modern Masters 2015 Edition", "Reprint/MM2", "MM2"},
             {"Modern Masters", "Reprint/MMA", "MMA"},
             {"Vintage Masters", "Reprint/VMA", "VMA"},
             {"Eternal Masters", "Reprint/EMA", "EMA"},
-            {"Duel: Kiora vs. Elspeth", "Reprint/DDO", "DDO"},
-            {"Duel: Speed vs. Cunning", "Reprint/DDN", "DDN"},
+
+            {"Duel: Kiora vs Elspeth", "Reprint/DDO", "DDO"},
+            {"Duel: Speed vs Cunning", "Reprint/DDN", "DDN"},
             {"Duel: Jace vs Vraska", "Reprint/DDM", "DDM"},
             {"Duel: Heroes vs Monsters", "Reprint/DDL", "DDL"},
             {"Duel: Sorin vs Tibalt", "Reprint/DDK", "DDK"},
@@ -129,6 +135,7 @@ public class CardParser {
             {"Duel: Divine vs Demonic", "Reprint/DDC", "DVD"},
             {"Duel: Jace vs Chandra", "Reprint/DD2", "JVC"},
             {"Duel: Elves vs Goblins", "Reprint/EVG", "EVG"},
+
             {"Premium: Graveborn", "Reprint/PD3", "PD3"},
             {"Premium: Fire and Lightning", "Reprint/PD2", "PD2"},
             {"Premium: Slivers", "Reprint/H09", "PDS"},
@@ -141,21 +148,19 @@ public class CardParser {
             {"From the Vault: Relics", "Reprint/V10", "FVR"},
             {"From the Vault: Exiled", "Reprint/V09", "FVE"},
             {"From the Vault: Dragons", "Reprint/DRB", "FVD"},
+
             {"MTGO Masters Edition IV", "Reprint/ME4", "ME4"},
             {"MTGO Masters Edition III", "Reprint/ME3", "ME3"},
             {"MTGO Masters Edition II", "Reprint/ME2", "ME2"},
             {"MTGO Masters Edition", "Reprint/MED", "MED"},
+
             {"Chronicles", "Reprint/CHR", "CH"},
             {"Commander's Arsenal", "Reprint/CMA", "CMA"},
 
-            {"Unhinged", "Unset/UNH", "UH"},
-            {"Unglued", "Unset/UGL", "UG"},
-
-            {"Media Inserts", "Special/MBP", "MBP"},
-            {"Conspiracy Conspiracies", "Conspiracy/Conspiracy", "CNS"},
-            {"Archenemy Schemes", "Archenemy/Scheme", "ARC"},
-            {"Planechase Planes", "Planechase/Plane", "PCH"},
-            {"Planechase 2012 Planes", "Planechase/Plane2012", "PC2"},
+            {"Conspiracy Conspiracies", "Conspiracy/Conspiracy", "Conspiracy"},
+            {"Archenemy Schemes", "Archenemy/Scheme", "Scheme"},
+            {"Planechase 2012 Planes", "Planechase/Plane2012", "Plane2012"},
+            {"Planechase Planes", "Planechase/Plane", "Plane"},
     };
 
     public static int rulePage = 0;
@@ -168,7 +173,7 @@ public class CardParser {
         int idx = 0;
         for (String[] strs : SetList) {
             int index;
-            if ((index = url.lastIndexOf(strs[1])) >= 0 && !url.contains("/Misc/")) {
+            if ((index = url.lastIndexOf(strs[1] + "/")) >= 0 && !url.contains("/Misc/")) {
                 if (url.substring(index + strs[1].length() + 1).contains("/")
                         && strs.length >= 4) {
                     file = new File(MainActivity.SDPath
@@ -190,7 +195,7 @@ public class CardParser {
             idx++;
         }
 
-        if (setInfo.equals("") && url.contains("/Conspiracy/")) {
+        if (url.contains("/Conspiracy/")) {
             setInfo = "cns";
         }
 

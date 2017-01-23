@@ -194,18 +194,14 @@ public class MainActivity extends Activity {
         menu.add(Menu.NONE, 5, 6, "Select");
         menu.add(Menu.NONE, 6, 7, "Done");
         menu.add(Menu.NONE, 7, 8, "Token");
-        menu.add(Menu.NONE, 8, 9, "Plane");
-        menu.add(Menu.NONE, 9, 10, "Scheme");
-        menu.add(Menu.NONE, 10, 11, "Conspiracy");
-        menu.add(Menu.NONE, 11, 12, "Unset");
-        menu.add(Menu.NONE, 12, 13, "Promo");
-        menu.add(Menu.NONE, 13, 14, "Special");
-        menu.add(Menu.NONE, 14, 15, "Vanguard");
+        menu.add(Menu.NONE, 8, 9, "Promo");
+        menu.add(Menu.NONE, 9, 10, "Special");
+        menu.add(Menu.NONE, 10, 11, "Vanguard");
         for (int i = 0; i < CardParser.SetList.length; i++) {
-            menu.add(Menu.NONE, i + 15, i + 16, CardParser.SetList[i][0]);
+            menu.add(Menu.NONE, i + 11, i + 12, CardParser.SetList[i][0]);
         }
         for (int i = 0; i < mMiscSets.length; i++) {
-            menu.add(Menu.NONE, i + CardParser.SetList.length + 15, i + CardParser.SetList.length + 16,
+            menu.add(Menu.NONE, i + CardParser.SetList.length + 11, i + CardParser.SetList.length + 12,
                     mMiscSets[i].substring(mMiscSets[i].lastIndexOf("/") + 1));
         }
         return super.onCreateOptionsMenu(menu);
@@ -247,23 +243,15 @@ public class MainActivity extends Activity {
         } else if (n == 7) {
             init("Token");
         } else if (n == 8) {
-            init("Planechase/Plane|Planechase/Plane2012");
-        } else if (n == 9) {
-            init("Archenemy/Scheme");
-        } else if (n == 10) {
-            init("Conspiracy/Conspiracy");
-        } else if (n == 11) {
-            init("Unset");
-        } else if (n == 12) {
             init("Promo");
-        } else if (n == 13) {
+        } else if (n == 9) {
             init("Special");
-        } else if (n == 14) {
+        } else if (n == 10) {
             init("Vanguard");
-        } else if (n <= 14 + CardParser.SetList.length) {
-            init(CardParser.SetList[n - 15][1]);
+        } else if (n <= 10 + CardParser.SetList.length) {
+            init(CardParser.SetList[n - 11][1]);
         } else {
-            init(mMiscSets[n - 15 - CardParser.SetList.length]);
+            init(mMiscSets[n - 11 - CardParser.SetList.length]);
         }
 
         return false;

@@ -308,14 +308,6 @@ public class CardAnalyzer {
         reprint.rating = Float.parseFloat(getEntry(str, "Rating"));
         reprint.votes = Integer.parseInt(getEntry(str, "Votes"));
 
-        for (String[] strs : CardParser.SetList) {
-            if (reprint.set.equals(strs[0])) {
-                reprint.code = strs[1].substring(strs[1].lastIndexOf("/") + 1);
-                reprint.folder = strs[1];
-                reprint.altCode = strs[2];
-                break;
-            }
-        }
         if (card.superTypes.size() > 0) {
             for (String special : SpecialList) {
                 for (String types : card.superTypes) {
@@ -378,12 +370,53 @@ public class CardAnalyzer {
             reprint.formatedNumber = getFormatedNumber(reprint.number, 2);
         }
 
-        for (String[] strs : CardParser.SetList) {
-            if (reprint.set.equals(strs[0])) {
-                reprint.picture = strs[1] + "/" + reprint.formatedNumber + ".jpg";
-                break;
+        if (reprint.specialType == null) {
+            switch(reprint.set) {
+                case "Eighth Edition Box Set":
+                    reprint.code = "8EB";
+                    reprint.folder = "Modern/8ED/8EB";
+                    reprint.altCode = "8EB";
+                    break;
+                case "Ninth Edition Box Set":
+                    reprint.code = "9EB";
+                    reprint.folder = "Modern/9ED/9EB";
+                    reprint.altCode = "9EB";
+                    break;
+                default:
+                    for (String[] strs : CardParser.SetList) {
+                        String set = reprint.set.replace("Premium Deck Series:", "Premium:")
+                                .replace("Duel Decks:", "Duel:").replace("The Coalition", "Coalition").replace(" vs. ", " vs ");
+                        if (set.equals(strs[0])) {
+                            reprint.code = strs[1].substring(strs[1].lastIndexOf("/") + 1);
+                            reprint.folder = strs[1];
+                            reprint.altCode = strs[2];
+                            break;
+                        }
+                    }
             }
+        } else {
+            int index = 0;
+            switch(reprint.set) {
+                case "Conspiracy":
+                    index = CardParser.SetList.length - 4;
+                    break;
+                case "Archenemy":
+                    index = CardParser.SetList.length - 3;
+                    break;
+                case "Planechase 2012 Edition":
+                    index = CardParser.SetList.length - 2;
+                    break;
+                case "Planechase":
+                    index = CardParser.SetList.length - 1;
+                    break;
+            }
+            String[] strs = CardParser.SetList[index];
+            reprint.code = strs[1].substring(strs[1].lastIndexOf("/") + 1);
+            reprint.folder = strs[1];
+            reprint.altCode = strs[2];
         }
+
+        reprint.picture = reprint.folder + "/" + reprint.formatedNumber + ".jpg";
 
         reprint.card = card;
         card.reprints.add(reprint);
@@ -417,6 +450,7 @@ public class CardAnalyzer {
     }
 
     public static void processSet(File file) {
+        System.out.println("Process Oracle: " + file);
         BufferedReader reader;
         try {
             reader = new BufferedReader(new FileReader(file));
@@ -455,16 +489,19 @@ public class CardAnalyzer {
             filter.clear();
             filter.add("Magic Origins");
         } else {
-            filterString = sets;
-            filter.clear();
+            Vector<String> v = new Vector<>();
             String[] paths = sets.split("\\|");
             for (String[] s : CardParser.SetList) {
                 for (String path : paths) {
-                    if (s[1].contains(path)) {
-                        filter.add(s[0]);
+                    if ((s[1] + "/").contains(path + "/")) {
+                        v.add(s[0]);
                         break;
                     }
                 }
+            }
+            if (!v.isEmpty()) {
+                filterString = sets;
+                filter = v;
             }
         }
     }
