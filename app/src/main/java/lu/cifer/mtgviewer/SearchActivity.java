@@ -9,10 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SearchActivity extends Activity {
 
     EditText code;
+    TextView output;
 
     private void saveCode(String code) {
         SharedPreferences sp = getSharedPreferences("code", Context.MODE_PRIVATE);
@@ -39,6 +41,9 @@ public class SearchActivity extends Activity {
         code = (EditText) findViewById(R.id.code);
         code.setText(loadCode());
 
+        output = (TextView) findViewById(R.id.output);
+        output.setText(CardAnalyzer.getFilterString());
+
         Button initButton = (Button) findViewById(R.id.init_button);
         initButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,15 +57,16 @@ public class SearchActivity extends Activity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                code = (EditText) findViewById(R.id.code);
-                TextView output = (TextView) findViewById(R.id.output);
-
                 saveCode(code.getText().toString());
 
                 String[] cards = CardAnalyzer.searchCard(code.getText().toString());
                 output.setText(LuaScript.output);
-                if(cards == null) {
+                if (cards == null) {
                     ((Button) findViewById(R.id.help_button)).setText("Show");
+                    return;
+                }
+                if (cards.length == 0) {
+                    Toast.makeText(SearchActivity.this, "Found no card", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Bundle bundle = new Bundle();
@@ -85,9 +91,9 @@ public class SearchActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String picture = CardAnalyzer.getWrongCard();
-                if(picture != null) {
+                if (picture != null) {
                     Bundle bundle = new Bundle();
-                    bundle.putStringArray("pictures", new String[] {picture});
+                    bundle.putStringArray("pictures", new String[]{picture});
                     Intent intent = new Intent(SearchActivity.this, MainActivity.class);
                     intent.putExtras(bundle);
                     startActivity(intent);

@@ -31,11 +31,8 @@ public class CardAnalyzer {
     static int[] landIndex = new int[5];
     static HashMap<String, Integer> cardNameInSet = new HashMap<>();
     static String wrongCard;
+    static String filterString = "All";
     static Vector<String> filter = new Vector<>();
-
-    static {
-        filter.add("Magic Origins");
-    }
 
     public static String getEntry(String str, String tag) {
         Pattern pattern = Pattern.compile("<" + tag + ">(.+?)</" + tag + ">",
@@ -109,7 +106,7 @@ public class CardAnalyzer {
         for (String[] s : CardParser.SetList) {
             landIndex = new int[5];
             cardNameInSet = new HashMap<>();
-            if(filter.isEmpty() || filter.contains(s[0])) {
+            if (filter.isEmpty() || filter.contains(s[0])) {
                 for (int i = 2; i < s.length; i++) {
                     setNum++;
                     processSet(new File(MainActivity.SDPath + "/MTG/Oracle/MtgOracle_" + s[i] + ".txt"));
@@ -224,7 +221,7 @@ public class CardAnalyzer {
                     }
                 }
                 if (!flag) {
-                    if(s.equals("Legendary")) {
+                    if (s.equals("Legendary")) {
                         card.isLegendary = true;
                     }
                     card.superTypes.add(s);
@@ -439,6 +436,10 @@ public class CardAnalyzer {
         }
     }
 
+    public static String getFilterString() {
+        return filterString;
+    }
+
     public static String getWrongCard() {
         String card = wrongCard;
         wrongCard = null;
@@ -447,12 +448,18 @@ public class CardAnalyzer {
 
     public static void setFilter(String sets) {
         if (sets == null || sets.equals("")) {
+            filterString = "All";
             filter.clear();
+        } else if (sets.equals("Back")) {
+            filterString = "ORI";
+            filter.clear();
+            filter.add("Magic Origins");
         } else {
+            filterString = sets;
             filter.clear();
             String[] paths = sets.split("\\|");
             for (String[] s : CardParser.SetList) {
-                for(String path : paths) {
+                for (String path : paths) {
                     if (s[1].contains(path)) {
                         filter.add(s[0]);
                         break;
@@ -476,7 +483,7 @@ public class CardAnalyzer {
                 int result = LuaScript.checkCard(card, reprint, script);
                 if (result == 1) {
                     cards.add(reprint);
-                } else if(result == 2) {
+                } else if (result == 2) {
                     wrongCard = reprint.picture;
                     return null;
                 }

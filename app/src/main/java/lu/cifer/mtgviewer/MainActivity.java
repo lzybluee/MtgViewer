@@ -206,7 +206,7 @@ public class MainActivity extends Activity {
         }
         for (int i = 0; i < mMiscSets.length; i++) {
             menu.add(Menu.NONE, i + CardParser.SetList.length + 15, i + CardParser.SetList.length + 16,
-                        mMiscSets[i].substring(mMiscSets[i].lastIndexOf("/") + 1));
+                    mMiscSets[i].substring(mMiscSets[i].lastIndexOf("/") + 1));
         }
         return super.onCreateOptionsMenu(menu);
     }

@@ -2,12 +2,12 @@ package lu.cifer.mtgviewer;
 
 public class LuaScript {
 
+    static String output;
+
     static {
         System.loadLibrary("native-lib");
         initLua(MainActivity.SDPath + "/MTG/Script/global.lua");
     }
-
-    static String output;
 
     static private void initCard(CardAnalyzer.CardInfo card, CardAnalyzer.ReprintInfo reprint) {
         luaPushString("name", card.name);
