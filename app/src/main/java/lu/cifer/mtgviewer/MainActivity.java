@@ -262,8 +262,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         String pictures[] = new String[0];
-        if (getIntent() != null && getIntent().getExtras() != null) {
-            pictures = getIntent().getExtras().getStringArray("pictures");
+        if (CardAnalyzer.results != null) {
+            pictures = CardAnalyzer.results;
         }
 
         SDPath = Environment.getExternalStorageDirectory();

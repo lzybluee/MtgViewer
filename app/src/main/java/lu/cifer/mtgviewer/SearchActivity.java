@@ -59,20 +59,17 @@ public class SearchActivity extends Activity {
             public void onClick(View v) {
                 saveCode(code.getText().toString());
 
-                String[] cards = CardAnalyzer.searchCard(code.getText().toString());
+                int ret = CardAnalyzer.searchCard(code.getText().toString());
                 output.setText(LuaScript.output);
-                if (cards == null) {
+                if (ret == -1) {
                     ((Button) findViewById(R.id.help_button)).setText("Show");
                     return;
                 }
-                if (cards.length == 0) {
+                if (ret == 0) {
                     Toast.makeText(SearchActivity.this, "Found no card", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Bundle bundle = new Bundle();
-                bundle.putStringArray("pictures", cards);
                 Intent intent = new Intent(SearchActivity.this, MainActivity.class);
-                intent.putExtras(bundle);
                 startActivity(intent);
                 finish();
             }

@@ -22,8 +22,10 @@ public class CardAnalyzer {
     public static String[] SpecialList = {"Plane", "Phenomenon", "Scheme",
             "Ongoing Scheme", "Conspiracy"};
 
+    public static String[] results;
+
     static String last_name = "";
-    static ReprintInfo last_card = null;
+    static ReprintInfo last_card;
     static int same_count = 0;
     static Hashtable<String, CardInfo> cardDatabase = new Hashtable<>();
     static int reprintCards = 0;
@@ -509,7 +511,7 @@ public class CardAnalyzer {
         }
     }
 
-    public static String[] searchCard(String script) {
+    public static int searchCard(String script) {
         if (allName == null) {
             initData();
         }
@@ -525,7 +527,7 @@ public class CardAnalyzer {
                     cards.add(reprint);
                 } else if (result == 2) {
                     wrongCard = reprint.picture;
-                    return null;
+                    return -1;
                 }
             }
         }
@@ -540,11 +542,11 @@ public class CardAnalyzer {
             }
         });
 
-        String[] ret = new String[cards.size()];
-        for (int i = 0; i < ret.length; i++) {
-            ret[i] = cards.get(i).picture;
+        results = new String[cards.size()];
+        for (int i = 0; i < results.length; i++) {
+            results[i] = cards.get(i).picture;
         }
-        return ret;
+        return results.length;
     }
 
     public static class ReprintInfo {
