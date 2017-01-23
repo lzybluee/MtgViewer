@@ -34,6 +34,7 @@ public class CardAnalyzer {
     static HashMap<String, Integer> cardNameInSet = new HashMap<>();
     static String wrongCard;
     static String filterString = "All";
+    static Vector<String> lastFilter;
     static Vector<String> filter = new Vector<>();
     static Vector<String> setOrder = new Vector<>();
 
@@ -100,7 +101,33 @@ public class CardAnalyzer {
         return name;
     }
 
+    private static boolean compareFilter() {
+        if (lastFilter.size() != filter.size()) {
+            return false;
+        } else {
+            for (String set : filter) {
+                if (!lastFilter.contains(set)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static void copyFilter() {
+        lastFilter = new Vector<>();
+        lastFilter.addAll(filter);
+    }
+
     public static String initData() {
+        if (lastFilter == null) {
+            copyFilter();
+        } else if (compareFilter()) {
+            return setOrder.size() + " Sets and " + allName.length
+                    + " Cards" + " (" + reprintCards + " Reprints)";
+        } else {
+            copyFilter();
+        }
 
         setOrder.clear();
         cardDatabase.clear();
@@ -297,7 +324,6 @@ public class CardAnalyzer {
     }
 
     public static ReprintInfo addReprintCard(String str, CardInfo card) {
-
         reprintCards++;
 
         ReprintInfo reprint = new ReprintInfo();
@@ -374,7 +400,7 @@ public class CardAnalyzer {
         }
 
         if (reprint.specialType == null) {
-            switch(reprint.set) {
+            switch (reprint.set) {
                 case "Eighth Edition Box Set":
                     reprint.code = "8EB";
                     reprint.folder = "Modern/8ED/8EB";
@@ -399,7 +425,7 @@ public class CardAnalyzer {
             }
         } else {
             int index = 0;
-            switch(reprint.set) {
+            switch (reprint.set) {
                 case "Conspiracy":
                     index = CardParser.SetList.length - 4;
                     break;
@@ -512,9 +538,7 @@ public class CardAnalyzer {
     }
 
     public static int searchCard(String script) {
-        if (allName == null) {
-            initData();
-        }
+        initData();
 
         wrongCard = null;
 
