@@ -1,8 +1,8 @@
-white = string_contains(mana, 'W')
-blue = string_contains(mana, 'U')
-black = string_contains(mana, 'B')
-red = string_contains(mana, 'R')
-green = string_contains(mana, 'G')
+white = string_contains(mana, 'W') or string_contains(colorIndicator, 'White')
+blue = string_contains(mana, 'U') or string_contains(colorIndicator, 'Blue')
+black = string_contains(mana, 'B') or string_contains(colorIndicator, 'Black')
+red = string_contains(mana, 'R') or string_contains(colorIndicator, 'Red')
+green = string_contains(mana, 'G') or string_contains(colorIndicator, 'Green')
 
 artifact = table_contains(types, 'Artifact')
 creature = table_contains(types, 'Creature')
@@ -36,6 +36,15 @@ else
 	multicolor = false
 end
 
+po = tonumber(power)
+to = tonumber(toughness)
+lo = tonumber(loyalty)
+
+common = (rarity == "Common")
+uncommon = (rarity == "Uncommon")
+rare = (rarity == "Rare")
+mythic = (rarity == "Mythic Rare")
+
 w = white
 u = blue
 b = black
@@ -52,3 +61,7 @@ s = sorcery
 t = tribal
 
 m = multicolor
+
+cmc = converted
+
+legend = isLegendary
