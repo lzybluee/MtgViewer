@@ -33,6 +33,7 @@ public class CardAnalyzer {
     static String wrongCard;
     static String filterString = "All";
     static Vector<String> filter = new Vector<>();
+    static Vector<String> setOrder = new Vector<>();
 
     public static String getEntry(String str, String tag) {
         Pattern pattern = Pattern.compile("<" + tag + ">(.+?)</" + tag + ">",
@@ -99,7 +100,7 @@ public class CardAnalyzer {
 
     public static String initData() {
 
-        int setNum = 0;
+        setOrder.clear();
         cardDatabase.clear();
         reprintCards = 0;
 
@@ -108,7 +109,7 @@ public class CardAnalyzer {
             cardNameInSet = new HashMap<>();
             if (filter.isEmpty() || filter.contains(s[0])) {
                 for (int i = 2; i < s.length; i++) {
-                    setNum++;
+                    setOrder.add(s[i]);
                     processSet(new File(MainActivity.SDPath + "/MTG/Oracle/MtgOracle_" + s[i] + ".txt"));
                 }
             }
@@ -144,7 +145,7 @@ public class CardAnalyzer {
         }
         allName = temp;
 
-        return setNum + " Sets and " + allName.length
+        return setOrder.size() + " Sets and " + allName.length
                 + " Cards" + " (" + reprintCards + " Reprints)";
     }
 
@@ -418,6 +419,8 @@ public class CardAnalyzer {
 
         reprint.picture = reprint.folder + "/" + reprint.formatedNumber + ".jpg";
 
+        reprint.order = setOrder.indexOf(reprint.altCode);
+
         reprint.card = card;
         card.reprints.add(reprint);
 
@@ -533,7 +536,7 @@ public class CardAnalyzer {
                 if (left.set.equals(right.set)) {
                     return left.formatedNumber.compareTo(right.formatedNumber);
                 }
-                return left.set.compareTo(right.set);
+                return left.order - right.order;
             }
         });
 
@@ -565,6 +568,7 @@ public class CardAnalyzer {
         public String picture;
         public int sameIndex;
         public String formatedNumber;
+        public int order;
 
         public String toString() {
             return multiverseid + " " + set
