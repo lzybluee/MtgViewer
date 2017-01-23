@@ -32,7 +32,7 @@ static void loadFile(const char* path) {
         return;
     }
 
-    if (luaL_loadfile(state, path)) {
+    if (luaL_loadfile(state, path) || lua_pcall(state, 0, 0, 0)) {
         error = true;
         const char *e = lua_tostring(state, -1);
         __android_log_print(ANDROID_LOG_ERROR, "LUA", "Error : %s %s", path, e);
