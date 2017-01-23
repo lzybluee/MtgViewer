@@ -64,4 +64,7 @@ m = multicolor
 
 cmc = converted
 
+split = isSplit
+double = isDoubleFaced
+flip = isFlip
 legend = isLegendary
