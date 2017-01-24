@@ -1,6 +1,7 @@
 package lu.cifer.mtgviewer;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -22,10 +23,13 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 public class MainActivity extends Activity {
@@ -39,12 +43,15 @@ public class MainActivity extends Activity {
     String mSets = "";
     String[] mMiscSets = null;
     long mBackPressed = 0;
+    ProgressDialog mProgress;
+    Timer mTimer;
+    String mProcessSet;
 
     void processFile(File file) {
         File[] files = file.listFiles();
         for (File f : files) {
             if (f.isDirectory()) {
-                System.out.println(f);
+                mProcessSet = f.toString().replace(SDPath + "/MTG/", "");
                 processFile(f);
             } else {
                 if (f.getName().endsWith(".jpg") || f.getName().endsWith(".png")) {
@@ -148,28 +155,72 @@ public class MainActivity extends Activity {
 
         mCardPath = new Vector<>();
 
-        String[] paths = path.split("\\|");
+        final String[] paths = path.split("\\|");
 
-        for (String s : paths) {
-            File file = new File(SDPath + "/MTG/" + s);
-            if (file.exists() && file.isDirectory()) {
-                processFile(file);
-            }
+        if (!path.equals("Back")) {
+            mProgress = new ProgressDialog(this);
+            mProgress.setIndeterminate(true);
+            mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mProgress.setCancelable(false);
+            mProgress.setMessage("Processing...");
+            mProgress.show();
+
+            mTimer = new Timer();
+            mTimer.schedule(new TimerTask() {
+
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(mProgress != null && mProcessSet != null) {
+                                mProgress.setMessage(mProcessSet);
+                            }
+                        }
+                    });
+                }
+            }, 0, 200);
         }
 
-        if (mShuffle) {
-            Collections.shuffle(mCardPath);
-        } else {
-            Collections.sort(mCardPath);
-            if (!mAscending) {
-                Collections.reverse(mCardPath);
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                for (String s : paths) {
+                    File file = new File(SDPath + "/MTG/" + s);
+                    if (file.exists() && file.isDirectory()) {
+                        processFile(file);
+                    }
+                }
+
+                if (mShuffle) {
+                    Collections.shuffle(mCardPath);
+                } else {
+                    Collections.sort(mCardPath);
+                    if (!mAscending) {
+                        Collections.reverse(mCardPath);
+                    }
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initGallery();
+
+                        Toast.makeText(MainActivity.this, "Total Cards : " + mCardPath.size(),
+                                Toast.LENGTH_SHORT).show();
+
+                        if(mProgress != null) {
+                            mProgress.dismiss();
+                            mProgress = null;
+                            mTimer.cancel();
+                            mProcessSet = null;
+                        }
+                    }
+                });
             }
-        }
+        };
 
-        Toast.makeText(MainActivity.this, "Total Cards : " + mCardPath.size(),
-                Toast.LENGTH_SHORT).show();
-
-        initGallery();
+        new Thread(runnable).start();
     }
 
     void saveSelectedSets(String sets) {
