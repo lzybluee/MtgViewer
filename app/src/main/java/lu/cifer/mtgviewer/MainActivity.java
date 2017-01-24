@@ -275,6 +275,7 @@ public class MainActivity extends Activity {
         } else if (n == 4) {
             mShuffle = false;
             mAscending = !mAscending;
+            CardAnalyzer.setReverse(!mAscending);
             Toast.makeText(this, mAscending ? "Ascending" : "Descending",
                     Toast.LENGTH_SHORT).show();
         } else if (n == 5) {

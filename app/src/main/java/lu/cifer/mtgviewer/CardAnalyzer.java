@@ -38,6 +38,64 @@ public class CardAnalyzer {
     static Vector<String> filter = new Vector<>();
     static Vector<String> setOrder = new Vector<>();
     static int progress;
+    static boolean reverse;
+    static int sortType = 0;
+    static String[] sortName = new String[] {"Edition", "Name", "Cmc"};
+
+    static Comparator<ReprintInfo> editionComparator = new Comparator<ReprintInfo>() {
+        @Override
+        public int compare(ReprintInfo left, ReprintInfo right) {
+            int ret;
+            if (left.order == right.order) {
+                ret = left.formatedNumber.compareTo(right.formatedNumber);
+            } else {
+                ret = left.order - right.order;
+            }
+            return reverse ? -ret : ret;
+        }
+    };
+
+    static Comparator<ReprintInfo> nameComparator = new Comparator<ReprintInfo>() {
+        @Override
+        public int compare(ReprintInfo left, ReprintInfo right) {
+            int ret;
+            if (left.card.name.equals(right.card.name)) {
+                if (left.order == right.order) {
+                    ret = left.formatedNumber.compareTo(right.formatedNumber);
+                } else {
+                    ret = left.order - right.order;
+                }
+            } else {
+                ret = left.card.name.compareTo(right.card.name);
+            }
+            return reverse ? -ret : ret;
+        }
+    };
+
+    static Comparator<ReprintInfo> cmcComparator = new Comparator<ReprintInfo>() {
+        @Override
+        public int compare(ReprintInfo left, ReprintInfo right) {
+            int ret;
+            if (left.card.converted == right.card.converted) {
+                if (left.order == right.order) {
+                    ret = left.formatedNumber.compareTo(right.formatedNumber);
+                } else {
+                    ret = left.order - right.order;
+                }
+            } else {
+                ret = left.card.converted - right.card.converted;
+            }
+            return reverse ? -ret : ret;
+        }
+    };
+
+    public static String switchSortType() {
+        sortType++;
+        if (sortType >= sortName.length) {
+            sortType = 0;
+        }
+        return sortName[sortType];
+    }
 
     public static String getEntry(String str, String tag) {
         Pattern pattern = Pattern.compile("<" + tag + ">(.+?)</" + tag + ">",
@@ -133,6 +191,10 @@ public class CardAnalyzer {
 
     public static int getProgress() {
         return progress;
+    }
+
+    public static void setReverse(boolean r) {
+        reverse = r;
     }
 
     public static String initData() {
@@ -576,15 +638,17 @@ public class CardAnalyzer {
             }
         }
 
-        Collections.sort(cards, new Comparator<ReprintInfo>() {
-            @Override
-            public int compare(ReprintInfo left, ReprintInfo right) {
-                if (left.set.equals(right.set)) {
-                    return left.formatedNumber.compareTo(right.formatedNumber);
-                }
-                return left.order - right.order;
-            }
-        });
+        switch (sortType) {
+            case 0:
+                Collections.sort(cards, editionComparator);
+                break;
+            case 1:
+                Collections.sort(cards, nameComparator);
+                break;
+            case 2:
+                Collections.sort(cards, cmcComparator);
+                break;
+        }
 
         results = new String[cards.size()];
         for (int i = 0; i < results.length; i++) {

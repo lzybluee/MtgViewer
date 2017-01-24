@@ -122,7 +122,7 @@ public class SearchActivity extends Activity {
                                     return;
                                 }
                                 if (ret == 0) {
-                                    Toast.makeText(SearchActivity.this, "Found no card", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SearchActivity.this, "Found No Card", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 
@@ -164,6 +164,15 @@ public class SearchActivity extends Activity {
             public void onClick(View v) {
                 saveCode(code.getText().toString());
                 searchDatabase();
+            }
+        });
+
+        Button sortButton = (Button) findViewById(R.id.sort_button);
+        sortButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String sort = CardAnalyzer.switchSortType();
+                Toast.makeText(SearchActivity.this, sort, Toast.LENGTH_SHORT).show();
             }
         });
 
