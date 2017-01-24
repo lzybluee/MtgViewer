@@ -2,6 +2,7 @@ package lu.cifer.mtgviewer;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -45,8 +46,12 @@ public class MainActivity extends Activity {
     ProgressDialog mProgress;
     Timer mTimer;
     String mProcessSet;
+    boolean mStop;
 
     void processFile(File file) {
+        if (mStop) {
+            return;
+        }
         File[] files = file.listFiles();
         for (File f : files) {
             if (f.isDirectory()) {
@@ -160,7 +165,13 @@ public class MainActivity extends Activity {
             mProgress = new ProgressDialog(this);
             mProgress.setIndeterminate(true);
             mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mProgress.setCancelable(false);
+            mProgress.setCanceledOnTouchOutside(false);
+            mProgress.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    mStop = true;
+                }
+            });
             mProgress.setMessage("Processing...\n");
             mProgress.show();
 
@@ -184,6 +195,8 @@ public class MainActivity extends Activity {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
+                mStop = false;
+
                 for (String s : paths) {
                     File file = new File(SDPath + "/MTG/" + s);
                     if (file.exists() && file.isDirectory()) {

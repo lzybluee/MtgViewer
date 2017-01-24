@@ -3,6 +3,7 @@ package lu.cifer.mtgviewer;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -43,7 +44,13 @@ public class SearchActivity extends Activity {
         mProgress = new ProgressDialog(this);
         mProgress.setIndeterminate(false);
         mProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        mProgress.setCancelable(false);
+        mProgress.setCanceledOnTouchOutside(false);
+        mProgress.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                CardAnalyzer.setStop();
+            }
+        });
         mProgress.setMax(max);
         mProgress.setTitle(title);
         mProgress.show();

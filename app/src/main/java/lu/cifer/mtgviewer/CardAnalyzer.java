@@ -40,7 +40,8 @@ public class CardAnalyzer {
     static int progress;
     static boolean reverse;
     static int sortType = 0;
-    static String[] sortName = new String[] {"Edition", "Name", "Cmc"};
+    static String[] sortName = new String[]{"Edition", "Name", "Cmc"};
+    static boolean stop;
 
     static Comparator<ReprintInfo> editionComparator = new Comparator<ReprintInfo>() {
         @Override
@@ -198,15 +199,12 @@ public class CardAnalyzer {
     }
 
     public static String initData() {
-        if (lastFilter == null) {
-            copyFilter();
-        } else if (compareFilter()) {
+        if (lastFilter != null && compareFilter()) {
             return setOrder.size() + " Sets and " + allName.length
                     + " Cards" + " (" + reprintCards + " Reprints)";
-        } else {
-            copyFilter();
         }
 
+        stop = false;
         progress = 0;
 
         setOrder.clear();
@@ -217,12 +215,19 @@ public class CardAnalyzer {
             landIndex = new int[5];
             cardNameInSet = new HashMap<>();
             if (filter.isEmpty() || filter.contains(s[0])) {
+                if (stop) {
+                    break;
+                }
                 progress++;
                 for (int i = 2; i < s.length; i++) {
                     setOrder.add(s[i]);
                     processSet(new File(MainActivity.SDPath + "/MTG/Oracle/MtgOracle_" + s[i] + ".txt"));
                 }
             }
+        }
+
+        if (!stop) {
+            copyFilter();
         }
 
         allName = new String[cardDatabase.size()];
@@ -618,12 +623,20 @@ public class CardAnalyzer {
         }
     }
 
+    public static void setStop() {
+        stop = true;
+    }
+
     public static int searchCard(String script) {
         wrongCard = null;
+        stop = false;
         progress = 0;
 
         Vector<ReprintInfo> cards = new Vector<>();
         for (String name : allName) {
+            if (stop) {
+                break;
+            }
             progress++;
             CardInfo card = cardDatabase.get(name);
             for (ReprintInfo reprint : card.reprints) {
