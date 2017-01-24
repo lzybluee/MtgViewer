@@ -201,7 +201,7 @@ public class CardAnalyzer {
     private static void SortReprint(CardInfo card) {
         card.reprintTimes = card.reprints.size();
 
-        if(card.reprints.size() == 1) {
+        if (card.reprints.size() == 1) {
             card.reprints.get(0).reprintIndex = 1;
             return;
         }
@@ -211,7 +211,7 @@ public class CardAnalyzer {
                 return left.multiverseid - right.multiverseid;
             }
         });
-        for(int i = 0; i < card.reprints.size(); i++) {
+        for (int i = 0; i < card.reprints.size(); i++) {
             card.reprints.get(i).reprintIndex = i + 1;
         }
     }

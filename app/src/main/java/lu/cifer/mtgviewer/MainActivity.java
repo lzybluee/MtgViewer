@@ -36,7 +36,6 @@ public class MainActivity extends Activity {
 
     public static File SDPath;
     public static String urlInfo = "";
-    Gallery mGallery;
     Vector<String> mCardPath = new Vector<>();
     boolean mShuffle = true;
     boolean mAscending = false;
@@ -83,23 +82,24 @@ public class MainActivity extends Activity {
     }
 
     void initGallery() {
-        mGallery = (Gallery) findViewById(R.id.gallery);
-        mGallery.setAdapter(new GalleryAdapter());
-        mGallery.setBackgroundColor(0x222222);
-        mGallery.setSpacing(20);
+        Gallery gallery = (Gallery) findViewById(R.id.gallery);
+        gallery.setAdapter(new GalleryAdapter());
+        gallery.setBackgroundColor(0x222222);
+        gallery.setSpacing(20);
 
-        mGallery.setOnItemClickListener(new OnItemClickListener() {
+        gallery.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 CardParser.rulePage++;
                 Toast.makeText(
                         MainActivity.this,
-                        CardParser.getCardInfo(mCardPath.get(position), false),
+                        "[" + (position + 1) + " / " + mCardPath.size() + "]\n"
+                                + CardParser.getCardInfo(mCardPath.get(position), false),
                         Toast.LENGTH_LONG).show();
             }
         });
 
-        mGallery.setOnItemLongClickListener(new OnItemLongClickListener() {
+        gallery.setOnItemLongClickListener(new OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View v,
                                            int position, long id) {
@@ -285,7 +285,7 @@ public class MainActivity extends Activity {
             finish();
         } else if (n == 3) {
             mShuffle = true;
-            Toast.makeText(this, "Shuffle\n" + (mGallery.getSelectedItemId() + 1) + "/" + mGallery.getCount(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Shuffle", Toast.LENGTH_SHORT).show();
         } else if (n == 4) {
             mShuffle = false;
             mAscending = !mAscending;

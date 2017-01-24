@@ -238,8 +238,8 @@ public class CardParser {
             reader = new BufferedReader(new FileReader(file));
             String str;
             boolean flag = false;
-            boolean isrule = false;
-            boolean isbasic = false;
+            boolean isRule = false;
+            boolean isBasic = false;
             while ((str = reader.readLine()) != null) {
                 if (str.equals("<No>" + num + "</No>")) {
                     flag = true;
@@ -251,7 +251,7 @@ public class CardParser {
                             MainActivity.urlInfo = "http://magiccards.info/" + setInfo + "/en/" + num + ".html";
                         }
                     }
-                    isrule = justRule;
+                    isRule = justRule;
                 }
                 if (flag) {
                     if (str.equals("")) {
@@ -272,8 +272,8 @@ public class CardParser {
                             }
                         }
                     }
-                    if (!isrule && str.startsWith("<Name>")) {
-                        isbasic = str.contains(">Plains<") || str.contains(">Island<") || str.contains(">Swamp<")
+                    if (!isRule && str.startsWith("<Name>")) {
+                        isBasic = str.contains(">Plains<") || str.contains(">Island<") || str.contains(">Swamp<")
                                 || str.contains(">Mountain<") || str.contains(">Forest<");
                     }
                     if (str.startsWith("<Multiverseid>")) {
@@ -287,11 +287,11 @@ public class CardParser {
                             }
                         }
                     }
-                    if (!isrule && str.startsWith("<ColorIndicator>")) {
+                    if (!isRule && str.startsWith("<ColorIndicator>")) {
                         card += "Color: " + str + "\n";
                         continue;
                     }
-                    if (!isrule && str.startsWith("<OtherPart>")) {
+                    if (!isRule && str.startsWith("<OtherPart>")) {
                         card += "Other: " + str + "\n";
                         continue;
                     }
@@ -300,9 +300,9 @@ public class CardParser {
                             && !str.startsWith("<Classic>")
                             && !str.startsWith("<Multiverseid>")) {
                         if (str.startsWith("<Rulings>")) {
-                            isrule = !justRule;
+                            isRule = !justRule;
                         }
-                        if (!isrule) {
+                        if (!isRule) {
                             if (str.contains(">Banned<")
                                     || str.contains(">Restricted<")
                                     || str.contains(">Legal<")) {
@@ -321,7 +321,7 @@ public class CardParser {
                                             break;
                                         }
                                     }
-                                } else if (str.contains("Modern>Legal<") && !isModern && !isbasic) {
+                                } else if (str.contains("Modern>Legal<") && !isModern && !isBasic) {
                                     card += "Legal in Modern\n";
                                 }
                             } else {
@@ -329,7 +329,7 @@ public class CardParser {
                             }
                         }
                         if (str.contains("</Rulings>")) {
-                            isrule = justRule;
+                            isRule = justRule;
                             if (justRule) {
                                 card = card.replaceAll("<Rulings>", "")
                                         .replaceAll("</Rulings>", "");
