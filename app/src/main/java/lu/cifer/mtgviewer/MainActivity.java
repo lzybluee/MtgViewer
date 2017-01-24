@@ -23,7 +23,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.File;
@@ -162,7 +161,7 @@ public class MainActivity extends Activity {
             mProgress.setIndeterminate(true);
             mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mProgress.setCancelable(false);
-            mProgress.setMessage("Processing...");
+            mProgress.setMessage("Processing...\n");
             mProgress.show();
 
             mTimer = new Timer();
@@ -173,8 +172,8 @@ public class MainActivity extends Activity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(mProgress != null && mProcessSet != null) {
-                                mProgress.setMessage(mProcessSet);
+                            if (mProgress != null && mProcessSet != null) {
+                                mProgress.setMessage("Processing...\n" + mProcessSet);
                             }
                         }
                     });
@@ -209,7 +208,7 @@ public class MainActivity extends Activity {
                         Toast.makeText(MainActivity.this, "Total Cards : " + mCardPath.size(),
                                 Toast.LENGTH_SHORT).show();
 
-                        if(mProgress != null) {
+                        if (mProgress != null) {
                             mProgress.dismiss();
                             mProgress = null;
                             mTimer.cancel();

@@ -37,6 +37,7 @@ public class CardAnalyzer {
     static Vector<String> lastFilter;
     static Vector<String> filter = new Vector<>();
     static Vector<String> setOrder = new Vector<>();
+    static int progress;
 
     public static String getEntry(String str, String tag) {
         Pattern pattern = Pattern.compile("<" + tag + ">(.+?)</" + tag + ">",
@@ -119,6 +120,21 @@ public class CardAnalyzer {
         lastFilter.addAll(filter);
     }
 
+    public static int getInitProgressMax() {
+        if (filter.isEmpty()) {
+            return CardParser.SetList.length;
+        }
+        return filter.size();
+    }
+
+    public static int getSearchProgressMax() {
+        return allName.length;
+    }
+
+    public static int getProgress() {
+        return progress;
+    }
+
     public static String initData() {
         if (lastFilter == null) {
             copyFilter();
@@ -129,6 +145,8 @@ public class CardAnalyzer {
             copyFilter();
         }
 
+        progress = 0;
+
         setOrder.clear();
         cardDatabase.clear();
         reprintCards = 0;
@@ -137,6 +155,7 @@ public class CardAnalyzer {
             landIndex = new int[5];
             cardNameInSet = new HashMap<>();
             if (filter.isEmpty() || filter.contains(s[0])) {
+                progress++;
                 for (int i = 2; i < s.length; i++) {
                     setOrder.add(s[i]);
                     processSet(new File(MainActivity.SDPath + "/MTG/Oracle/MtgOracle_" + s[i] + ".txt"));
@@ -538,12 +557,12 @@ public class CardAnalyzer {
     }
 
     public static int searchCard(String script) {
-        initData();
-
         wrongCard = null;
+        progress = 0;
 
         Vector<ReprintInfo> cards = new Vector<>();
         for (String name : allName) {
+            progress++;
             CardInfo card = cardDatabase.get(name);
             for (ReprintInfo reprint : card.reprints) {
                 int result = LuaScript.checkCard(card, reprint, script);
@@ -551,6 +570,7 @@ public class CardAnalyzer {
                     cards.add(reprint);
                 } else if (result == 2) {
                     wrongCard = reprint.picture;
+                    results = new String[]{wrongCard};
                     return -1;
                 }
             }

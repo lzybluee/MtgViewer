@@ -1,6 +1,7 @@
 package lu.cifer.mtgviewer;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,10 +12,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class SearchActivity extends Activity {
 
     EditText code;
     TextView output;
+    ProgressDialog mProgress;
+    Timer mTimer;
 
     private void saveCode(String code) {
         SharedPreferences sp = getSharedPreferences("code", Context.MODE_PRIVATE);
@@ -33,6 +39,106 @@ public class SearchActivity extends Activity {
         super.onBackPressed();
     }
 
+    private void initProgress(int max, String title) {
+        mProgress = new ProgressDialog(this);
+        mProgress.setIndeterminate(false);
+        mProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgress.setCancelable(false);
+        mProgress.setMax(max);
+        mProgress.setTitle(title);
+        mProgress.show();
+
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mProgress != null) {
+                            mProgress.setProgress(CardAnalyzer.getProgress());
+                        }
+                    }
+                });
+            }
+        }, 0, 200);
+    }
+
+    private void initDatabase(final Runnable search) {
+        initProgress(CardAnalyzer.getInitProgressMax(), "Initializing...");
+
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final String ret = CardAnalyzer.initData();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((TextView) findViewById(R.id.output)).setText(ret);
+
+                        if (mProgress != null) {
+                            mProgress.dismiss();
+                            mProgress = null;
+                            mTimer.cancel();
+                        }
+
+                        if (search != null) {
+                            search.run();
+                        }
+                    }
+                });
+            }
+        };
+
+        new Thread(runnable).start();
+    }
+
+    private void searchDatabase() {
+        initDatabase(new Runnable() {
+            @Override
+            public void run() {
+                initProgress(CardAnalyzer.getSearchProgressMax(), "Searching...");
+
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        final int ret = CardAnalyzer.searchCard(code.getText().toString());
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                output.setText(LuaScript.getOutput());
+
+                                if (mProgress != null) {
+                                    mProgress.dismiss();
+                                    mProgress = null;
+                                    mTimer.cancel();
+                                }
+
+                                if (ret == -1) {
+                                    ((Button) findViewById(R.id.help_button)).setText("Show");
+                                    return;
+                                }
+                                if (ret == 0) {
+                                    Toast.makeText(SearchActivity.this, "Found no card", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+
+                                Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                    }
+                };
+
+                new Thread(runnable).start();
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +154,7 @@ public class SearchActivity extends Activity {
         initButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String ret = CardAnalyzer.initData();
-                ((TextView) findViewById(R.id.output)).setText(ret);
+                initDatabase(null);
             }
         });
 
@@ -58,20 +163,7 @@ public class SearchActivity extends Activity {
             @Override
             public void onClick(View v) {
                 saveCode(code.getText().toString());
-
-                int ret = CardAnalyzer.searchCard(code.getText().toString());
-                output.setText(LuaScript.output);
-                if (ret == -1) {
-                    ((Button) findViewById(R.id.help_button)).setText("Show");
-                    return;
-                }
-                if (ret == 0) {
-                    Toast.makeText(SearchActivity.this, "Found no card", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Intent intent = new Intent(SearchActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                searchDatabase();
             }
         });
 
@@ -89,10 +181,7 @@ public class SearchActivity extends Activity {
             public void onClick(View v) {
                 String picture = CardAnalyzer.getWrongCard();
                 if (picture != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putStringArray("pictures", new String[]{picture});
                     Intent intent = new Intent(SearchActivity.this, MainActivity.class);
-                    intent.putExtras(bundle);
                     startActivity(intent);
                     finish();
                 } else {

@@ -64,6 +64,10 @@ public class LuaScript {
         return getResult();
     }
 
+    public static String getOutput() {
+        return output;
+    }
+
     public static native void closeLua();
 
     public static native void initLua(String file);
