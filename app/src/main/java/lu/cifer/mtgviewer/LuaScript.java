@@ -35,6 +35,7 @@ public class LuaScript {
         luaPushStringArray("banned", card.banned.toArray(new String[card.banned.size()]));
         luaPushBoolean("reserved", card.reserved);
         luaPushBoolean("rarityChanged", card.rarityChanged);
+        luaPushInteger("reprintTimes", card.reprintTimes);
 
         luaPushInteger("multiverseid", reprint.multiverseid);
         luaPushFloat("rating", reprint.rating);
@@ -52,6 +53,8 @@ public class LuaScript {
         luaPushString("picture", reprint.picture);
         luaPushInteger("sameIndex", reprint.sameIndex);
         luaPushString("formatedNumber", reprint.formatedNumber);
+        luaPushInteger("order", reprint.order);
+        luaPushInteger("reprintIndex", reprint.reprintIndex);
     }
 
     private static String composeScript(String script) {

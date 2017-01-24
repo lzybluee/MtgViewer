@@ -198,6 +198,24 @@ public class CardAnalyzer {
         reverse = r;
     }
 
+    private static void SortReprint(CardInfo card) {
+        card.reprintTimes = card.reprints.size();
+
+        if(card.reprints.size() == 1) {
+            card.reprints.get(0).reprintIndex = 1;
+            return;
+        }
+        Collections.sort(card.reprints, new Comparator<ReprintInfo>() {
+            @Override
+            public int compare(ReprintInfo left, ReprintInfo right) {
+                return left.multiverseid - right.multiverseid;
+            }
+        });
+        for(int i = 0; i < card.reprints.size(); i++) {
+            card.reprints.get(i).reprintIndex = i + 1;
+        }
+    }
+
     public static String initData() {
         if (lastFilter != null && compareFilter()) {
             return setOrder.size() + " Sets and " + allName.length
@@ -236,6 +254,7 @@ public class CardAnalyzer {
         int count = 0;
         while (keys.hasMoreElements()) {
             CardInfo info = cardDatabase.get(keys.nextElement());
+            SortReprint(info);
             allName[count] = info.name;
             count++;
         }
@@ -692,6 +711,7 @@ public class CardAnalyzer {
         public int sameIndex;
         public String formatedNumber;
         public int order;
+        public int reprintIndex;
 
         public String toString() {
             return multiverseid + " " + set
@@ -734,6 +754,8 @@ public class CardAnalyzer {
 
         public Vector<ReprintInfo> reprints;
         public boolean rarityChanged;
+
+        public int reprintTimes;
 
         public String toString() {
             StringBuilder str = new StringBuilder();

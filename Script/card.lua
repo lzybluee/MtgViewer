@@ -87,3 +87,6 @@ split = isSplit
 double = isDoubleFaced
 flip = isFlip
 legend = isLegendary
+
+reprint = reprintIndex
+id = multiverseid

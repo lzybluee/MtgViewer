@@ -205,12 +205,12 @@ public class SearchActivity extends Activity {
                             "isDoubleFaced -> Boolean\nisFlip -> Boolean\nisLegendary -> Boolean\nisFun -> Boolean\n" +
                             "isInCore -> Boolean\ntypes -> StringArray\nsubTypes -> StringArray\nsuperTypes -> StringArray\n" +
                             "mana -> String\nconverted -> Integer\ncolorIndicator -> String\npower -> String\ntoughness -> String\n" +
-                            "loyalty -> String\ntext -> String\nrules -> String\nlegal -> StringArray\n" +
-                            "restricted -> StringArray\nbanned -> StringArray\nreserved -> Boolean\nrarityChanged -> Boolean\n" +
+                            "loyalty -> String\ntext -> String\nrules -> String\nlegal -> StringArray\nrestricted -> StringArray\n" +
+                            "banned -> StringArray\nreserved -> Boolean\nrarityChanged -> Boolean\nreprintTimes -> Integer\n" +
                             "\nmultiverseid -> Integer\nrating -> Float\nvotes -> Integer\nset -> String\ncode -> String\n" +
                             "folder -> String\naltCode -> String\nnumber -> String\nflavor -> String\nartist -> String\n" +
                             "rarity -> String\nwatermark -> String\nspecialType -> String\npicture -> String\n" +
-                            "sameIndex -> Integer\nformatedNumber -> String");
+                            "sameIndex -> Integer\nformatedNumber -> String\norder -> Integer\nreprintIndex -> Integer");
                 }
             }
         });
