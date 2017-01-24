@@ -623,6 +623,7 @@ public class CardAnalyzer {
         } else {
             if (sets.equals("Back")) {
                 filterString = "Modern";
+                sets = "Modern";
             }
             Vector<String> v = new Vector<>();
             String[] paths = sets.split("\\|");
