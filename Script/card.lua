@@ -30,8 +30,20 @@ if green then
 	colors = colors + 1
 end
 
+function hastext(str)
+	return string_contains(text, str)
+end
+
+function hasrule(str)
+	return string_contains(rule, str)
+end
+
 function hastype(str)
 	return table_contains(types, str) or table_contains(subTypes, str) or table_contains(superTypes, str)
+end
+
+function containstype(str)
+	return table_contains_str(types, str) or table_contains_str(subTypes, str) or table_contains_str(superTypes, str)
 end
 
 modern = table_contains(legal, 'Modern')

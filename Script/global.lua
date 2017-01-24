@@ -31,3 +31,12 @@ function string_contains(s, str)
 		return false
 	end
 end
+
+function table_contains_str(t, str)
+	for _, value in pairs(t) do
+		if string.find(string.lower(value), string.lower(str)) then
+			return true
+		end
+	end
+	return false
+end
