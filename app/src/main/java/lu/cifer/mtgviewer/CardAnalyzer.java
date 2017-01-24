@@ -620,11 +620,10 @@ public class CardAnalyzer {
         if (sets == null || sets.equals("")) {
             filterString = "All";
             filter.clear();
-        } else if (sets.equals("Back")) {
-            filterString = "ORI";
-            filter.clear();
-            filter.add("Magic Origins");
         } else {
+            if (sets.equals("Back")) {
+                filterString = "Modern";
+            }
             Vector<String> v = new Vector<>();
             String[] paths = sets.split("\\|");
             for (String[] s : CardParser.SetList) {
