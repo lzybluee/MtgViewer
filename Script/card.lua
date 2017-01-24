@@ -30,15 +30,22 @@ if green then
 	colors = colors + 1
 end
 
+function hastype(str)
+	return table_contains(types, str) or table_contains(subTypes, str) or table_contains(superTypes, str)
+end
+
+modern = table_contains(legal, 'Modern')
+legacy = table_contains(legal, 'Legacy')
+
 if colors > 1 then
 	multicolor = true
 else
 	multicolor = false
 end
 
-po = tonumber(power)
-to = tonumber(toughness)
-lo = tonumber(loyalty)
+pn = tonumber(power)
+tn = tonumber(toughness)
+ln = tonumber(loyalty)
 
 common = (rarity == "Common")
 uncommon = (rarity == "Uncommon")
