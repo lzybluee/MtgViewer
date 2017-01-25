@@ -41,7 +41,7 @@ public class CardAnalyzer {
     static int foundCards;
     static boolean reverse;
     static int sortType = 0;
-    static String[] sortName = new String[]{"Edition", "Name", "Cmc"};
+    static String[] sortName = new String[]{"Edition", "Name", "Cmc", "Color"};
     static boolean stop;
 
     static Comparator<ReprintInfo> editionComparator = new Comparator<ReprintInfo>() {
@@ -86,6 +86,104 @@ public class CardAnalyzer {
                 }
             } else {
                 ret = left.card.converted - right.card.converted;
+            }
+            return reverse ? -ret : ret;
+        }
+    };
+
+    static boolean hasColor(CardInfo card, String longColor, String shortColor) {
+        if (card.colorIndicator != null && card.colorIndicator.contains(longColor)) {
+            return true;
+        }
+        return card.mana != null && card.mana.contains(shortColor);
+    }
+
+    static boolean hasLandColor(CardInfo card, String manaColor, String land) {
+        if (card.types != null && card.types.contains(land)) {
+            return true;
+        }
+        return card.text != null && card.text.contains(manaColor);
+    }
+
+    static int getColorMask(CardInfo card) {
+        int mask = 0;
+        int colors = 0;
+        if (hasColor(card, "White", "W")) {
+            mask |= 0x1;
+            colors++;
+        }
+        if (hasColor(card, "Blue", "U")) {
+            mask |= 0x10;
+            colors++;
+        }
+        if (hasColor(card, "Black", "B")) {
+            mask |= 0x100;
+            colors++;
+        }
+        if (hasColor(card, "Red", "R")) {
+            mask |= 0x1000;
+            colors++;
+        }
+        if (hasColor(card, "Green", "G")) {
+            mask |= 0x10000;
+            colors++;
+        }
+        mask += 0x100000 * colors;
+        if (mask == 0) {
+            if (card.types.contains("Land")) {
+                mask = 0x10000000;
+                if (hasLandColor(card, "{W}", "Plains")) {
+                    mask |= 0x1;
+                    colors++;
+                }
+                if (hasLandColor(card, "{U}", "Island")) {
+                    mask |= 0x10;
+                    colors++;
+                }
+                if (hasLandColor(card, "{B}", "Swamp")) {
+                    mask |= 0x100;
+                    colors++;
+                }
+                if (hasLandColor(card, "{R}", "Mountain")) {
+                    mask |= 0x1000;
+                    colors++;
+                }
+                if (hasLandColor(card, "{G}", "Forest")) {
+                    mask |= 0x10000;
+                    colors++;
+                }
+                mask += 0x100000 * colors;
+                if (card.name.equals("Plains") || card.name.equals("Island")
+                        || card.name.equals("Swamp")
+                        || card.name.equals("Mountain")
+                        || card.name.equals("Forest")) {
+                    mask += 0x10000000;
+                }
+            } else if(card.types.contains("Artifact")) {
+                mask = 0x1000000;
+            }
+        }
+        return mask;
+    }
+
+    static Comparator<ReprintInfo> colorComparator = new Comparator<ReprintInfo>() {
+        @Override
+        public int compare(ReprintInfo left, ReprintInfo right) {
+            int ret;
+            int leftColorMask = getColorMask(left.card);
+            int rightColorMask = getColorMask(right.card);
+            if (leftColorMask == rightColorMask) {
+                if (left.card.converted == right.card.converted) {
+                    if (left.order == right.order) {
+                        ret = left.formatedNumber.compareTo(right.formatedNumber);
+                    } else {
+                        ret = left.order - right.order;
+                    }
+                } else {
+                    ret = left.card.converted - right.card.converted;
+                }
+            } else {
+                ret = leftColorMask - rightColorMask;
             }
             return reverse ? -ret : ret;
         }
@@ -687,6 +785,9 @@ public class CardAnalyzer {
                 break;
             case 2:
                 Collections.sort(cards, cmcComparator);
+                break;
+            case 3:
+                Collections.sort(cards, colorComparator);
                 break;
         }
 
