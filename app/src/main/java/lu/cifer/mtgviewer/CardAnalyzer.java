@@ -38,6 +38,7 @@ public class CardAnalyzer {
     static Vector<String> filter = new Vector<>();
     static Vector<String> setOrder = new Vector<>();
     static int progress;
+    static int foundCards;
     static boolean reverse;
     static int sortType = 0;
     static String[] sortName = new String[]{"Edition", "Name", "Cmc"};
@@ -194,6 +195,10 @@ public class CardAnalyzer {
         return progress;
     }
 
+    public static int getFoundCards() {
+        return foundCards;
+    }
+
     public static void setReverse(boolean r) {
         reverse = r;
     }
@@ -224,6 +229,7 @@ public class CardAnalyzer {
 
         stop = false;
         progress = 0;
+        foundCards = 0;
 
         setOrder.clear();
         cardDatabase.clear();
@@ -650,6 +656,7 @@ public class CardAnalyzer {
         wrongCard = null;
         stop = false;
         progress = 0;
+        foundCards = 0;
 
         Vector<ReprintInfo> cards = new Vector<>();
         for (String name : allName) {
@@ -661,6 +668,7 @@ public class CardAnalyzer {
             for (ReprintInfo reprint : card.reprints) {
                 int result = LuaScript.checkCard(card, reprint, script);
                 if (result == 1) {
+                    foundCards++;
                     cards.add(reprint);
                 } else if (result == 2) {
                     wrongCard = reprint.picture;

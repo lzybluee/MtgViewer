@@ -18,8 +18,8 @@ import java.util.TimerTask;
 
 public class SearchActivity extends Activity {
 
-    EditText code;
-    TextView output;
+    EditText mCode;
+    TextView mOutput;
     ProgressDialog mProgress;
     Timer mTimer;
 
@@ -65,6 +65,10 @@ public class SearchActivity extends Activity {
                     public void run() {
                         if (mProgress != null) {
                             mProgress.setProgress(CardAnalyzer.getProgress());
+                            int foundCards = CardAnalyzer.getFoundCards();
+                            if(foundCards > 0) {
+                                mProgress.setTitle(CardAnalyzer.getFoundCards() + " card" + (foundCards == 1 ? "" : "s") + " found ...");
+                            }
                         }
                     }
                 });
@@ -111,12 +115,12 @@ public class SearchActivity extends Activity {
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        final int ret = CardAnalyzer.searchCard(code.getText().toString());
+                        final int ret = CardAnalyzer.searchCard(mCode.getText().toString());
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                output.setText(LuaScript.getOutput());
+                                mOutput.setText(LuaScript.getOutput());
 
                                 if (mProgress != null) {
                                     mProgress.dismiss();
@@ -151,11 +155,11 @@ public class SearchActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_layout);
 
-        code = (EditText) findViewById(R.id.code);
-        code.setText(loadCode());
+        mCode = (EditText) findViewById(R.id.code);
+        mCode.setText(loadCode());
 
-        output = (TextView) findViewById(R.id.output);
-        output.setText(CardAnalyzer.getFilterString());
+        mOutput = (TextView) findViewById(R.id.output);
+        mOutput.setText(CardAnalyzer.getFilterString());
 
         Button initButton = (Button) findViewById(R.id.init_button);
         initButton.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +173,7 @@ public class SearchActivity extends Activity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveCode(code.getText().toString());
+                saveCode(mCode.getText().toString());
                 searchDatabase();
             }
         });
@@ -187,7 +191,7 @@ public class SearchActivity extends Activity {
         cleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                code.setText("");
+                mCode.setText("");
             }
         });
 
@@ -201,7 +205,7 @@ public class SearchActivity extends Activity {
                     startActivity(intent);
                     finish();
                 } else {
-                    code.setText("name -> String\notherPart -> String\npartIndex -> Integer\nisSplit -> Boolean\n" +
+                    mCode.setText("name -> String\notherPart -> String\npartIndex -> Integer\nisSplit -> Boolean\n" +
                             "isDoubleFaced -> Boolean\nisFlip -> Boolean\nisLegendary -> Boolean\nisFun -> Boolean\n" +
                             "isInCore -> Boolean\ntypes -> StringArray\nsubTypes -> StringArray\nsuperTypes -> StringArray\n" +
                             "mana -> String\nconverted -> Integer\ncolorIndicator -> String\npower -> String\ntoughness -> String\n" +

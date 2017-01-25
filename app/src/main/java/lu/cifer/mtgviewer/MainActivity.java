@@ -46,6 +46,7 @@ public class MainActivity extends Activity {
     ProgressDialog mProgress;
     Timer mTimer;
     String mProcessSet;
+    int mLoadCards;
     boolean mStop;
 
     void processFile(File file) {
@@ -59,6 +60,7 @@ public class MainActivity extends Activity {
                 processFile(f);
             } else {
                 if (f.getName().endsWith(".jpg") || f.getName().endsWith(".png")) {
+                    mLoadCards++;
                     mCardPath.add(file.getAbsolutePath() + "/" + f.getName());
                 }
             }
@@ -185,7 +187,7 @@ public class MainActivity extends Activity {
                         @Override
                         public void run() {
                             if (mProgress != null && mProcessSet != null) {
-                                mProgress.setMessage("Processing...\n" + mProcessSet);
+                                mProgress.setMessage("Processing...\n" + mProcessSet + (mLoadCards > 0 ? "\n(" + mLoadCards + " cards)" : ""));
                             }
                         }
                     });
@@ -197,6 +199,7 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 mStop = false;
+                mLoadCards = 0;
 
                 for (String s : paths) {
                     File file = new File(SDPath + "/MTG/" + s);
