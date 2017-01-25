@@ -286,7 +286,7 @@ public class CardAnalyzer {
     }
 
     public static int getSearchProgressMax() {
-        return allName.length;
+        return reprintCards;
     }
 
     public static int getProgress() {
@@ -761,9 +761,9 @@ public class CardAnalyzer {
             if (stop) {
                 break;
             }
-            progress++;
             CardInfo card = cardDatabase.get(name);
             for (ReprintInfo reprint : card.reprints) {
+                progress++;
                 int result = LuaScript.checkCard(card, reprint, script);
                 if (result == 1) {
                     foundCards++;
