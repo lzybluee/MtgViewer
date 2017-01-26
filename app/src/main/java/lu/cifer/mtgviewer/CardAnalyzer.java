@@ -41,7 +41,7 @@ public class CardAnalyzer {
     static int foundCards;
     static boolean reverse;
     static int sortType = 0;
-    static String[] sortName = new String[]{"Edition", "Name", "Cmc", "Color"};
+    static String[] sortName = new String[]{"Edition", "Name", "Cmc", "Color", "Random"};
     static boolean stop;
 
     static Comparator<ReprintInfo> editionComparator = new Comparator<ReprintInfo>() {
@@ -92,17 +92,13 @@ public class CardAnalyzer {
     };
 
     static boolean hasColor(CardInfo card, String longColor, String shortColor) {
-        if (card.colorIndicator != null && card.colorIndicator.contains(longColor)) {
-            return true;
-        }
-        return card.mana != null && card.mana.contains(shortColor);
+        return (card.colorIndicator != null && card.colorIndicator.contains(longColor)) ||
+                (card.mana != null && card.mana.contains(shortColor));
     }
 
     static boolean hasLandColor(CardInfo card, String manaColor, String land) {
-        if (card.types != null && card.types.contains(land)) {
-            return true;
-        }
-        return card.text != null && card.text.contains(manaColor);
+        return (card.types != null && card.types.contains(land)) ||
+                (card.text != null && card.text.contains(manaColor));
     }
 
     static int getColorMask(CardInfo card) {
@@ -153,13 +149,19 @@ public class CardAnalyzer {
                     colors++;
                 }
                 mask += 0x100000 * colors;
-                if (card.name.equals("Plains") || card.name.equals("Island")
-                        || card.name.equals("Swamp")
-                        || card.name.equals("Mountain")
-                        || card.name.equals("Forest")) {
+                if (card.superTypes.contains("Basic")) {
                     mask += 0x10000000;
+                    if (card.name.equals("Plains") || card.name.equals("Island")
+                            || card.name.equals("Swamp")
+                            || card.name.equals("Mountain")
+                            || card.name.equals("Forest")) {
+                        mask += 0x10000000;
+                    }
                 }
-            } else if(card.types.contains("Artifact")) {
+                if (card.types.contains("Artifact")) {
+                    mask = 0x2000000 + mask - 0x10000000;
+                }
+            } else if (card.types.contains("Artifact")) {
                 mask = 0x1000000;
             }
         }
@@ -306,6 +308,7 @@ public class CardAnalyzer {
 
         if (card.reprints.size() == 1) {
             card.reprints.get(0).reprintIndex = 1;
+            card.reprints.get(0).latest = true;
             return;
         }
         Collections.sort(card.reprints, new Comparator<ReprintInfo>() {
@@ -314,8 +317,11 @@ public class CardAnalyzer {
                 return left.multiverseid - right.multiverseid;
             }
         });
-        for (int i = 0; i < card.reprints.size(); i++) {
+        for (int i = 0; i < card.reprintTimes; i++) {
             card.reprints.get(i).reprintIndex = i + 1;
+            if (i == card.reprintTimes - 1) {
+                card.reprints.get(i).latest = true;
+            }
         }
     }
 
@@ -789,6 +795,9 @@ public class CardAnalyzer {
             case 3:
                 Collections.sort(cards, colorComparator);
                 break;
+            case 4:
+                Collections.shuffle(cards);
+                break;
         }
 
         results = new String[cards.size()];
@@ -821,6 +830,7 @@ public class CardAnalyzer {
         public String formatedNumber;
         public int order;
         public int reprintIndex;
+        public boolean latest;
 
         public String toString() {
             return multiverseid + " " + set

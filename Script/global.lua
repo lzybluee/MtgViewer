@@ -32,6 +32,15 @@ function string_contains(s, str)
 	end
 end
 
+function table_contains_case(t, str)
+	for _, value in pairs(t) do
+		if string.find(value, str) then
+			return true
+		end
+	end
+	return false
+end
+
 function table_contains_str(t, str)
 	for _, value in pairs(t) do
 		if string.find(string.lower(value), string.lower(str)) then

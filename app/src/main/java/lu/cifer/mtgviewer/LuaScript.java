@@ -55,6 +55,7 @@ public class LuaScript {
         luaPushString("formatedNumber", reprint.formatedNumber);
         luaPushInteger("order", reprint.order);
         luaPushInteger("reprintIndex", reprint.reprintIndex);
+        luaPushBoolean("latest", reprint.latest);
     }
 
     private static String composeScript(String script) {

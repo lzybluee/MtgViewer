@@ -1,3 +1,68 @@
+--[[
+name -> String
+otherPart -> String
+partIndex -> Integer
+isSplit -> Boolean
+isDoubleFaced -> Boolean
+isFlip -> Boolean
+isLegendary -> Boolean
+isFun -> Boolean
+isInCore -> Boolean
+types -> StringArray
+subTypes -> StringArray
+superTypes -> StringArray
+mana -> String
+converted -> Integer
+colorIndicator -> String
+power -> String
+toughness -> String
+loyalty -> String
+text -> String
+rules -> String
+legal -> StringArray
+restricted -> StringArray
+banned -> StringArray
+reserved -> Boolean
+rarityChanged -> Boolean
+reprintTimes -> Integer
+
+multiverseid -> Integer
+rating -> Float
+votes -> Integer
+set -> String
+code -> String
+folder -> String
+altCode -> String
+number -> String
+flavor -> String
+artist -> String
+rarity -> String
+watermark -> String
+specialType -> String
+picture -> String
+sameIndex -> Integer
+formatedNumber -> String
+order -> Integer
+reprintIndex -> Integer
+latest -> Boolean
+
+function table_contains_case(t, element)
+function table_contains(t, element)
+function string_contains_case(s, str)
+function string_contains(s, str)
+function table_contains_case(t, str)
+function table_contains_str(t, str)
+]]
+
+function has(obj, str)
+	if(type(obj) == "table") then
+		return table_contains_str(obj, str)
+	end
+	if(type(obj) == "string") then
+		return string_contains(obj, str)
+	end
+end
+
 white = string_contains(mana, 'W') or string_contains(colorIndicator, 'White')
 blue = string_contains(mana, 'U') or string_contains(colorIndicator, 'Blue')
 black = string_contains(mana, 'B') or string_contains(colorIndicator, 'Black')

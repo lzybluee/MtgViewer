@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -66,7 +68,7 @@ public class SearchActivity extends Activity {
                         if (mProgress != null) {
                             mProgress.setProgress(CardAnalyzer.getProgress());
                             int foundCards = CardAnalyzer.getFoundCards();
-                            if(foundCards > 0) {
+                            if (foundCards > 0) {
                                 mProgress.setTitle(CardAnalyzer.getFoundCards() + " card" + (foundCards == 1 ? "" : "s") + " found ...");
                             }
                         }
@@ -205,16 +207,15 @@ public class SearchActivity extends Activity {
                     startActivity(intent);
                     finish();
                 } else {
-                    mCode.setText("name -> String\notherPart -> String\npartIndex -> Integer\nisSplit -> Boolean\n" +
-                            "isDoubleFaced -> Boolean\nisFlip -> Boolean\nisLegendary -> Boolean\nisFun -> Boolean\n" +
-                            "isInCore -> Boolean\ntypes -> StringArray\nsubTypes -> StringArray\nsuperTypes -> StringArray\n" +
-                            "mana -> String\nconverted -> Integer\ncolorIndicator -> String\npower -> String\ntoughness -> String\n" +
-                            "loyalty -> String\ntext -> String\nrules -> String\nlegal -> StringArray\nrestricted -> StringArray\n" +
-                            "banned -> StringArray\nreserved -> Boolean\nrarityChanged -> Boolean\nreprintTimes -> Integer\n" +
-                            "\nmultiverseid -> Integer\nrating -> Float\nvotes -> Integer\nset -> String\ncode -> String\n" +
-                            "folder -> String\naltCode -> String\nnumber -> String\nflavor -> String\nartist -> String\n" +
-                            "rarity -> String\nwatermark -> String\nspecialType -> String\npicture -> String\n" +
-                            "sameIndex -> Integer\nformatedNumber -> String\norder -> Integer\nreprintIndex -> Integer");
+                    File file = new File(MainActivity.SDPath + "/MTG/Script/card.lua");
+                    if (file.exists()) {
+                        Intent intent = new Intent("android.intent.action.VIEW");
+                        intent.addCategory("android.intent.category.DEFAULT");
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Uri uri = Uri.fromFile(file);
+                        intent.setDataAndType(uri, "text/plain");
+                        startActivity(intent);
+                    }
                 }
             }
         });
