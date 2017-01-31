@@ -62,8 +62,8 @@ public class LuaScript {
         return "function checkCard()\n" + script + "\nend\nif(checkCard()) then\nresult = true\nelse result = false\nend";
     }
 
-    public static int checkCard(CardAnalyzer.CardInfo card, CardAnalyzer.ReprintInfo reprint, String script) {
-        initCard(card, reprint);
+    public static int checkCard(CardAnalyzer.ReprintInfo reprint, String script) {
+        initCard(reprint.card, reprint);
         output = runScript(composeScript(script), MainActivity.SDPath + "/MTG/Script/card.lua");
         return getResult();
     }

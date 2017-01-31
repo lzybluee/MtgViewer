@@ -20,6 +20,8 @@ import java.util.TimerTask;
 
 public class SearchActivity extends Activity {
 
+    static String mLastCode = "";
+    static String mInitOutput = "";
     EditText mCode;
     TextView mOutput;
     ProgressDialog mProgress;
@@ -84,12 +86,12 @@ public class SearchActivity extends Activity {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                final String ret = CardAnalyzer.initData();
+                mInitOutput = CardAnalyzer.initData();
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((TextView) findViewById(R.id.output)).setText(ret);
+                        ((TextView) findViewById(R.id.output)).setText(mInitOutput);
 
                         if (mProgress != null) {
                             mProgress.dismiss();
@@ -108,7 +110,7 @@ public class SearchActivity extends Activity {
         new Thread(runnable).start();
     }
 
-    private void searchDatabase() {
+    private void searchDatabase(final boolean inResult) {
         initDatabase(new Runnable() {
             @Override
             public void run() {
@@ -117,12 +119,11 @@ public class SearchActivity extends Activity {
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        final int ret = CardAnalyzer.searchCard(mCode.getText().toString());
+                        final int ret = CardAnalyzer.searchCard(mCode.getText().toString(), inResult);
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mOutput.setText(LuaScript.getOutput());
 
                                 if (mProgress != null) {
                                     mProgress.dismiss();
@@ -130,13 +131,19 @@ public class SearchActivity extends Activity {
                                     mTimer.cancel();
                                 }
 
-                                if (ret == -1) {
-                                    ((Button) findViewById(R.id.help_button)).setText("Show");
-                                    return;
-                                }
-                                if (ret == 0) {
-                                    Toast.makeText(SearchActivity.this, "Found No Card", Toast.LENGTH_SHORT).show();
-                                    return;
+                                ((Button) findViewById(R.id.help_button)).setText("Help");
+
+                                switch (ret) {
+                                    case 0:
+                                        mOutput.setText("Found No Card!");
+                                        return;
+                                    case -1:
+                                        mOutput.setText(LuaScript.getOutput());
+                                        ((Button) findViewById(R.id.help_button)).setText("Show");
+                                        return;
+                                    case -2:
+                                        mOutput.setText("Empty Result!");
+                                        return;
                                 }
 
                                 Intent intent = new Intent(SearchActivity.this, MainActivity.class);
@@ -150,6 +157,18 @@ public class SearchActivity extends Activity {
                 new Thread(runnable).start();
             }
         });
+    }
+
+    private void openFile(String path) {
+        File file = new File(MainActivity.SDPath + path);
+        if (file.exists()) {
+            Intent intent = new Intent("android.intent.action.VIEW");
+            intent.addCategory("android.intent.category.DEFAULT");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Uri uri = Uri.fromFile(file);
+            intent.setDataAndType(uri, "text/plain");
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -170,13 +189,30 @@ public class SearchActivity extends Activity {
                 initDatabase(null);
             }
         });
+        initButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                CardAnalyzer.clearResults();
+                Toast.makeText(SearchActivity.this, "Clear Results", Toast.LENGTH_SHORT).show();
+                ((TextView) findViewById(R.id.output)).setText(mInitOutput);
+                return true;
+            }
+        });
 
         Button searchButton = (Button) findViewById(R.id.search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveCode(mCode.getText().toString());
-                searchDatabase();
+                searchDatabase(false);
+            }
+        });
+        searchButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                saveCode(mCode.getText().toString());
+                searchDatabase(true);
+                return true;
             }
         });
 
@@ -184,8 +220,16 @@ public class SearchActivity extends Activity {
         sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String sort = CardAnalyzer.switchSortType();
+                String sort = CardAnalyzer.switchSortType(false);
                 Toast.makeText(SearchActivity.this, sort, Toast.LENGTH_SHORT).show();
+            }
+        });
+        sortButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String sort = CardAnalyzer.switchSortType(true);
+                Toast.makeText(SearchActivity.this, sort, Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
 
@@ -193,7 +237,17 @@ public class SearchActivity extends Activity {
         cleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mLastCode = mCode.getText().toString();
                 mCode.setText("");
+            }
+        });
+        cleanButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (!mLastCode.isEmpty()) {
+                    mCode.setText(mLastCode);
+                }
+                return true;
             }
         });
 
@@ -207,16 +261,15 @@ public class SearchActivity extends Activity {
                     startActivity(intent);
                     finish();
                 } else {
-                    File file = new File(MainActivity.SDPath + "/MTG/Script/card.lua");
-                    if (file.exists()) {
-                        Intent intent = new Intent("android.intent.action.VIEW");
-                        intent.addCategory("android.intent.category.DEFAULT");
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        Uri uri = Uri.fromFile(file);
-                        intent.setDataAndType(uri, "text/plain");
-                        startActivity(intent);
-                    }
+                    openFile("/MTG/Script/card.lua");
                 }
+            }
+        });
+        helpButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                openFile("/MTG/Script/global.lua");
+                return true;
             }
         });
     }

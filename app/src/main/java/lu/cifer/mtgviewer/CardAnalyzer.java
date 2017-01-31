@@ -43,6 +43,8 @@ public class CardAnalyzer {
     static int sortType = 0;
     static String[] sortName = new String[]{"Edition", "Name", "Cmc", "Color", "Random"};
     static boolean stop;
+    static Vector<ReprintInfo> resultCards;
+    static String lastCode;
 
     static Comparator<ReprintInfo> editionComparator = new Comparator<ReprintInfo>() {
         @Override
@@ -86,6 +88,29 @@ public class CardAnalyzer {
                 }
             } else {
                 ret = left.card.converted - right.card.converted;
+            }
+            return reverse ? -ret : ret;
+        }
+    };
+
+    static Comparator<ReprintInfo> colorComparator = new Comparator<ReprintInfo>() {
+        @Override
+        public int compare(ReprintInfo left, ReprintInfo right) {
+            int ret;
+            int leftColorMask = getColorMask(left.card);
+            int rightColorMask = getColorMask(right.card);
+            if (leftColorMask == rightColorMask) {
+                if (left.card.converted == right.card.converted) {
+                    if (left.order == right.order) {
+                        ret = left.formatedNumber.compareTo(right.formatedNumber);
+                    } else {
+                        ret = left.order - right.order;
+                    }
+                } else {
+                    ret = left.card.converted - right.card.converted;
+                }
+            } else {
+                ret = leftColorMask - rightColorMask;
             }
             return reverse ? -ret : ret;
         }
@@ -168,30 +193,11 @@ public class CardAnalyzer {
         return mask;
     }
 
-    static Comparator<ReprintInfo> colorComparator = new Comparator<ReprintInfo>() {
-        @Override
-        public int compare(ReprintInfo left, ReprintInfo right) {
-            int ret;
-            int leftColorMask = getColorMask(left.card);
-            int rightColorMask = getColorMask(right.card);
-            if (leftColorMask == rightColorMask) {
-                if (left.card.converted == right.card.converted) {
-                    if (left.order == right.order) {
-                        ret = left.formatedNumber.compareTo(right.formatedNumber);
-                    } else {
-                        ret = left.order - right.order;
-                    }
-                } else {
-                    ret = left.card.converted - right.card.converted;
-                }
-            } else {
-                ret = leftColorMask - rightColorMask;
-            }
-            return reverse ? -ret : ret;
+    public static String switchSortType(boolean defaultSort) {
+        if (defaultSort) {
+            sortType = 0;
+            return sortName[sortType];
         }
-    };
-
-    public static String switchSortType() {
         sortType++;
         if (sortType >= sortName.length) {
             sortType = 0;
@@ -330,6 +336,8 @@ public class CardAnalyzer {
             return setOrder.size() + " Sets and " + allName.length
                     + " Cards" + " (" + reprintCards + " Reprints)";
         }
+
+        lastCode = null;
 
         stop = false;
         progress = 0;
@@ -756,53 +764,98 @@ public class CardAnalyzer {
         stop = true;
     }
 
-    public static int searchCard(String script) {
+    public static void clearResults() {
+        resultCards = null;
+    }
+
+    private static boolean checkCard(ReprintInfo reprint, String script, Vector<ReprintInfo> cards) {
+        progress++;
+        int result = LuaScript.checkCard(reprint, script);
+        if (result == 1) {
+            foundCards++;
+            cards.add(reprint);
+        } else if (result == 2) {
+            wrongCard = reprint.picture;
+            results = new String[]{wrongCard};
+            return false;
+        }
+        return true;
+    }
+
+    public static int searchCard(String script, boolean inResult) {
+        boolean skipSearch = false;
+
         wrongCard = null;
         stop = false;
         progress = 0;
         foundCards = 0;
 
-        Vector<ReprintInfo> cards = new Vector<>();
-        for (String name : allName) {
-            if (stop) {
-                break;
-            }
-            CardInfo card = cardDatabase.get(name);
-            for (ReprintInfo reprint : card.reprints) {
-                progress++;
-                int result = LuaScript.checkCard(card, reprint, script);
-                if (result == 1) {
-                    foundCards++;
-                    cards.add(reprint);
-                } else if (result == 2) {
-                    wrongCard = reprint.picture;
-                    results = new String[]{wrongCard};
-                    return -1;
+        if (lastCode == null) {
+            lastCode = script;
+        } else if (!script.isEmpty() && script.equals(lastCode)) {
+            skipSearch = true;
+        }
+
+        if (resultCards == null) {
+            inResult = false;
+            skipSearch = false;
+            resultCards = new Vector<>();
+        }
+
+        if (!skipSearch) {
+            Vector<ReprintInfo> cards = new Vector<>();
+            if (inResult) {
+                if (resultCards.isEmpty()) {
+                    return -2;
+                }
+                for (ReprintInfo reprint : resultCards) {
+                    if (stop) {
+                        break;
+                    }
+                    if (!checkCard(reprint, script, cards)) {
+                        return -1;
+                    }
+                }
+            } else {
+                for (String name : allName) {
+                    if (stop) {
+                        break;
+                    }
+                    CardInfo card = cardDatabase.get(name);
+                    for (ReprintInfo reprint : card.reprints) {
+                        if (!checkCard(reprint, script, cards)) {
+                            return -1;
+                        }
+                    }
                 }
             }
+
+            resultCards = cards;
         }
+
+        lastCode = script;
 
         switch (sortType) {
             case 0:
-                Collections.sort(cards, editionComparator);
+                Collections.sort(resultCards, editionComparator);
                 break;
             case 1:
-                Collections.sort(cards, nameComparator);
+                Collections.sort(resultCards, nameComparator);
                 break;
             case 2:
-                Collections.sort(cards, cmcComparator);
+                Collections.sort(resultCards, cmcComparator);
                 break;
             case 3:
-                Collections.sort(cards, colorComparator);
+                Collections.sort(resultCards, colorComparator);
                 break;
             case 4:
-                Collections.shuffle(cards);
+                Collections.shuffle(resultCards);
                 break;
         }
 
-        results = new String[cards.size()];
+        results = new String[resultCards.size()];
         for (int i = 0; i < results.length; i++) {
-            results[i] = cards.get(i).picture;
+            results[i] = resultCards.get(i).picture;
         }
         return results.length;
     }
