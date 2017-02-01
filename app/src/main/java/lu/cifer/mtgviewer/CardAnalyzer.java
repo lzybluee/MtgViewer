@@ -783,6 +783,7 @@ public class CardAnalyzer {
     }
 
     public static int searchCard(String script, boolean inResult) {
+        Vector<ReprintInfo> cards = new Vector<>();
         boolean skipSearch = false;
 
         wrongCard = null;
@@ -790,9 +791,7 @@ public class CardAnalyzer {
         progress = 0;
         foundCards = 0;
 
-        if (lastCode == null) {
-            lastCode = script;
-        } else if (!script.isEmpty() && script.equals(lastCode)) {
+        if (lastCode != null && !script.isEmpty() && script.equals(lastCode)) {
             skipSearch = true;
         }
 
@@ -802,8 +801,9 @@ public class CardAnalyzer {
             resultCards = new Vector<>();
         }
 
-        if (!skipSearch) {
-            Vector<ReprintInfo> cards = new Vector<>();
+        if (skipSearch) {
+            cards = resultCards;
+        } else {
             if (inResult) {
                 if (resultCards.isEmpty()) {
                     return -2;
@@ -830,32 +830,36 @@ public class CardAnalyzer {
                 }
             }
 
-            resultCards = cards;
+            if (!stop) {
+                resultCards = cards;
+            }
         }
 
-        lastCode = script;
+        if (!stop) {
+            lastCode = script;
+        }
 
         switch (sortType) {
             case 0:
-                Collections.sort(resultCards, editionComparator);
+                Collections.sort(cards, editionComparator);
                 break;
             case 1:
-                Collections.sort(resultCards, nameComparator);
+                Collections.sort(cards, nameComparator);
                 break;
             case 2:
-                Collections.sort(resultCards, cmcComparator);
+                Collections.sort(cards, cmcComparator);
                 break;
             case 3:
-                Collections.sort(resultCards, colorComparator);
+                Collections.sort(cards, colorComparator);
                 break;
             case 4:
-                Collections.shuffle(resultCards);
+                Collections.shuffle(cards);
                 break;
         }
 
-        results = new String[resultCards.size()];
+        results = new String[cards.size()];
         for (int i = 0; i < results.length; i++) {
-            results[i] = resultCards.get(i).picture;
+            results[i] = cards.get(i).picture;
         }
         return results.length;
     }
