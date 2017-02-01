@@ -159,6 +159,11 @@ public class SearchActivity extends Activity {
         });
     }
 
+    private void trimCode() {
+        String text = mCode.getText().toString();
+        mCode.setText(text.trim());
+    }
+
     private void openFile(String path) {
         File file = new File(MainActivity.SDPath + path);
         if (file.exists()) {
@@ -203,6 +208,7 @@ public class SearchActivity extends Activity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                trimCode();
                 saveCode(mCode.getText().toString());
                 searchDatabase(false);
             }
@@ -210,6 +216,7 @@ public class SearchActivity extends Activity {
         searchButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                trimCode();
                 saveCode(mCode.getText().toString());
                 searchDatabase(true);
                 return true;

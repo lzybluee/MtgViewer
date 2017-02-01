@@ -782,9 +782,10 @@ public class CardAnalyzer {
         return true;
     }
 
-    public static int searchCard(String script, boolean inResult) {
+    public static int searchCard(String script, boolean searchResult) {
         Vector<ReprintInfo> cards = new Vector<>();
         boolean skipSearch = false;
+        boolean noResult = false;
 
         wrongCard = null;
         stop = false;
@@ -796,7 +797,8 @@ public class CardAnalyzer {
         }
 
         if (resultCards == null) {
-            inResult = false;
+            noResult = true;
+            searchResult = false;
             skipSearch = false;
             resultCards = new Vector<>();
         }
@@ -804,7 +806,7 @@ public class CardAnalyzer {
         if (skipSearch) {
             cards = resultCards;
         } else {
-            if (inResult) {
+            if (searchResult) {
                 if (resultCards.isEmpty()) {
                     return -2;
                 }
@@ -832,6 +834,8 @@ public class CardAnalyzer {
 
             if (!stop) {
                 resultCards = cards;
+            } else if (noResult) {
+                resultCards = null;
             }
         }
 
