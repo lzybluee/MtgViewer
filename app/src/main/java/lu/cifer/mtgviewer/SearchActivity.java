@@ -15,17 +15,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 public class SearchActivity extends Activity {
 
+    static String[] SpecailFolder = new String[]{"Token", "Promo", "Special"};
+    static int SpecialCards = 4408;
     static String mLastCode = "";
     static String mInitOutput = "";
     EditText mCode;
     TextView mOutput;
     ProgressDialog mProgress;
     Timer mTimer;
+
+    boolean mStop;
+    int mFound;
+    int mChecked;
 
     private void saveCode(String code) {
         SharedPreferences sp = getSharedPreferences("code", Context.MODE_PRIVATE);
@@ -44,7 +53,7 @@ public class SearchActivity extends Activity {
         super.onBackPressed();
     }
 
-    private void initProgress(int max, String title) {
+    private void initProgress(int max, String title, boolean timer) {
         mProgress = new ProgressDialog(this);
         mProgress.setIndeterminate(false);
         mProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -59,6 +68,10 @@ public class SearchActivity extends Activity {
         mProgress.setTitle(title);
         mProgress.show();
 
+        if (!timer) {
+            return;
+        }
+
         mTimer = new Timer();
         mTimer.schedule(new TimerTask() {
 
@@ -71,7 +84,7 @@ public class SearchActivity extends Activity {
                             mProgress.setProgress(CardAnalyzer.getProgress());
                             int foundCards = CardAnalyzer.getFoundCards();
                             if (foundCards > 0) {
-                                mProgress.setTitle(CardAnalyzer.getFoundCards() + " card" + (foundCards == 1 ? "" : "s") + " found ...");
+                                mProgress.setTitle(foundCards + " card" + (foundCards == 1 ? "" : "s") + " found ...");
                             }
                         }
                     }
@@ -81,7 +94,7 @@ public class SearchActivity extends Activity {
     }
 
     private void initDatabase(final Runnable search) {
-        initProgress(CardAnalyzer.getInitProgressMax(), "Initializing...");
+        initProgress(CardAnalyzer.getInitProgressMax(), "Initializing...", true);
 
         final Runnable runnable = new Runnable() {
             @Override
@@ -114,7 +127,7 @@ public class SearchActivity extends Activity {
         initDatabase(new Runnable() {
             @Override
             public void run() {
-                initProgress(CardAnalyzer.getSearchProgressMax(), "Searching...");
+                initProgress(CardAnalyzer.getSearchProgressMax(), "Searching...", true);
 
                 Runnable runnable = new Runnable() {
                     @Override
@@ -159,9 +172,148 @@ public class SearchActivity extends Activity {
         });
     }
 
-    private void trimCode() {
-        String text = mCode.getText().toString();
-        mCode.setText(text.trim());
+    private boolean checkCard(String path, String search, boolean anyWord) {
+        boolean ret = false;
+        String[] strs = search.split(" ");
+        if (anyWord) {
+            for (String s : strs) {
+                if (path.contains(s)) {
+                    return true;
+                }
+            }
+        } else {
+            for (String s : strs) {
+                if (path.contains(s)) {
+                    ret = true;
+                } else {
+                    ret = false;
+                    break;
+                }
+            }
+        }
+        return ret;
+    }
+
+    private void processFolder(File file, String search, boolean anyWord, Vector<String> cards) {
+        if (mStop) {
+            return;
+        }
+
+        for (File f : file.listFiles()) {
+            if (f.isDirectory()) {
+                processFolder(f, search, anyWord, cards);
+            } else {
+                String path = f.getAbsolutePath();
+                path = path.substring(path.indexOf("/MTG/") + 5);
+                if (path.endsWith(".jpg") && checkCard(path.toLowerCase(), search, anyWord)) {
+                    cards.add(path);
+                    mFound++;
+                }
+                mChecked++;
+            }
+        }
+    }
+
+    private void searchSpecial(final String search, final boolean anyWord) {
+        initProgress(SpecialCards, "Searching...", false);
+        mProgress.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                mStop = true;
+            }
+        });
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mProgress != null) {
+                            mProgress.setProgress(mChecked);
+                            if (mFound > 0) {
+                                mProgress.setTitle(mFound + " card" + (mFound == 1 ? "" : "s") + " found ...");
+                            }
+                        }
+                    }
+                });
+            }
+        }, 0, 200);
+
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Vector<String> cards = new Vector<>();
+                mStop = false;
+                mFound = 0;
+                mChecked = 0;
+
+                for (String s : SpecailFolder) {
+                    File folder = new File(MainActivity.SDPath + "/MTG/" + s);
+                    processFolder(folder, search, anyWord, cards);
+                }
+
+                if (cards.isEmpty()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mProgress != null) {
+                                mProgress.dismiss();
+                                mProgress = null;
+                                mTimer.cancel();
+                            }
+
+                            Toast.makeText(SearchActivity.this, "Found No Card!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    return;
+                }
+
+                if (CardAnalyzer.getSortType().equals("Random")) {
+                    Collections.shuffle(cards);
+                } else {
+                    Collections.sort(cards, new Comparator<String>() {
+                        @Override
+                        public int compare(String left, String right) {
+                            return CardAnalyzer.isReverse() ? right.compareTo(left) : left.compareTo(right);
+                        }
+                    });
+                }
+
+                CardAnalyzer.results = new String[cards.size()];
+                for (int i = 0; i < CardAnalyzer.results.length; i++) {
+                    CardAnalyzer.results[i] = cards.get(i);
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mProgress != null) {
+                            mProgress.dismiss();
+                            mProgress = null;
+                            mTimer.cancel();
+                        }
+
+                        Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+            }
+        };
+
+        new Thread(runnable).start();
+    }
+
+    private boolean trimCode() {
+        String text = mCode.getText().toString().trim();
+        mCode.setText(text);
+        saveCode(text);
+        if (text.isEmpty()) {
+            Toast.makeText(this, "Empty Text!", Toast.LENGTH_SHORT).show();
+        }
+        return text.isEmpty();
     }
 
     private void openFile(String path) {
@@ -208,16 +360,18 @@ public class SearchActivity extends Activity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                trimCode();
-                saveCode(mCode.getText().toString());
+                if (trimCode()) {
+                    return;
+                }
                 searchDatabase(false);
             }
         });
         searchButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                trimCode();
-                saveCode(mCode.getText().toString());
+                if (trimCode()) {
+                    return true;
+                }
                 searchDatabase(true);
                 return true;
             }
@@ -227,14 +381,14 @@ public class SearchActivity extends Activity {
         sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String sort = CardAnalyzer.switchSortType(false);
+                String sort = CardAnalyzer.switchSortType(true);
                 Toast.makeText(SearchActivity.this, sort, Toast.LENGTH_SHORT).show();
             }
         });
         sortButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                String sort = CardAnalyzer.switchSortType(true);
+                String sort = CardAnalyzer.switchSortType(false);
                 Toast.makeText(SearchActivity.this, sort, Toast.LENGTH_SHORT).show();
                 return true;
             }
@@ -276,6 +430,27 @@ public class SearchActivity extends Activity {
             @Override
             public boolean onLongClick(View v) {
                 openFile("/MTG/Script/global.lua");
+                return true;
+            }
+        });
+
+        Button specialButton = (Button) findViewById(R.id.special_button);
+        specialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (trimCode()) {
+                    return;
+                }
+                searchSpecial(mCode.getText().toString().toLowerCase(), false);
+            }
+        });
+        specialButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (trimCode()) {
+                    return true;
+                }
+                searchSpecial(mCode.getText().toString().toLowerCase(), true);
                 return true;
             }
         });

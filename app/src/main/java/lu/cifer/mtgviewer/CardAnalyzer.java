@@ -193,16 +193,31 @@ public class CardAnalyzer {
         return mask;
     }
 
-    public static String switchSortType(boolean defaultSort) {
-        if (defaultSort) {
-            sortType = 0;
-            return sortName[sortType];
-        }
-        sortType++;
-        if (sortType >= sortName.length) {
-            sortType = 0;
+    public static String switchSortType(boolean increment) {
+        if (increment) {
+            sortType++;
+            if (sortType >= sortName.length) {
+                sortType = 0;
+            }
+        } else {
+            sortType--;
+            if (sortType < 0) {
+                sortType = sortName.length - 1;
+            }
         }
         return sortName[sortType];
+    }
+
+    public static String getSortType() {
+        return sortName[sortType];
+    }
+
+    public static boolean isReverse() {
+        return reverse;
+    }
+
+    public static void setReverse(boolean r) {
+        reverse = r;
     }
 
     public static String getEntry(String str, String tag) {
@@ -303,10 +318,6 @@ public class CardAnalyzer {
 
     public static int getFoundCards() {
         return foundCards;
-    }
-
-    public static void setReverse(boolean r) {
-        reverse = r;
     }
 
     private static void SortReprint(CardInfo card) {
@@ -843,20 +854,20 @@ public class CardAnalyzer {
             lastCode = script;
         }
 
-        switch (sortType) {
-            case 0:
+        switch (sortName[sortType]) {
+            case "Edition":
                 Collections.sort(cards, editionComparator);
                 break;
-            case 1:
+            case "Name":
                 Collections.sort(cards, nameComparator);
                 break;
-            case 2:
+            case "Cmc":
                 Collections.sort(cards, cmcComparator);
                 break;
-            case 3:
+            case "Color":
                 Collections.sort(cards, colorComparator);
                 break;
-            case 4:
+            case "Random":
                 Collections.shuffle(cards);
                 break;
         }

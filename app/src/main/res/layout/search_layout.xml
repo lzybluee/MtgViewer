@@ -14,7 +14,7 @@
             android:id="@+id/init_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Initialize" />
+            android:text="Init" />
 
         <Button
             android:id="@+id/search_button"
@@ -39,6 +39,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Help" />
+
+        <Button
+            android:id="@+id/special_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Spec" />
 
     </LinearLayout>
 
