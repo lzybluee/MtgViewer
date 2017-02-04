@@ -114,11 +114,9 @@ end
 modern = table_contains(legal, 'Modern')
 legacy = table_contains(legal, 'Legacy')
 
-if colors > 1 then
-	multicolor = true
-else
-	multicolor = false
-end
+multicolor = (colors > 1)
+mono = (colors == 1)
+colorless = (colors == 0)
 
 pn = tonumber(power)
 tn = tonumber(toughness)
