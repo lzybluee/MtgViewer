@@ -54,6 +54,8 @@ public class SearchActivity extends Activity {
     }
 
     private void initProgress(int max, String title, boolean timer) {
+        CardAnalyzer.initProgress();
+
         mProgress = new ProgressDialog(this);
         mProgress.setIndeterminate(false);
         mProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);

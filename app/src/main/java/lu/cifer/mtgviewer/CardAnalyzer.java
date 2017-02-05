@@ -41,7 +41,7 @@ public class CardAnalyzer {
     static int foundCards;
     static boolean reverse;
     static int sortType = 0;
-    static String[] sortName = new String[]{"Edition", "Name", "Cmc", "Color", "Random"};
+    static String[] sortName = new String[]{"Edition", "Name", "Cmc", "Color", "Rating", "Random"};
     static boolean stop;
     static Vector<ReprintInfo> resultCards;
     static String lastCode;
@@ -90,6 +90,27 @@ public class CardAnalyzer {
                 ret = left.card.converted - right.card.converted;
             }
             return reverse ? -ret : ret;
+        }
+    };
+
+    static Comparator<ReprintInfo> ratingComparator = new Comparator<ReprintInfo>() {
+        @Override
+        public int compare(ReprintInfo left, ReprintInfo right) {
+            float ret;
+            if (left.rating == right.rating) {
+                if (left.order == right.order) {
+                    ret = left.formatedNumber.compareTo(right.formatedNumber);
+                } else {
+                    ret = left.order - right.order;
+                }
+            } else {
+                ret = left.rating - right.rating;
+            }
+            if(reverse) {
+                return ret > 0.0f ? 1 : -1;
+            } else {
+                return ret > 0.0f ? -1 : 1;
+            }
         }
     };
 
@@ -318,6 +339,12 @@ public class CardAnalyzer {
 
     public static int getFoundCards() {
         return foundCards;
+    }
+
+    public static void initProgress() {
+        progress = 0;
+        foundCards = 0;
+        stop = false;
     }
 
     private static void SortReprint(CardInfo card) {
@@ -866,6 +893,9 @@ public class CardAnalyzer {
                 break;
             case "Color":
                 Collections.sort(cards, colorComparator);
+                break;
+            case "Rating":
+                Collections.sort(cards, ratingComparator);
                 break;
             case "Random":
                 Collections.shuffle(cards);
