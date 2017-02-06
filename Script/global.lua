@@ -49,3 +49,9 @@ function table_contains_str(t, str)
 	end
 	return false
 end
+
+function clean_str(str)
+	if(str) then
+		return string.gsub(str, ' ?%(.-%)', '')
+	end
+end

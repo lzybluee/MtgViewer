@@ -69,6 +69,14 @@ black = string_contains(mana, 'B') or string_contains(colorIndicator, 'Black')
 red = string_contains(mana, 'R') or string_contains(colorIndicator, 'Red')
 green = string_contains(mana, 'G') or string_contains(colorIndicator, 'Green')
 
+pure = clean_str(text)
+
+textwhite = string_contains(pure, '{W') or string_contains(pure, 'W}')
+textblue = string_contains(pure, '{U') or string_contains(pure, 'U}')
+textblack = string_contains(pure, '{B') or string_contains(pure, 'B}')
+textred = string_contains(pure, '{R') or string_contains(pure, 'R}')
+textgreen = string_contains(pure, '{G') or string_contains(pure, 'G}')
+
 artifact = table_contains(types, 'Artifact')
 creature = table_contains(types, 'Creature')
 enchantment = table_contains(types, 'Enchantment')
@@ -96,7 +104,7 @@ if green then
 end
 
 function hastext(str)
-	return string_contains(text, str)
+	return string_contains(pure, str)
 end
 
 function hasrule(str)
@@ -132,6 +140,18 @@ u = blue
 b = black
 r = red
 g = green
+
+tw = textwhite
+tu = textblue
+tb = textblack
+tr = textred
+tg = textgreen
+
+cw = w or tw
+cu = u or tu
+cb = b or tb
+cr = r or tr
+cg = g or tg
 
 a = artifact
 c = creature
