@@ -144,7 +144,7 @@ public class CardAnalyzer {
 
     static boolean hasLandColor(CardInfo card, String manaColor, String land) {
         return (card.types != null && card.types.contains(land)) ||
-                (card.text != null && card.text.contains(manaColor));
+                (card.text != null && (card.text.contains("{" + manaColor) || card.text.contains(manaColor + "}")));
     }
 
     static int getColorMask(CardInfo card) {
@@ -174,23 +174,23 @@ public class CardAnalyzer {
         if (mask == 0) {
             if (card.types.contains("Land")) {
                 mask = 0x10000000;
-                if (hasLandColor(card, "{W}", "Plains")) {
+                if (hasLandColor(card, "W", "Plains")) {
                     mask |= 0x1;
                     colors++;
                 }
-                if (hasLandColor(card, "{U}", "Island")) {
+                if (hasLandColor(card, "U", "Island")) {
                     mask |= 0x10;
                     colors++;
                 }
-                if (hasLandColor(card, "{B}", "Swamp")) {
+                if (hasLandColor(card, "B", "Swamp")) {
                     mask |= 0x100;
                     colors++;
                 }
-                if (hasLandColor(card, "{R}", "Mountain")) {
+                if (hasLandColor(card, "R", "Mountain")) {
                     mask |= 0x1000;
                     colors++;
                 }
-                if (hasLandColor(card, "{G}", "Forest")) {
+                if (hasLandColor(card, "G", "Forest")) {
                     mask |= 0x10000;
                     colors++;
                 }
