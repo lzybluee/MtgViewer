@@ -808,7 +808,14 @@ public class CardAnalyzer {
 
     private static boolean checkCard(ReprintInfo reprint, String script, Vector<ReprintInfo> cards) {
         progress++;
-        int result = LuaScript.checkCard(reprint, script);
+        int result;
+
+        if(script.startsWith("@")) {
+            result = (reprint.card.name.toLowerCase().contains(script.substring(1).trim().toLowerCase()) ? 1 : 0);
+        } else {
+            result = LuaScript.checkCard(reprint, script);
+        }
+
         if (result == 1) {
             foundCards++;
             cards.add(reprint);
