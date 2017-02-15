@@ -28,6 +28,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -240,6 +242,26 @@ public class MainActivity extends Activity {
         new Thread(runnable).start();
     }
 
+    void saveBundle(Vector<String> bundle) {
+        SharedPreferences prep = getSharedPreferences("bundle", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prep.edit();
+        editor.putStringSet("bundle", new HashSet<>(bundle));
+        editor.apply();
+    }
+
+    void loadBundle() {
+        SharedPreferences prep = getSharedPreferences("bundle", MODE_PRIVATE);
+        Set<String> set = prep.getStringSet("bundle", null);
+        CardBundle.bundle.clear();
+        if (set != null && !set.isEmpty()) {
+            for (String s : set) {
+                if (new File(SDPath + "/MTG/" + s).exists()) {
+                    CardBundle.bundle.add(s);
+                }
+            }
+        }
+    }
+
     void saveSelectedSets(String sets) {
         SharedPreferences prep = getSharedPreferences("mtg", MODE_PRIVATE);
         Editor editor = prep.edit();
@@ -397,6 +419,7 @@ public class MainActivity extends Activity {
             j++;
         }
 
+        loadBundle();
         mSets = loadSelectedSets();
 
         setContentView(R.layout.main_layout);
