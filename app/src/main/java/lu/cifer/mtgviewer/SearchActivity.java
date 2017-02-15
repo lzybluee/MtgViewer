@@ -46,6 +46,16 @@ public class SearchActivity extends Activity {
         return sp.getString("code", "");
     }
 
+    private void saveFilter(String filter) {
+        SharedPreferences sp = getSharedPreferences("filter", Context.MODE_PRIVATE);
+        sp.edit().putString("filter", filter).apply();
+    }
+
+    private String loadFilter() {
+        SharedPreferences sp = getSharedPreferences("filter", Context.MODE_PRIVATE);
+        return sp.getString("filter", "Modern");
+    }
+
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(SearchActivity.this, MainActivity.class);
@@ -290,6 +300,7 @@ public class SearchActivity extends Activity {
         String text = mCode.getText().toString().trim();
         mCode.setText(text);
         saveCode(text);
+        saveFilter(CardAnalyzer.getFilterString());
         if (text.isEmpty()) {
             Toast.makeText(this, "Empty Text!", Toast.LENGTH_SHORT).show();
         }
@@ -312,6 +323,10 @@ public class SearchActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_layout);
+
+        if (CardAnalyzer.getFilterString().equals("Back")) {
+            CardAnalyzer.setFilter(loadFilter());
+        }
 
         mCode = (EditText) findViewById(R.id.code);
         mCode.setText(loadCode());

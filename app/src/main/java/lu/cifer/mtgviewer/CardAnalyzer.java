@@ -33,7 +33,7 @@ public class CardAnalyzer {
     static int[] landIndex = new int[5];
     static HashMap<String, Integer> cardNameInSet = new HashMap<>();
     static String wrongCard;
-    static String filterString = "All";
+    static String filterString = "";
     static Vector<String> lastFilter;
     static Vector<String> filter = new Vector<>();
     static Vector<String> setOrder = new Vector<>();
@@ -776,11 +776,11 @@ public class CardAnalyzer {
         if (sets == null || sets.equals("")) {
             filterString = "All";
             filter.clear();
-        } else {
-            if (sets.equals("Back")) {
-                filterString = "Modern";
-                sets = "Modern";
+        } else if (sets.equals("Back")) {
+            if (filterString.isEmpty()) {
+                filterString = "Back";
             }
+        } else {
             Vector<String> v = new Vector<>();
             String[] paths = sets.split("\\|");
             for (String[] s : CardParser.SetList) {

@@ -443,7 +443,6 @@ public class MainActivity extends Activity {
                 init(mSets);
             }
         } else if (System.currentTimeMillis() - mBackPressed <= 1000) {
-            saveSelectedSets("");
             super.onBackPressed();
             LuaScript.closeLua();
             System.exit(0);
