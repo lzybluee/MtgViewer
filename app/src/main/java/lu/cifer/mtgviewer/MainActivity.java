@@ -260,15 +260,16 @@ public class MainActivity extends Activity {
         menu.add(Menu.NONE, 4, 5, "Numerical");
         menu.add(Menu.NONE, 5, 6, "Select");
         menu.add(Menu.NONE, 6, 7, "Done");
-        menu.add(Menu.NONE, 7, 8, "Token");
-        menu.add(Menu.NONE, 8, 9, "Promo");
-        menu.add(Menu.NONE, 9, 10, "Special");
-        menu.add(Menu.NONE, 10, 11, "Vanguard");
+        menu.add(Menu.NONE, 7, 8, "Ancient");
+        menu.add(Menu.NONE, 8, 9, "Token");
+        menu.add(Menu.NONE, 9, 10, "Promo");
+        menu.add(Menu.NONE, 10, 11, "Special");
+        menu.add(Menu.NONE, 11, 12, "Vanguard");
         for (int i = 0; i < CardParser.SetList.length; i++) {
-            menu.add(Menu.NONE, i + 11, i + 12, CardParser.SetList[i][0]);
+            menu.add(Menu.NONE, i + 12, i + 13, CardParser.SetList[i][0]);
         }
         for (int i = 0; i < mMiscSets.length; i++) {
-            menu.add(Menu.NONE, i + CardParser.SetList.length + 11, i + CardParser.SetList.length + 12,
+            menu.add(Menu.NONE, i + CardParser.SetList.length + 12, i + CardParser.SetList.length + 13,
                     mMiscSets[i].substring(mMiscSets[i].lastIndexOf("/") + 1));
         }
         return super.onCreateOptionsMenu(menu);
@@ -279,7 +280,11 @@ public class MainActivity extends Activity {
         int n = item.getItemId();
 
         if (n == 0) {
-            init("Ancient|Modern|Commander|Planechase/PC2|Planechase/HOP|Archenemy/ARC|Conspiracy/CNS|Starter|Reprint/MMA|Reprint/MM2|Special/MBP|Token|Planechase/Plane|Planechase/Plane2012|Archenemy/Scheme|Conspiracy/Conspiracy|Unset");
+            init("Ancient|Modern|Commander|Planechase|Archenemy|Conspiracy|Starter|Special/MBP|Unset|" +
+                    "Reprint/CMA|Reprint/DD2|Reprint/DDC|Reprint/DDD|Reprint/DDE|Reprint/DDF|Reprint/DDG|Reprint/DDH|" +
+                    "Reprint/DDI|Reprint/DDJ|Reprint/DDK|Reprint/DDL|Reprint/DDM|Reprint/DDN|Reprint/DDO|Reprint/DRB|" +
+                    "Reprint/EMA|Reprint/EVG|Reprint/H09|Reprint/MM2|Reprint/MMA|Reprint/PD2|Reprint/PD3|Reprint/V09|" +
+                    "Reprint/V10|Reprint/V11|Reprint/V12|Reprint/V13|Reprint/V14|Reprint/V15");
         } else if (n == 1) {
             init("Modern");
         } else if (n == 2) {
@@ -309,17 +314,19 @@ public class MainActivity extends Activity {
                 init(mSets);
             }
         } else if (n == 7) {
-            init("Token");
+            init("Ancient");
         } else if (n == 8) {
-            init("Promo");
+            init("Token");
         } else if (n == 9) {
-            init("Special");
+            init("Promo");
         } else if (n == 10) {
+            init("Special");
+        } else if (n == 11) {
             init("Vanguard");
-        } else if (n <= 10 + CardParser.SetList.length) {
-            init(CardParser.SetList[n - 11][1]);
+        } else if (n <= 11 + CardParser.SetList.length) {
+            init(CardParser.SetList[n - 12][1]);
         } else {
-            init(mMiscSets[n - 11 - CardParser.SetList.length]);
+            init(mMiscSets[n - 12 - CardParser.SetList.length]);
         }
 
         return false;
