@@ -174,28 +174,6 @@ public class SearchActivity extends Activity {
         });
     }
 
-    private boolean checkCard(String path, String search, boolean anyWord) {
-        boolean ret = false;
-        String[] strs = search.split(" ");
-        if (anyWord) {
-            for (String s : strs) {
-                if (path.contains(s)) {
-                    return true;
-                }
-            }
-        } else {
-            for (String s : strs) {
-                if (path.contains(s)) {
-                    ret = true;
-                } else {
-                    ret = false;
-                    break;
-                }
-            }
-        }
-        return ret;
-    }
-
     private void processFolder(File file, String search, boolean anyWord, Vector<String> cards) {
         if (mStop) {
             return;
@@ -207,7 +185,7 @@ public class SearchActivity extends Activity {
             } else {
                 String path = f.getAbsolutePath();
                 path = path.substring(path.indexOf("/MTG/") + 5);
-                if (path.endsWith(".jpg") && checkCard(path.toLowerCase(), search, anyWord)) {
+                if (path.endsWith(".jpg") && CardAnalyzer.checkStringGroup(path.toLowerCase(), search, anyWord)) {
                     cards.add(path);
                     mFound++;
                 }

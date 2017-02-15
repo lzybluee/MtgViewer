@@ -806,12 +806,34 @@ public class CardAnalyzer {
         resultCards = null;
     }
 
+    public static boolean checkStringGroup(String text, String search, boolean anyWord) {
+        boolean ret = false;
+        String[] strs = search.split(" ");
+        if (anyWord) {
+            for (String s : strs) {
+                if (!s.isEmpty() && text.contains(s)) {
+                    return true;
+                }
+            }
+        } else {
+            for (String s : strs) {
+                if (!s.isEmpty() && text.contains(s)) {
+                    ret = true;
+                } else {
+                    ret = false;
+                    break;
+                }
+            }
+        }
+        return ret;
+    }
+
     private static boolean checkCard(ReprintInfo reprint, String script, Vector<ReprintInfo> cards) {
         progress++;
         int result;
 
         if(script.startsWith("@")) {
-            result = (reprint.card.name.toLowerCase().contains(script.substring(1).trim().toLowerCase()) ? 1 : 0);
+            result = (checkStringGroup(reprint.card.name.toLowerCase(), script.substring(1).trim().toLowerCase(), false) ? 1 : 0);
         } else {
             result = LuaScript.checkCard(reprint, script);
         }
