@@ -103,6 +103,10 @@ if green then
 	colors = colors + 1
 end
 
+function hasname(str)
+	return string_contains(name, str)
+end
+
 function hastext(str)
 	return string_contains(pure, str)
 end
@@ -153,6 +157,23 @@ cb = b or tb
 cr = r or tr
 cg = g or tg
 
+ccolors = 0
+if cw then
+	ccolors = ccolors + 1
+end
+if cu then
+	ccolors = ccolors + 1
+end
+if cb then
+	ccolors = ccolors + 1
+end
+if cr then
+	ccolors = ccolors + 1
+end
+if cg then
+	ccolors = ccolors + 1
+end
+
 a = artifact
 c = creature
 e = enchantment
@@ -173,3 +194,8 @@ legend = isLegendary
 
 reprint = reprintIndex
 id = multiverseid
+
+nm = hasname
+tx = hastext
+tp = containstype
+
