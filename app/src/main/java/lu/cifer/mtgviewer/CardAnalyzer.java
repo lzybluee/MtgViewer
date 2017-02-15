@@ -106,7 +106,7 @@ public class CardAnalyzer {
             } else {
                 ret = left.rating - right.rating;
             }
-            if(reverse) {
+            if (reverse) {
                 return ret > 0.0f ? 1 : -1;
             } else {
                 return ret > 0.0f ? -1 : 1;
@@ -832,7 +832,7 @@ public class CardAnalyzer {
         progress++;
         int result;
 
-        if(script.startsWith("@")) {
+        if (script.startsWith("@")) {
             result = (checkStringGroup(reprint.card.name.toLowerCase(), script.substring(1).trim().toLowerCase(), false) ? 1 : 0);
         } else {
             result = LuaScript.checkCard(reprint, script);

@@ -36,6 +36,7 @@ public class MainActivity extends Activity {
 
     public static File SDPath;
     public static String urlInfo = "";
+    Gallery mGallery;
     Vector<String> mCardPath = new Vector<>();
     boolean mShuffle = true;
     boolean mAscending = false;
@@ -84,12 +85,12 @@ public class MainActivity extends Activity {
     }
 
     void initGallery() {
-        Gallery gallery = (Gallery) findViewById(R.id.gallery);
-        gallery.setAdapter(new GalleryAdapter());
-        gallery.setBackgroundColor(0x222222);
-        gallery.setSpacing(20);
+        mGallery = (Gallery) findViewById(R.id.gallery);
+        mGallery.setAdapter(new GalleryAdapter());
+        mGallery.setBackgroundColor(0x222222);
+        mGallery.setSpacing(20);
 
-        gallery.setOnItemClickListener(new OnItemClickListener() {
+        mGallery.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 CardParser.rulePage++;
@@ -101,7 +102,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        gallery.setOnItemLongClickListener(new OnItemLongClickListener() {
+        mGallery.setOnItemLongClickListener(new OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View v,
                                            int position, long id) {
@@ -260,16 +261,17 @@ public class MainActivity extends Activity {
         menu.add(Menu.NONE, 4, 5, "Numerical");
         menu.add(Menu.NONE, 5, 6, "Select");
         menu.add(Menu.NONE, 6, 7, "Done");
-        menu.add(Menu.NONE, 7, 8, "Ancient");
-        menu.add(Menu.NONE, 8, 9, "Token");
-        menu.add(Menu.NONE, 9, 10, "Promo");
-        menu.add(Menu.NONE, 10, 11, "Special");
-        menu.add(Menu.NONE, 11, 12, "Vanguard");
+        menu.add(Menu.NONE, 7, 8, "Bundle");
+        menu.add(Menu.NONE, 8, 9, "Ancient");
+        menu.add(Menu.NONE, 9, 10, "Token");
+        menu.add(Menu.NONE, 10, 11, "Promo");
+        menu.add(Menu.NONE, 11, 12, "Special");
+        menu.add(Menu.NONE, 12, 13, "Vanguard");
         for (int i = 0; i < CardParser.SetList.length; i++) {
-            menu.add(Menu.NONE, i + 12, i + 13, CardParser.SetList[i][0]);
+            menu.add(Menu.NONE, i + 13, i + 14, CardParser.SetList[i][0]);
         }
         for (int i = 0; i < mMiscSets.length; i++) {
-            menu.add(Menu.NONE, i + CardParser.SetList.length + 12, i + CardParser.SetList.length + 13,
+            menu.add(Menu.NONE, i + CardParser.SetList.length + 13, i + CardParser.SetList.length + 14,
                     mMiscSets[i].substring(mMiscSets[i].lastIndexOf("/") + 1));
         }
         return super.onCreateOptionsMenu(menu);
@@ -314,19 +316,21 @@ public class MainActivity extends Activity {
                 init(mSets);
             }
         } else if (n == 7) {
-            init("Ancient");
+            CardBundle.showDialog(this);
         } else if (n == 8) {
-            init("Token");
+            init("Ancient");
         } else if (n == 9) {
-            init("Promo");
+            init("Token");
         } else if (n == 10) {
-            init("Special");
+            init("Promo");
         } else if (n == 11) {
+            init("Special");
+        } else if (n == 12) {
             init("Vanguard");
-        } else if (n <= 11 + CardParser.SetList.length) {
-            init(CardParser.SetList[n - 12][1]);
+        } else if (n <= 12 + CardParser.SetList.length) {
+            init(CardParser.SetList[n - 13][1]);
         } else {
-            init(mMiscSets[n - 12 - CardParser.SetList.length]);
+            init(mMiscSets[n - 13 - CardParser.SetList.length]);
         }
 
         return false;
@@ -465,28 +469,24 @@ public class MainActivity extends Activity {
             ImageView view = new ImageView(MainActivity.this);
             Bitmap bitmap = BitmapFactory.decodeFile(mCardPath.get(position));
 
-            boolean wotc = (bitmap.getWidth() == 265 && bitmap.getHeight() == 370);
-
-            if (bitmap.getWidth() > bitmap.getHeight() || wotc) {
-                Matrix m = new Matrix();
-                m.postRotate(-90);
-                Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-                        bitmap.getWidth(), bitmap.getHeight(), m, false);
-                bitmap.recycle();
-                view.setImageBitmap(newBitmap);
-            } else {
-                view.setImageBitmap(bitmap);
+            if (bitmap != null) {
+                if (bitmap.getWidth() > bitmap.getHeight()) {
+                    Matrix m = new Matrix();
+                    m.postRotate(-90);
+                    Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                            bitmap.getWidth(), bitmap.getHeight(), m, false);
+                    bitmap.recycle();
+                    view.setImageBitmap(newBitmap);
+                } else {
+                    view.setImageBitmap(bitmap);
+                }
             }
 
             view.setBackgroundColor(0x222222);
             view.setLayoutParams(new Gallery.LayoutParams(
                     LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-            if (wotc) {
-                view.setScaleType(ImageView.ScaleType.CENTER);
-            } else {
-                view.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            }
+            view.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
             return view;
         }
