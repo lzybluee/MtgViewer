@@ -24,11 +24,24 @@ public class CardBundle {
                 if (!bundle.contains(card)) {
                     bundle.add(card);
                     activity.saveBundle(bundle);
-                    Toast.makeText(activity, "#" + bundle.size() + " Added to Bundle", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "#" + bundle.size() + " Added to BUNDLE", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(activity, "Already in Bundle", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Already in BUNDLE", Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
+            }
+        });
+        addButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String card = activity.mCardPath.get((int) activity.mGallery.getSelectedItemId()).replace(MainActivity.SDPath + "/MTG/", "");
+                if (!bundle.contains(card)) {
+                    bundle.add(card);
+                    activity.saveBundle(bundle);
+                    activity.init(bundle.toArray(new String[0]));
+                }
+                dialog.dismiss();
+                return true;
             }
         });
 
@@ -55,22 +68,41 @@ public class CardBundle {
             public void onClick(View v) {
                 bundle.clear();
                 activity.saveBundle(bundle);
-                Toast.makeText(activity, "Bundle Cleared", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "BUNDLE Cleared", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
-
-        Button removeButton = (Button) dialog.findViewById(R.id.remove_button);
-        removeButton.setOnClickListener(new View.OnClickListener() {
+        clearButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
                 String card = activity.mCardPath.get((int) activity.mGallery.getSelectedItemId()).replace(MainActivity.SDPath + "/MTG/", "");
                 if (bundle.contains(card)) {
                     bundle.remove(card);
                     activity.saveBundle(bundle);
-                    Toast.makeText(activity, "Removed from Bundle", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Removed from BUNDLE", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(activity, "Not in Bundle", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Not in BUNDLE", Toast.LENGTH_SHORT).show();
+                }
+                dialog.dismiss();
+                return true;
+            }
+        });
+
+        Button allButton = (Button) dialog.findViewById(R.id.all_button);
+        allButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int num = 0;
+                for (String s : activity.mCardPath) {
+                    String card = s.replace(MainActivity.SDPath + "/MTG/", "");
+                    if (!bundle.contains(card)) {
+                        bundle.add(card);
+                        num++;
+                    }
+                }
+                if (num > 0) {
+                    activity.saveBundle(bundle);
+                    Toast.makeText(activity, "#" + bundle.size() + " Batch added to BUNDLE", Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
             }
