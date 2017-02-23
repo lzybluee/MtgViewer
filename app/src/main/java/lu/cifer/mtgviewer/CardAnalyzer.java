@@ -807,6 +807,10 @@ public class CardAnalyzer {
     }
 
     public static boolean checkStringGroup(String text, String search, boolean anyWord) {
+        if(search.isEmpty()) {
+            return true;
+        }
+
         boolean ret = false;
         String[] strs = search.split(" ");
         if (anyWord) {
