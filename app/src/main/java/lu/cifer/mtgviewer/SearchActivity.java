@@ -433,18 +433,18 @@ public class SearchActivity extends Activity {
         specialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (trimCode()) {
-                    return;
-                }
+                String text = mCode.getText().toString().trim();
+                mCode.setText(text);
+                saveCode(text);
                 searchSpecial(mCode.getText().toString().toLowerCase(), false);
             }
         });
         specialButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (trimCode()) {
-                    return true;
-                }
+                String text = mCode.getText().toString().trim();
+                mCode.setText(text);
+                saveCode(text);
                 searchSpecial(mCode.getText().toString().toLowerCase(), true);
                 return true;
             }
