@@ -45,6 +45,7 @@ public class CardAnalyzer {
     static boolean stop;
     static Vector<ReprintInfo> resultCards;
     static String lastCode;
+    static boolean single;
 
     static Comparator<ReprintInfo> editionComparator = new Comparator<ReprintInfo>() {
         @Override
@@ -231,6 +232,11 @@ public class CardAnalyzer {
 
     public static String getSortType() {
         return sortName[sortType];
+    }
+
+    public static boolean switchSingleMode() {
+        single = !single;
+        return single;
     }
 
     public static boolean isReverse() {
@@ -807,7 +813,7 @@ public class CardAnalyzer {
     }
 
     public static boolean checkStringGroup(String text, String search, boolean anyWord) {
-        if(search.isEmpty()) {
+        if (search.isEmpty()) {
             return true;
         }
 
@@ -837,7 +843,7 @@ public class CardAnalyzer {
         int result;
 
         if (script.startsWith("@")) {
-            result = (checkStringGroup(reprint.card.name.toLowerCase(), script.substring(1).trim().toLowerCase(), false) ? 1 : 0);
+            result = checkStringGroup(reprint.card.name.toLowerCase(), script.substring(1).trim().toLowerCase(), false) ? 1 : 0;
         } else {
             result = LuaScript.checkCard(reprint, script);
         }
@@ -935,10 +941,31 @@ public class CardAnalyzer {
                 break;
         }
 
-        results = new String[cards.size()];
-        for (int i = 0; i < results.length; i++) {
-            results[i] = cards.get(i).picture;
+        if (single) {
+            Vector<String> names = new Vector<>();
+            Vector<ReprintInfo> singleCards = new Vector<>();
+
+            for (ReprintInfo info : cards) {
+                if (names.contains(info.card.name)) {
+                    continue;
+                }
+                singleCards.add(info);
+                names.add(info.card.name);
+            }
+
+            results = new String[singleCards.size()];
+
+            for (int i = 0; i < results.length; i++) {
+                results[i] = singleCards.get(i).picture;
+            }
+        } else {
+            results = new String[cards.size()];
+
+            for (int i = 0; i < results.length; i++) {
+                results[i] = cards.get(i).picture;
+            }
         }
+
         return results.length;
     }
 

@@ -46,6 +46,12 @@
             android:layout_height="wrap_content"
             android:text="Spec" />
 
+        <Button
+            android:id="@+id/single_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1" />
+
     </LinearLayout>
 
     <TextView

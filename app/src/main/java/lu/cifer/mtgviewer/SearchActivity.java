@@ -449,5 +449,14 @@ public class SearchActivity extends Activity {
                 return true;
             }
         });
+
+        Button singleButton = (Button) findViewById(R.id.single_button);
+        singleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean single = CardAnalyzer.switchSingleMode();
+                Toast.makeText(SearchActivity.this, single ? "Single card" : "Multiple cards", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
