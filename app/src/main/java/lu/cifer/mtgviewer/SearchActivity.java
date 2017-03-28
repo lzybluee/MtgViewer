@@ -195,7 +195,7 @@ public class SearchActivity extends Activity {
             } else {
                 String path = f.getAbsolutePath();
                 path = path.substring(path.indexOf("/MTG/") + 5);
-                if (path.endsWith(".jpg") && CardAnalyzer.checkStringGroup(path.toLowerCase(), search, anyWord)) {
+                if (path.endsWith(".jpg") && CardAnalyzer.checkStringGroup(path, search, anyWord)) {
                     cards.add(path);
                     mFound++;
                 }
@@ -436,7 +436,7 @@ public class SearchActivity extends Activity {
                 String text = mCode.getText().toString().trim();
                 mCode.setText(text);
                 saveCode(text);
-                searchSpecial(mCode.getText().toString().toLowerCase(), false);
+                searchSpecial(mCode.getText().toString(), false);
             }
         });
         specialButton.setOnLongClickListener(new View.OnLongClickListener() {
@@ -445,7 +445,7 @@ public class SearchActivity extends Activity {
                 String text = mCode.getText().toString().trim();
                 mCode.setText(text);
                 saveCode(text);
-                searchSpecial(mCode.getText().toString().toLowerCase(), true);
+                searchSpecial(mCode.getText().toString(), true);
                 return true;
             }
         });
