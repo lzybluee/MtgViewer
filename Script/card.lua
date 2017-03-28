@@ -141,6 +141,12 @@ rare = (rarity == "Rare")
 mythic = (rarity == "Mythic Rare")
 special = (rarity == "Special")
 
+cm = common
+uc = uncommon
+rr = rare
+my = mythic
+sp = special
+
 w = white
 u = blue
 b = black
@@ -201,3 +207,5 @@ nm = hasname
 tx = hastext
 tp = containstype
 
+vanilla = not text
+v = vanilla
