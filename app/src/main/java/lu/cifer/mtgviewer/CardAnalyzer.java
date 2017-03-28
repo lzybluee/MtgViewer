@@ -972,7 +972,9 @@ public class CardAnalyzer {
                 Collections.sort(cards, ratingComparator);
                 break;
             case "Random":
-                Collections.shuffle(cards);
+                if(!single) {
+                    Collections.shuffle(cards);
+                }
                 break;
         }
 
@@ -986,6 +988,10 @@ public class CardAnalyzer {
                 }
                 singleCards.add(info);
                 names.add(info.card.name);
+            }
+
+            if (sortName[sortType].equals("Random")) {
+                Collections.shuffle(singleCards);
             }
 
             results = new String[singleCards.size()];
