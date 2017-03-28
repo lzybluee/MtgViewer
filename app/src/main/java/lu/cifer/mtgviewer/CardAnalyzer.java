@@ -453,6 +453,10 @@ public class CardAnalyzer {
 
         card.name = getEntry(str, "Name");
 
+        card.simpleName = card.name.replaceAll(" \\(.+/.+\\)", "").replaceAll("®", "")
+                .replaceAll("[àáâ]", "a").replaceAll("é", "e").replaceAll("í", "i")
+                .replaceAll("ö", "o").replaceAll("[úû]", "u").replaceAll("Æ", "AE");
+
         entry = getEntry(str, "OtherPart");
         if (entry != null) {
             card.otherPart = entry;
@@ -812,26 +816,57 @@ public class CardAnalyzer {
         resultCards = null;
     }
 
+    public static boolean containsUpperCase(String text) {
+        for (char c : text.toCharArray()) {
+            if (c >= 'A' && c <= 'Z') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean containsText(String text, String search) {
+        if (search.startsWith("\"") && search.endsWith("\"")) {
+            String s = search.substring(1, search.length() - 1);
+            if (s.isEmpty()) {
+                return false;
+            }
+            Pattern pattern = Pattern.compile("\\b" + Pattern.quote(s) + "\\b");
+            Matcher matcher = pattern.matcher(text);
+            return matcher.find();
+        } else {
+            return text.contains(search);
+        }
+    }
+
     public static boolean checkStringGroup(String text, String search, boolean anyWord) {
         if (search.isEmpty()) {
             return true;
         }
 
+        if (!containsUpperCase(search)) {
+            text = text.toLowerCase();
+            search = search.toLowerCase();
+        }
+
         boolean ret = false;
-        String[] strs = search.split(" ");
+        String[] strs = search.contains("|") ? search.split("\\|") : search.split(" ");
+
         if (anyWord) {
             for (String s : strs) {
-                if (!s.isEmpty() && text.contains(s)) {
+                if (!s.isEmpty() && containsText(text, s)) {
                     return true;
                 }
             }
         } else {
             for (String s : strs) {
-                if (!s.isEmpty() && text.contains(s)) {
-                    ret = true;
-                } else {
-                    ret = false;
-                    break;
+                if (!s.isEmpty()) {
+                    if (containsText(text, s)) {
+                        ret = true;
+                    } else {
+                        ret = false;
+                        break;
+                    }
                 }
             }
         }
@@ -843,7 +878,7 @@ public class CardAnalyzer {
         int result;
 
         if (script.startsWith("@")) {
-            result = checkStringGroup(reprint.card.name.toLowerCase(), script.substring(1).trim().toLowerCase(), false) ? 1 : 0;
+            result = checkStringGroup(reprint.card.simpleName, script.substring(1).trim(), false) ? 1 : 0;
         } else {
             result = LuaScript.checkCard(reprint, script);
         }
@@ -1004,6 +1039,7 @@ public class CardAnalyzer {
     public static class CardInfo {
 
         public String name;
+        public String simpleName;
         public String otherPart;
         public int partIndex;
         public boolean isSplit;

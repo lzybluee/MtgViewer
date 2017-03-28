@@ -276,24 +276,25 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(Menu.NONE, 0, 1, "All");
+        menu.add(Menu.NONE, 0, 1, "MTG");
         menu.add(Menu.NONE, 1, 2, "Modern");
         menu.add(Menu.NONE, 2, 3, "Search");
-        menu.add(Menu.NONE, 3, 4, "Shuffle");
+        menu.add(Menu.NONE, 3, 4, "Bundle");
         menu.add(Menu.NONE, 4, 5, "Numerical");
         menu.add(Menu.NONE, 5, 6, "Select");
         menu.add(Menu.NONE, 6, 7, "Done");
-        menu.add(Menu.NONE, 7, 8, "Bundle");
-        menu.add(Menu.NONE, 8, 9, "Ancient");
-        menu.add(Menu.NONE, 9, 10, "Token");
-        menu.add(Menu.NONE, 10, 11, "Promo");
-        menu.add(Menu.NONE, 11, 12, "Special");
-        menu.add(Menu.NONE, 12, 13, "Vanguard");
+        menu.add(Menu.NONE, 7, 8, "Shuffle");
+        menu.add(Menu.NONE, 8, 9, "All");
+        menu.add(Menu.NONE, 9, 10, "Ancient");
+        menu.add(Menu.NONE, 10, 11, "Token");
+        menu.add(Menu.NONE, 11, 12, "Promo");
+        menu.add(Menu.NONE, 12, 13, "Special");
+        menu.add(Menu.NONE, 13, 14, "Vanguard");
         for (int i = 0; i < CardParser.SetList.length; i++) {
-            menu.add(Menu.NONE, i + 13, i + 14, CardParser.SetList[i][0]);
+            menu.add(Menu.NONE, i + 14, i + 15, CardParser.SetList[i][0]);
         }
         for (int i = 0; i < mMiscSets.length; i++) {
-            menu.add(Menu.NONE, i + CardParser.SetList.length + 13, i + CardParser.SetList.length + 14,
+            menu.add(Menu.NONE, i + CardParser.SetList.length + 14, i + CardParser.SetList.length + 15,
                     mMiscSets[i].substring(mMiscSets[i].lastIndexOf("/") + 1));
         }
         return super.onCreateOptionsMenu(menu);
@@ -304,11 +305,8 @@ public class MainActivity extends Activity {
         int n = item.getItemId();
 
         if (n == 0) {
-            init("Ancient|Modern|Commander|Planechase|Archenemy|Conspiracy|Starter|Special/MBP|Unset|" +
-                    "Reprint/CMA|Reprint/DD2|Reprint/DDC|Reprint/DDD|Reprint/DDE|Reprint/DDF|Reprint/DDG|Reprint/DDH|" +
-                    "Reprint/DDI|Reprint/DDJ|Reprint/DDK|Reprint/DDL|Reprint/DDM|Reprint/DDN|Reprint/DDO|Reprint/DRB|" +
-                    "Reprint/EMA|Reprint/EVG|Reprint/H09|Reprint/MM2|Reprint/MMA|Reprint/PD2|Reprint/PD3|Reprint/V09|" +
-                    "Reprint/V10|Reprint/V11|Reprint/V12|Reprint/V13|Reprint/V14|Reprint/V15");
+            init("Ancient|Modern|Commander|Planechase/PC2|Planechase/Plane|Planechase/Plane2012|Archenemy/Scheme|Conspiracy|" +
+                    "Starter|Special/MBP|Unset|");
         } else if (n == 1) {
             init("Modern");
         } else if (n == 2) {
@@ -316,8 +314,7 @@ public class MainActivity extends Activity {
             startActivity(intent);
             finish();
         } else if (n == 3) {
-            mShuffle = true;
-            Toast.makeText(this, "Shuffle", Toast.LENGTH_SHORT).show();
+            CardBundle.showDialog(this);
         } else if (n == 4) {
             mShuffle = false;
             mAscending = !mAscending;
@@ -338,21 +335,28 @@ public class MainActivity extends Activity {
                 init(mSets);
             }
         } else if (n == 7) {
-            CardBundle.showDialog(this);
+            mShuffle = true;
+            Toast.makeText(this, "Shuffle", Toast.LENGTH_SHORT).show();
         } else if (n == 8) {
-            init("Ancient");
+            init("Ancient|Modern|Commander|Planechase|Archenemy|Conspiracy|Starter|Special/MBP|Unset|" +
+                    "Reprint/CMA|Reprint/DD2|Reprint/DDC|Reprint/DDD|Reprint/DDE|Reprint/DDF|Reprint/DDG|Reprint/DDH|" +
+                    "Reprint/DDI|Reprint/DDJ|Reprint/DDK|Reprint/DDL|Reprint/DDM|Reprint/DDN|Reprint/DDO|Reprint/DRB|" +
+                    "Reprint/EMA|Reprint/EVG|Reprint/H09|Reprint/MM2|Reprint/MMA|Reprint/PD2|Reprint/PD3|Reprint/V09|" +
+                    "Reprint/V10|Reprint/V11|Reprint/V12|Reprint/V13|Reprint/V14|Reprint/V15");
         } else if (n == 9) {
-            init("Token");
+            init("Ancient");
         } else if (n == 10) {
-            init("Promo");
+            init("Token");
         } else if (n == 11) {
-            init("Special");
+            init("Promo");
         } else if (n == 12) {
+            init("Special");
+        } else if (n == 13) {
             init("Vanguard");
-        } else if (n <= 12 + CardParser.SetList.length) {
-            init(CardParser.SetList[n - 13][1]);
+        } else if (n <= 13 + CardParser.SetList.length) {
+            init(CardParser.SetList[n - 14][1]);
         } else {
-            init(mMiscSets[n - 13 - CardParser.SetList.length]);
+            init(mMiscSets[n - 14 - CardParser.SetList.length]);
         }
 
         return false;

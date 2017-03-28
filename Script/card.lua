@@ -1,5 +1,6 @@
 --[[
 name -> String
+simpleName -> String
 otherPart -> String
 partIndex -> Integer
 isSplit -> Boolean
@@ -138,6 +139,7 @@ common = (rarity == "Common")
 uncommon = (rarity == "Uncommon")
 rare = (rarity == "Rare")
 mythic = (rarity == "Mythic Rare")
+special = (rarity == "Special")
 
 w = white
 u = blue
