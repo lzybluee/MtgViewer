@@ -182,6 +182,12 @@ if cg then
 	ccolors = ccolors + 1
 end
 
+nw = count_str(mana, 'W')
+nu = count_str(mana, 'U')
+nb = count_str(mana, 'B')
+nr = count_str(mana, 'R')
+ng = count_str(mana, 'G')
+
 a = artifact
 c = creature
 e = enchantment
@@ -194,6 +200,9 @@ t = tribal
 m = multicolor
 
 cmc = converted
+
+permanent = a or c or e or l or p
+pm = permanent
 
 split = isSplit
 double = isDoubleFaced
