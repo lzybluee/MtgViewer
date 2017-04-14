@@ -325,7 +325,7 @@ public class MainActivity extends Activity {
             mSelect = true;
             showSelectedSets();
         } else if (n == 6) {
-            if (!mSelect && !mSets.equals("")) {
+            if (!mSelect) {
                 mSets = "";
                 saveSelectedSets(mSets);
                 Toast.makeText(this, "Clear all selectd sets", Toast.LENGTH_SHORT).show();
