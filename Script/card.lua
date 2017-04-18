@@ -147,6 +147,8 @@ rr = rare
 my = mythic
 sp = special
 
+rm = rare or mythic or special
+
 w = white
 u = blue
 b = black
