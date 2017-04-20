@@ -23,6 +23,7 @@ public class CardAnalyzer {
             "Ongoing Scheme", "Conspiracy"};
 
     public static String[] results;
+    public static int exclude;
 
     static String last_name = "";
     static ReprintInfo last_card;
@@ -903,6 +904,7 @@ public class CardAnalyzer {
         stop = false;
         progress = 0;
         foundCards = 0;
+        exclude = 0;
 
         if (lastCode != null && !script.isEmpty() && script.equals(lastCode)) {
             skipSearch = true;
@@ -1006,6 +1008,8 @@ public class CardAnalyzer {
                 results[i] = cards.get(i).picture;
             }
         }
+
+        exclude = cards.size() - results.length;
 
         return results.length;
     }

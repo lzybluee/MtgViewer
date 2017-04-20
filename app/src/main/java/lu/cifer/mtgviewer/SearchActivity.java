@@ -156,7 +156,7 @@ public class SearchActivity extends Activity {
                                     mTimer.cancel();
                                 }
 
-                                ((Button) findViewById(R.id.help_button)).setText("Help");
+                                ((Button) findViewById(R.id.help_button)).setText("?");
 
                                 switch (ret) {
                                     case 0:
@@ -164,7 +164,7 @@ public class SearchActivity extends Activity {
                                         return;
                                     case -1:
                                         mOutput.setText(LuaScript.getOutput());
-                                        ((Button) findViewById(R.id.help_button)).setText("Show");
+                                        ((Button) findViewById(R.id.help_button)).setText("!");
                                         return;
                                     case -2:
                                         mOutput.setText("Empty Result!");
@@ -205,6 +205,7 @@ public class SearchActivity extends Activity {
     }
 
     private void searchSpecial(final String search, final boolean anyWord) {
+        CardAnalyzer.exclude = 0;
         initProgress(SpecialCards, "Searching...", false);
         mProgress.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
@@ -334,7 +335,7 @@ public class SearchActivity extends Activity {
         mOutput = (TextView) findViewById(R.id.output);
         mOutput.setText(CardAnalyzer.getFilterString());
 
-        Button initButton = (Button) findViewById(R.id.init_button);
+        final Button initButton = (Button) findViewById(R.id.init_button);
         initButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -351,7 +352,7 @@ public class SearchActivity extends Activity {
             }
         });
 
-        Button searchButton = (Button) findViewById(R.id.search_button);
+        final Button searchButton = (Button) findViewById(R.id.search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -372,24 +373,24 @@ public class SearchActivity extends Activity {
             }
         });
 
-        Button sortButton = (Button) findViewById(R.id.sort_button);
+        final Button sortButton = (Button) findViewById(R.id.sort_button);
         sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String sort = CardAnalyzer.switchSortType(true);
-                Toast.makeText(SearchActivity.this, sort, Toast.LENGTH_SHORT).show();
+                sortButton.setText(sort);
             }
         });
         sortButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 String sort = CardAnalyzer.switchSortType(false);
-                Toast.makeText(SearchActivity.this, sort, Toast.LENGTH_SHORT).show();
+                sortButton.setText(sort);
                 return true;
             }
         });
 
-        Button cleanButton = (Button) findViewById(R.id.clean_button);
+        final Button cleanButton = (Button) findViewById(R.id.clean_button);
         cleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -407,7 +408,7 @@ public class SearchActivity extends Activity {
             }
         });
 
-        Button helpButton = (Button) findViewById(R.id.help_button);
+        final Button helpButton = (Button) findViewById(R.id.help_button);
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -429,7 +430,7 @@ public class SearchActivity extends Activity {
             }
         });
 
-        Button specialButton = (Button) findViewById(R.id.special_button);
+        final Button specialButton = (Button) findViewById(R.id.special_button);
         specialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -450,12 +451,12 @@ public class SearchActivity extends Activity {
             }
         });
 
-        Button singleButton = (Button) findViewById(R.id.single_button);
+        final Button singleButton = (Button) findViewById(R.id.single_button);
         singleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean single = CardAnalyzer.switchSingleMode();
-                Toast.makeText(SearchActivity.this, single ? "Single card" : "Multiple cards", Toast.LENGTH_SHORT).show();
+                singleButton.setText(single ? "1!" : "1+");
             }
         });
     }

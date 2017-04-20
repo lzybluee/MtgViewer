@@ -38,7 +38,7 @@ public class CardBundle {
                 if (!bundle.contains(card)) {
                     bundle.add(card);
                     activity.saveBundle(bundle);
-                    activity.init(bundle.toArray(new String[0]));
+                    activity.init(bundle.toArray(new String[0]), 0);
                 }
                 dialog.dismiss();
                 return true;
@@ -49,7 +49,7 @@ public class CardBundle {
         showButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.init(bundle.toArray(new String[0]));
+                activity.init(bundle.toArray(new String[0]), 0);
                 dialog.dismiss();
             }
         });

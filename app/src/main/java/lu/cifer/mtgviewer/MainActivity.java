@@ -118,14 +118,14 @@ public class MainActivity extends Activity {
         });
     }
 
-    void init(String[] cards) {
+    void init(String[] cards, int exclude) {
         mCardPath = new Vector<>();
 
         for (String card : cards) {
             mCardPath.add(SDPath + "/MTG/" + card);
         }
 
-        Toast.makeText(MainActivity.this, "Total Cards : " + mCardPath.size(),
+        Toast.makeText(MainActivity.this, "Total Cards : " + mCardPath.size() + (exclude == 0 ? "" : " (Exclude " + exclude + ")"),
                 Toast.LENGTH_SHORT).show();
 
         initGallery();
@@ -429,7 +429,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main_layout);
 
         if (pictures != null && pictures.length > 0) {
-            init(pictures);
+            init(pictures, CardAnalyzer.exclude);
         } else {
             init("Back");
         }
