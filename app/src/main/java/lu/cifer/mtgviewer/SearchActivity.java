@@ -374,6 +374,7 @@ public class SearchActivity extends Activity {
         });
 
         final Button sortButton = (Button) findViewById(R.id.sort_button);
+        sortButton.setText(CardAnalyzer.getSortType());
         sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -409,6 +410,7 @@ public class SearchActivity extends Activity {
         });
 
         final Button helpButton = (Button) findViewById(R.id.help_button);
+        helpButton.setText("?");
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -452,6 +454,7 @@ public class SearchActivity extends Activity {
         });
 
         final Button singleButton = (Button) findViewById(R.id.single_button);
+        singleButton.setText(CardAnalyzer.getSingleMode() ? "1!" : "1+");
         singleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

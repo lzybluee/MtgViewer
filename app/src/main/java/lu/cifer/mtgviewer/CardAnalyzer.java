@@ -235,6 +235,10 @@ public class CardAnalyzer {
         return sortName[sortType];
     }
 
+    public static boolean getSingleMode() {
+        return single;
+    }
+
     public static boolean switchSingleMode() {
         single = !single;
         return single;
@@ -983,6 +987,10 @@ public class CardAnalyzer {
         if (single) {
             Vector<String> names = new Vector<>();
             Vector<ReprintInfo> singleCards = new Vector<>();
+
+            if (sortName[sortType].equals("Random")) {
+                Collections.shuffle(cards);
+            }
 
             for (ReprintInfo info : cards) {
                 if (names.contains(info.card.name)) {
