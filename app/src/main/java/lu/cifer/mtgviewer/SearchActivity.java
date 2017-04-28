@@ -139,7 +139,7 @@ public class SearchActivity extends Activity {
         initDatabase(new Runnable() {
             @Override
             public void run() {
-                initProgress(CardAnalyzer.getSearchProgressMax(), "Searching...", true);
+                initProgress(CardAnalyzer.getSearchProgressMax(inResult), "Searching...", true);
 
                 Runnable runnable = new Runnable() {
                     @Override

@@ -340,8 +340,12 @@ public class CardAnalyzer {
         return filter.size();
     }
 
-    public static int getSearchProgressMax() {
-        return reprintCards;
+    public static int getSearchProgressMax(boolean inResult) {
+        if(inResult && resultCards != null) {
+            return resultCards.size();
+        } else {
+            return reprintCards;
+        }
     }
 
     public static int getProgress() {
