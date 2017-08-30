@@ -341,7 +341,7 @@ public class CardAnalyzer {
     }
 
     public static int getSearchProgressMax(boolean inResult) {
-        if(inResult && resultCards != null) {
+        if (inResult && resultCards != null) {
             return resultCards.size();
         } else {
             return reprintCards;
@@ -982,7 +982,7 @@ public class CardAnalyzer {
                 Collections.sort(cards, ratingComparator);
                 break;
             case "Random":
-                if(!single) {
+                if (!single) {
                     Collections.shuffle(cards);
                 }
                 break;

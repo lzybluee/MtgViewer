@@ -164,6 +164,17 @@ public class CardParser {
     };
 
     public static int rulePage = 0;
+    public static String oracleFolder = "Oracle";
+
+    private static File loadOracle(String set) {
+        File file = new File(MainActivity.SDPath
+                + "/MTG/" + oracleFolder + "/MtgOracle_" + set + ".txt");
+        if (!file.exists()) {
+            return new File(MainActivity.SDPath
+                    + "/MTG/Oracle/MtgOracle_" + set + ".txt");
+        }
+        return file;
+    }
 
     public static String getCardInfo(String url, boolean justRule) {
         String setInfo = "";
@@ -176,15 +187,13 @@ public class CardParser {
             if ((index = url.lastIndexOf(strs[1] + "/")) >= 0 && !url.contains("/Misc/")) {
                 if (url.substring(index + strs[1].length() + 1).contains("/")
                         && strs.length >= 4) {
-                    file = new File(MainActivity.SDPath
-                            + "/MTG/Oracle/MtgOracle_" + strs[3] + ".txt");
+                    file = loadOracle(strs[3]);
                     setInfo = strs[3].toLowerCase();
                     if (idx <= 48) {
                         isModern = true;
                     }
                 } else {
-                    file = new File(MainActivity.SDPath
-                            + "/MTG/Oracle/MtgOracle_" + strs[2] + ".txt");
+                    file = loadOracle(strs[2]);
                     setInfo = strs[2].toLowerCase();
                     if (idx <= 48) {
                         isModern = true;
@@ -206,8 +215,7 @@ public class CardParser {
         if (file == null) {
             String s = url.substring(0, url.lastIndexOf("/"));
             s = s.substring(s.lastIndexOf("/") + 1);
-            file = new File(MainActivity.SDPath + "/MTG/Oracle/MtgOracle_" + s
-                    + ".txt");
+            file = loadOracle(s);
         }
 
         if (file != null && !file.exists()) {
@@ -390,5 +398,21 @@ public class CardParser {
         }
 
         return card;
+    }
+
+    public static void setOracleFolder(String path) {
+        File file = new File(path);
+        if (file.exists()) {
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                String s = reader.readLine();
+                if (new File(MainActivity.SDPath + "/MTG/" + s).exists()) {
+                    oracleFolder = s;
+                }
+                reader.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
