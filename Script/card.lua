@@ -69,14 +69,16 @@ blue = string_contains(mana, 'U') or string_contains(colorIndicator, 'Blue')
 black = string_contains(mana, 'B') or string_contains(colorIndicator, 'Black')
 red = string_contains(mana, 'R') or string_contains(colorIndicator, 'Red')
 green = string_contains(mana, 'G') or string_contains(colorIndicator, 'Green')
+nocolor = string_contains(mana, 'C')
 
-pure = clean_str(text)
+clean = clean_str(text)
 
-textwhite = string_contains(pure, '{W') or string_contains(pure, 'W}')
-textblue = string_contains(pure, '{U') or string_contains(pure, 'U}')
-textblack = string_contains(pure, '{B') or string_contains(pure, 'B}')
-textred = string_contains(pure, '{R') or string_contains(pure, 'R}')
-textgreen = string_contains(pure, '{G') or string_contains(pure, 'G}')
+textwhite = string_contains(clean, '{W') or string_contains(clean, 'W}')
+textblue = string_contains(clean, '{U') or string_contains(clean, 'U}')
+textblack = string_contains(clean, '{B') or string_contains(clean, 'B}')
+textred = string_contains(clean, '{R') or string_contains(clean, 'R}')
+textgreen = string_contains(clean, '{G') or string_contains(clean, 'G}')
+textnocolor = string_contains(clean, '{C') or string_contains(clean, 'C}')
 
 artifact = table_contains(types, 'Artifact')
 creature = table_contains(types, 'Creature')
@@ -109,7 +111,7 @@ function hasname(str)
 end
 
 function hastext(str)
-	return string_contains(pure, str)
+	return string_contains(clean, str)
 end
 
 function hasrule(str)
@@ -130,6 +132,7 @@ legacy = table_contains(legal, 'Legacy')
 multicolor = (colors > 1)
 mono = (colors == 1)
 colorless = (colors == 0)
+cl = colorless
 
 pn = tonumber(power)
 tn = tonumber(toughness)
@@ -189,6 +192,7 @@ nu = count_str(mana, 'U')
 nb = count_str(mana, 'B')
 nr = count_str(mana, 'R')
 ng = count_str(mana, 'G')
+nc = count_str(mana, 'C')
 
 a = artifact
 c = creature
