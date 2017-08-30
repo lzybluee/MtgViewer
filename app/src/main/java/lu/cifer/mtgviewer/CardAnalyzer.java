@@ -410,7 +410,8 @@ public class CardAnalyzer {
                 progress++;
                 for (int i = 2; i < s.length; i++) {
                     setOrder.add(s[i]);
-                    processSet(new File(MainActivity.SDPath + "/MTG/Oracle/MtgOracle_" + s[i] + ".txt"));
+                    processSet(new File(MainActivity.SDPath + "/MTG/" + CardParser.oracleFolder
+                            + "/MtgOracle_" + s[i] + ".txt"));
                 }
             }
         }
@@ -614,8 +615,16 @@ public class CardAnalyzer {
         reprint.rarity = getEntry(str, "Rarity");
         reprint.multiverseid = Integer.parseInt(getEntry(str, "Multiverseid"));
         reprint.watermark = getEntry(str, "Watermark");
-        reprint.rating = Float.parseFloat(getEntry(str, "Rating"));
-        reprint.votes = Integer.parseInt(getEntry(str, "Votes"));
+
+        String rating = getEntry(str, "Rating");
+        if (rating != null) {
+            reprint.rating = Float.parseFloat(getEntry(str, "Rating"));
+        }
+
+        String votes = getEntry(str, "Votes");
+        if (votes != null) {
+            reprint.votes = Integer.parseInt(getEntry(str, "Votes"));
+        }
 
         if (card.superTypes.size() > 0) {
             for (String special : SpecialList) {

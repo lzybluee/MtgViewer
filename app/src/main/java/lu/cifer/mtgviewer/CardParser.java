@@ -8,7 +8,7 @@ import java.util.Vector;
 
 public class CardParser {
 
-    public static String[][] SetList = {
+    public static String[][] DefaultSetList = {
             {"Magic Origins", "Modern/ORI", "ORI"},
             {"Dragons of Tarkir", "Modern/DTK", "DTK"},
             {"Fate Reforged", "Modern/FRF", "FRF"},
@@ -162,6 +162,8 @@ public class CardParser {
             {"Planechase 2012 Planes", "Planechase/Plane2012", "Plane2012"},
             {"Planechase Planes", "Planechase/Plane", "Plane"},
     };
+
+    public static String[][] SetList;
 
     public static int rulePage = 0;
     public static String oracleFolder = "Oracle";
@@ -400,8 +402,8 @@ public class CardParser {
         return card;
     }
 
-    public static void setOracleFolder(String path) {
-        File file = new File(path);
+    public static void initOracle() {
+        File file = new File(MainActivity.SDPath + "/MTG/Script/oracle.txt");
         if (file.exists()) {
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -413,6 +415,31 @@ public class CardParser {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+
+        file = new File(MainActivity.SDPath + "/MTG/Script/list.txt");
+        if (file.exists()) {
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                String s = null;
+                Vector<String[]> vector = new Vector<>();
+                while ((s = reader.readLine()) != null) {
+                    s = s.trim();
+                    if (s.isEmpty() || s.startsWith("#")) {
+                        continue;
+                    }
+                    vector.add(s.split(","));
+                }
+                reader.close();
+                SetList = new String[vector.size()][];
+                for (int i = 0; i < vector.size(); i++) {
+                    SetList[i] = vector.get(i);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            SetList = DefaultSetList;
         }
     }
 }

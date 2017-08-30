@@ -389,6 +389,8 @@ public class MainActivity extends Activity {
             }
         }
 
+        CardParser.initOracle();
+
         Vector<String> v1 = new Vector<>();
         File file1 = new File(SDPath + "/MTG/Misc/");
         if (file1.exists()) {
@@ -425,8 +427,6 @@ public class MainActivity extends Activity {
 
         loadBundle();
         mSets = loadSelectedSets();
-
-        CardParser.setOracleFolder(SDPath + "/MTG/Script/oracle.txt");
 
         setContentView(R.layout.main_layout);
 
