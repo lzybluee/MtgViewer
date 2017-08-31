@@ -306,7 +306,7 @@ public class MainActivity extends Activity {
 
         if (n == 0) {
             init("Ancient|Modern|Commander|Planechase/PC2|Planechase/Plane|Planechase/Plane2012|Archenemy/Scheme|Conspiracy|" +
-                    "Starter|Special/MBP|Unset");
+                    "Starter|Special/MBP|Unset|EXT");
         } else if (n == 1) {
             init("Modern");
         } else if (n == 2) {
