@@ -171,6 +171,10 @@ MTGO Masters Edition,Reprint/MED,MED
 Chronicles,Reprint/CHR,CH
 Commander's Arsenal,Reprint/CMA,CMA
 
+Amonkhet Invocations,Reprint/MPSAKH,MPSAKH
+Kaladesh Inventions,Reprint/MPSKLD,MPSKLD
+Zendikar Expeditions,Reprint/EXP,EXP
+
 Planechase 2012 Planes,Planechase/Plane2012,Plane2012
 Planechase Planes,Planechase/Plane,Plane
 Archenemy Schemes,Archenemy/Scheme,Scheme
