@@ -104,8 +104,6 @@ Planechase 2012 Edition,Planechase/PC2,PC2
 Planechase Anthology,Planechase/PCA,PCA
 Planechase,Planechase/HOP,PCH
 
-Archenemy,Archenemy/ARC,ARC
-
 Conspiracy: Take the Crown,Conspiracy/CN2,CN2
 Conspiracy,Conspiracy/CNS,CNS
 
@@ -119,14 +117,17 @@ Media Inserts,Special/MBP,MBP
 Unhinged,Unset/UNH,UH
 Unglued,Unset/UGL,UG
 
-Welcome Deck 2017,Reprint/W17,W17
-Welcome Deck 2016,Reprint/W16,W16
+Archenemy: Nicol Bolas,Archenemy/E01,E01
+Archenemy,Archenemy/ARC,ARC
 
 Modern Masters 2017 Edition,Reprint/MM3,MM3
 Modern Masters 2015 Edition,Reprint/MM2,MM2
 Modern Masters,Reprint/MMA,MMA
 Vintage Masters,Reprint/VMA,VMA
 Eternal Masters,Reprint/EMA,EMA
+
+Welcome Deck 2017,Reprint/W17,W17
+Welcome Deck 2016,Reprint/W16,W16
 
 Duel: Mind vs Might,Reprint/DDS,DDS
 Duel: Nissa vs Ob Nixilis,Reprint/DDR,DDR
@@ -173,4 +174,4 @@ Commander's Arsenal,Reprint/CMA,CMA
 Planechase 2012 Planes,Planechase/Plane2012,Plane2012
 Planechase Planes,Planechase/Plane,Plane
 Archenemy Schemes,Archenemy/Scheme,Scheme
-Archenemy: Nicol Bolas,Archenemy/E01,E01
+Nicol Bolas Schemes,Archenemy/SchemeNicolBolas,SchemeNicolBolas

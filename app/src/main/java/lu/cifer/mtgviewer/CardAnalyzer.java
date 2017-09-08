@@ -713,9 +713,9 @@ public class CardAnalyzer {
                     reprint.altCode = "Plane";
                     break;
                 case "Archenemy: Nicol Bolas":
-                    reprint.code = "E01";
-                    reprint.folder = "Archenemy/E01";
-                    reprint.altCode = "E01";
+                    reprint.code = "SchemeNicolBolas";
+                    reprint.folder = "Archenemy/SchemeNicolBolas";
+                    reprint.altCode = "SchemeNicolBolas";
                     break;
             }
         }
