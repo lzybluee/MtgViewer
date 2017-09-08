@@ -362,7 +362,7 @@ public class CardAnalyzer {
         stop = false;
     }
 
-    private static void SortReprint(CardInfo card) {
+    private static void sortReprint(CardInfo card) {
         card.reprintTimes = card.reprints.size();
 
         if (card.reprints.size() == 1) {
@@ -426,30 +426,12 @@ public class CardAnalyzer {
         int count = 0;
         while (keys.hasMoreElements()) {
             CardInfo info = cardDatabase.get(keys.nextElement());
-            SortReprint(info);
+            sortReprint(info);
             allName[count] = info.name;
             count++;
         }
 
         Arrays.sort(allName);
-
-        int AtherPos = 0;
-        for (int i = allName.length - 1; i >= 0; i--) {
-            if (allName[i].startsWith("Z")) {
-                AtherPos = i + 1;
-                break;
-            }
-        }
-
-        String[] temp = new String[allName.length];
-        for (int i = 0; i < temp.length; i++) {
-            if (i < temp.length - AtherPos) {
-                temp[i] = allName[AtherPos + i];
-            } else {
-                temp[i] = allName[i - temp.length + AtherPos];
-            }
-        }
-        allName = temp;
 
         return setOrder.size() + " Sets and " + allName.length
                 + " Cards" + " (" + reprintCards + " Reprints)";
@@ -688,7 +670,7 @@ public class CardAnalyzer {
             reprint.formatedNumber = getFormatedNumber(reprint.number, 2);
         }
 
-        if (reprint.specialType == null) {
+        if (reprint.specialType == null || reprint.specialType.equals("Conspiracy")) {
             switch (reprint.set) {
                 case "Eighth Edition Box Set":
                     reprint.code = "8EB";
@@ -715,23 +697,27 @@ public class CardAnalyzer {
         } else {
             int index = 0;
             switch (reprint.set) {
-                case "Conspiracy":
-                    index = CardParser.SetList.length - 4;
-                    break;
                 case "Archenemy":
-                    index = CardParser.SetList.length - 3;
+                    reprint.code = "Schemes";
+                    reprint.folder = "Archenemy/Scheme";
+                    reprint.altCode = "Scheme";
                     break;
                 case "Planechase 2012 Edition":
-                    index = CardParser.SetList.length - 2;
+                    reprint.code = "Plane2012";
+                    reprint.folder = "Planechase/Plane2012";
+                    reprint.altCode = "Plane2012";
                     break;
                 case "Planechase":
-                    index = CardParser.SetList.length - 1;
+                    reprint.code = "Plane";
+                    reprint.folder = "Planechase/Plane";
+                    reprint.altCode = "Plane";
+                    break;
+                case "Archenemy: Nicol Bolas":
+                    reprint.code = "E01";
+                    reprint.folder = "Archenemy/E01";
+                    reprint.altCode = "E01";
                     break;
             }
-            String[] strs = CardParser.SetList[index];
-            reprint.code = strs[1].substring(strs[1].lastIndexOf("/") + 1);
-            reprint.folder = strs[1];
-            reprint.altCode = strs[2];
         }
 
         reprint.picture = reprint.folder + "/" + reprint.formatedNumber + ".jpg";
