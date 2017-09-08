@@ -1,9 +1,16 @@
+Hour of Devastation,Modern/HOU,HOU
+Amonkhet,Modern/AKH,AKH
+Aether Revolt,Modern/AER,AER
+Kaladesh,Modern/KLD,KLD
+Eldritch Moon,Modern/EMN,EMN
+Shadows over Innistrad,Modern/SOI,SOI
+Oath of the Gatewatch,Modern/OGW,OGW
+Battle for Zendikar,Modern/BFZ,BFZ
 Magic Origins,Modern/ORI,ORI
 Dragons of Tarkir,Modern/DTK,DTK
 Fate Reforged,Modern/FRF,FRF
 Khans of Tarkir,Modern/KTK,KTK
 Magic 2015,Modern/M15,M15
-
 Journey into Nyx,Modern/JOU,JOU
 Born of the Gods,Modern/BNG,BNG
 Theros,Modern/THS,THS
@@ -87,13 +94,21 @@ Unlimited Edition,Ancient/2ED,UN
 Limited Edition Beta,Ancient/LEB,BE
 Limited Edition Alpha,Ancient/LEA,AL
 
+Commander 2016 Edition,Commander/C16,C16
+Commander 2015 Edition,Commander/C15,C15
 Commander 2014 Edition,Commander/C14,C14
 Commander 2013 Edition,Commander/C13,C13
 Commander,Commander/CMD,CMD
+
 Planechase 2012 Edition,Planechase/PC2,PC2
+Planechase Anthology,Planechase/PCA,PCA
 Planechase,Planechase/HOP,PCH
+
 Archenemy,Archenemy/ARC,ARC
+
+Conspiracy: Take the Crown,Conspiracy/CN2,CN2
 Conspiracy,Conspiracy/CNS,CNS
+
 Portal Three Kingdoms,Starter/PTK,P3K
 Portal Second Age,Starter/PO2,PO2
 Portal,Starter/POR,PO
@@ -104,11 +119,19 @@ Media Inserts,Special/MBP,MBP
 Unhinged,Unset/UNH,UH
 Unglued,Unset/UGL,UG
 
+Welcome Deck 2017,Reprint/W17,W17
+Welcome Deck 2016,Reprint/W16,W16
+
+Modern Masters 2017 Edition,Reprint/MM3,MM3
 Modern Masters 2015 Edition,Reprint/MM2,MM2
 Modern Masters,Reprint/MMA,MMA
 Vintage Masters,Reprint/VMA,VMA
 Eternal Masters,Reprint/EMA,EMA
 
+Duel: Mind vs Might,Reprint/DDS,DDS
+Duel: Nissa vs Ob Nixilis,Reprint/DDR,DDR
+Duel: Blessed vs Cursed,Reprint/DDQ,DDQ
+Duel: Zendikar vs Eldrazi,Reprint/DDP,DDP
 Duel: Kiora vs Elspeth,Reprint/DDO,DDO
 Duel: Speed vs Cunning,Reprint/DDN,DDN
 Duel: Jace vs Vraska,Reprint/DDM,DDM
@@ -125,10 +148,7 @@ Duel: Divine vs Demonic,Reprint/DDC,DVD
 Duel: Jace vs Chandra,Reprint/DD2,JVC
 Duel: Elves vs Goblins,Reprint/EVG,EVG
 
-Premium: Graveborn,Reprint/PD3,PD3
-Premium: Fire and Lightning,Reprint/PD2,PD2
-Premium: Slivers,Reprint/H09,PDS
-
+From the Vault: Lore,Reprint/V16,V16
 From the Vault: Angels,Reprint/V15,V15
 From the Vault: Annihilation,Reprint/V14,V14
 From the Vault: Twenty,Reprint/V13,V13
@@ -138,6 +158,10 @@ From the Vault: Relics,Reprint/V10,FVR
 From the Vault: Exiled,Reprint/V09,FVE
 From the Vault: Dragons,Reprint/DRB,FVD
 
+Premium: Graveborn,Reprint/PD3,PD3
+Premium: Fire and Lightning,Reprint/PD2,PD2
+Premium: Slivers,Reprint/H09,PDS
+
 MTGO Masters Edition IV,Reprint/ME4,ME4
 MTGO Masters Edition III,Reprint/ME3,ME3
 MTGO Masters Edition II,Reprint/ME2,ME2
@@ -146,22 +170,7 @@ MTGO Masters Edition,Reprint/MED,MED
 Chronicles,Reprint/CHR,CH
 Commander's Arsenal,Reprint/CMA,CMA
 
-Hour of Devastation,EXT/HOU,HOU
-Amonkhet,EXT/AKH,AKH
-Aether Revolt,EXT/AER,AER
-Kaladesh,EXT/KLD,KLD
-Eldritch Moon,EXT/EMN,EMN
-Shadows over Innistrad,EXT/SOI,SOI
-Oath of the Gatewatch,EXT/OGW,OGW
-Battle for Zendikar,EXT/BFZ,BFZ
-Welcome Deck 2017,EXT/W17,W17
-Welcome Deck 2016,EXT/W16,W16
-Commander 2016 Edition,EXT/C16,C16
-Commander 2015 Edition,EXT/C15,C15
-Conspiracy: Take the Crown,EXT/CN2,CN2
-Modern Masters 2017 Edition,EXT/MM3,MM3
-
-Conspiracy Conspiracies,Conspiracy/Conspiracy,Conspiracy
-Archenemy Schemes,Archenemy/Scheme,Scheme
 Planechase 2012 Planes,Planechase/Plane2012,Plane2012
 Planechase Planes,Planechase/Plane,Plane
+Archenemy Schemes,Archenemy/Scheme,Scheme
+Archenemy: Nicol Bolas,Archenemy/E01,E01

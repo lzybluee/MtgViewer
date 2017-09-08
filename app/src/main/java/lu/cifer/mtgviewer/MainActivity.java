@@ -305,8 +305,7 @@ public class MainActivity extends Activity {
         int n = item.getItemId();
 
         if (n == 0) {
-            init("Ancient|Modern|Commander|Planechase/PC2|Planechase/Plane|Planechase/Plane2012|Archenemy/Scheme|Conspiracy|" +
-                    "Starter|Special/MBP|Unset|EXT");
+            init("Ancient|Modern|Commander|Planechase/PC2|Conspiracy|Starter|Special/MBP");
         } else if (n == 1) {
             init("Modern");
         } else if (n == 2) {
@@ -338,11 +337,7 @@ public class MainActivity extends Activity {
             mShuffle = true;
             Toast.makeText(this, "Shuffle", Toast.LENGTH_SHORT).show();
         } else if (n == 8) {
-            init("Ancient|Modern|Commander|Planechase|Archenemy|Conspiracy|Starter|Special/MBP|Unset|" +
-                    "Reprint/CMA|Reprint/DD2|Reprint/DDC|Reprint/DDD|Reprint/DDE|Reprint/DDF|Reprint/DDG|Reprint/DDH|" +
-                    "Reprint/DDI|Reprint/DDJ|Reprint/DDK|Reprint/DDL|Reprint/DDM|Reprint/DDN|Reprint/DDO|Reprint/DRB|" +
-                    "Reprint/EMA|Reprint/EVG|Reprint/H09|Reprint/MM2|Reprint/MMA|Reprint/PD2|Reprint/PD3|Reprint/V09|" +
-                    "Reprint/V10|Reprint/V11|Reprint/V12|Reprint/V13|Reprint/V14|Reprint/V15");
+            init("Ancient|Modern|Commander|Planechase|Archenemy|Conspiracy|Starter|Special/MBP|Unset|Reprint");
         } else if (n == 9) {
             init("Ancient");
         } else if (n == 10) {
