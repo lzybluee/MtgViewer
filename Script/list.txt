@@ -123,8 +123,8 @@ Archenemy,Archenemy/ARC,ARC
 Modern Masters 2017 Edition,Reprint/MM3,MM3
 Modern Masters 2015 Edition,Reprint/MM2,MM2
 Modern Masters,Reprint/MMA,MMA
-Vintage Masters,Reprint/VMA,VMA
 Eternal Masters,Reprint/EMA,EMA
+Vintage Masters,Reprint/VMA,VMA
 
 Welcome Deck 2017,Reprint/W17,W17
 Welcome Deck 2016,Reprint/W16,W16
