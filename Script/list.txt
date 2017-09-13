@@ -100,8 +100,8 @@ Commander 2014 Edition,Commander/C14,C14
 Commander 2013 Edition,Commander/C13,C13
 Commander,Commander/CMD,CMD
 
-Planechase 2012 Edition,Planechase/PC2,PC2
 Planechase Anthology,Planechase/PCA,PCA
+Planechase 2012 Edition,Planechase/PC2,PC2
 Planechase,Planechase/HOP,PCH
 
 Conspiracy: Take the Crown,Conspiracy/CN2,CN2
@@ -168,8 +168,8 @@ MTGO Masters Edition III,Reprint/ME3,ME3
 MTGO Masters Edition II,Reprint/ME2,ME2
 MTGO Masters Edition,Reprint/MED,MED
 
-Chronicles,Reprint/CHR,CH
 Commander's Arsenal,Reprint/CMA,CMA
+Chronicles,Reprint/CHR,CH
 
 Amonkhet Invocations,Reprint/MPSAKH,MPSAKH
 Kaladesh Inventions,Reprint/MPSKLD,MPSKLD
@@ -177,5 +177,5 @@ Zendikar Expeditions,Reprint/EXP,EXP
 
 Planechase 2012 Planes,Planechase/Plane2012,Plane2012
 Planechase Planes,Planechase/Plane,Plane
-Archenemy Schemes,Archenemy/Scheme,Scheme
 Nicol Bolas Schemes,Archenemy/SchemeNicolBolas,SchemeNicolBolas
+Archenemy Schemes,Archenemy/Scheme,Scheme

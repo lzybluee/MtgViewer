@@ -36,13 +36,13 @@ public class CardParser {
                         && strs.length >= 4) {
                     file = loadOracle(strs[3]);
                     setInfo = strs[3].toLowerCase();
-                    if (idx <= 48) {
+                    if (strs[1].startsWith("Modern/")) {
                         isModern = true;
                     }
                 } else {
                     file = loadOracle(strs[2]);
                     setInfo = strs[2].toLowerCase();
-                    if (idx <= 48) {
+                    if (strs[1].startsWith("Modern/")) {
                         isModern = true;
                     }
                 }
