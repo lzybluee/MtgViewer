@@ -27,8 +27,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -52,12 +55,28 @@ public class MainActivity extends Activity {
     int mLoadCards;
     boolean mStop;
 
+    public static List<File> ListFiles(File file) {
+        List<File> files = Arrays.asList(file.listFiles());
+        Collections.sort(files, new Comparator<File>() {
+            @Override
+            public int compare(File f1, File f2) {
+                if (f1.isDirectory() && f2.isFile()) {
+                    return -1;
+                }
+                if (f1.isFile() && f2.isDirectory()) {
+                    return 1;
+                }
+                return f1.getAbsolutePath().compareTo(f2.getAbsolutePath());
+            }
+        });
+        return files;
+    }
+
     void processFile(File file) {
         if (mStop) {
             return;
         }
-        File[] files = file.listFiles();
-        for (File f : files) {
+        for (File f : ListFiles(file)) {
             if (f.isDirectory()) {
                 mProcessSet = f.toString().replace(SDPath + "/MTG/", "");
                 processFile(f);
@@ -389,8 +408,7 @@ public class MainActivity extends Activity {
         Vector<String> v1 = new Vector<>();
         File file1 = new File(SDPath + "/MTG/Misc/");
         if (file1.exists()) {
-            File[] folders = file1.listFiles();
-            for (File f : folders) {
+            for (File f : ListFiles(file1)) {
                 if (f.isDirectory()) {
                     v1.add(f.getName());
                 }
@@ -400,8 +418,7 @@ public class MainActivity extends Activity {
         Vector<String> v2 = new Vector<>();
         File file2 = new File(SDPath + "/Misc/");
         if (file2.exists()) {
-            File[] folders = file2.listFiles();
-            for (File f : folders) {
+            for (File f : ListFiles(file2)) {
                 if (f.isDirectory()) {
                     v2.add(f.getName());
                 }

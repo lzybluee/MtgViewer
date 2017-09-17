@@ -189,7 +189,7 @@ public class SearchActivity extends Activity {
             return;
         }
 
-        for (File f : file.listFiles()) {
+        for (File f : MainActivity.ListFiles(file)) {
             if (f.isDirectory()) {
                 processFolder(f, search, anyWord, cards);
             } else {
