@@ -12,7 +12,7 @@ public class LuaScript {
     static private void initCard(CardAnalyzer.CardInfo card, CardAnalyzer.ReprintInfo reprint) {
         luaPushString("name", card.name);
         luaPushString("simpleName", card.simpleName);
-        luaPushString("otherPart", card.otherPart);
+        luaPushStringArray("otherPart", card.otherPart.toArray(new String[card.otherPart.size()]));
         luaPushInteger("partIndex", card.partIndex);
         luaPushBoolean("isSplit", card.isSplit);
         luaPushBoolean("isDoubleFaced", card.isDoubleFaced);

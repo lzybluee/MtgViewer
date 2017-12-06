@@ -19,8 +19,7 @@ public class CardAnalyzer {
     public static String[] LegalList = {"Block", "Modern", "Legacy", "Vintage", "Commander"};
     public static String[] TypeList = {"Artifact", "Creature", "Enchantment",
             "Instant", "Land", "Planeswalker", "Sorcery", "Tribal"};
-    public static String[] SpecialList = {"Plane", "Phenomenon", "Scheme",
-            "Ongoing Scheme", "Conspiracy"};
+    public static String[] SpecialTypeList = {"Conspiracy", "Phenomenon", "Plane", "Scheme"};
 
     public static String[] results;
     public static int exclude;
@@ -373,6 +372,9 @@ public class CardAnalyzer {
         Collections.sort(card.reprints, new Comparator<ReprintInfo>() {
             @Override
             public int compare(ReprintInfo left, ReprintInfo right) {
+                if (left.multiverseid == right.multiverseid) {
+                    return left.formatedNumber.compareTo(right.formatedNumber);
+                }
                 return left.multiverseid - right.multiverseid;
             }
         });
@@ -449,9 +451,11 @@ public class CardAnalyzer {
                 .replaceAll("[àáâ]", "a").replaceAll("é", "e").replaceAll("í", "i")
                 .replaceAll("ö", "o").replaceAll("[úû]", "u").replaceAll("Æ", "AE");
 
+        card.otherPart = new Vector<>();
+
         entry = getEntry(str, "OtherPart");
         if (entry != null) {
-            card.otherPart = entry;
+            card.otherPart.add(entry);
             String num = getEntry(str, "No");
             if (num.charAt(num.length() - 1) >= 'a') {
                 card.partIndex = num.charAt(num.length() - 1) - 'a' + 1;
@@ -513,12 +517,20 @@ public class CardAnalyzer {
                         break;
                     }
                 }
-                if (!flag) {
-                    if (s.equals("Legendary")) {
-                        card.isLegendary = true;
+                for (String t : SpecialTypeList) {
+                    if (s.equals(t)) {
+                        card.types.add(s);
+                        flag = true;
+                        break;
                     }
-                    card.superTypes.add(s);
                 }
+                if (flag) {
+                    continue;
+                }
+                if (s.equals("Legendary")) {
+                    card.isLegendary = true;
+                }
+                card.superTypes.add(s);
             }
         }
 
@@ -598,6 +610,11 @@ public class CardAnalyzer {
         reprint.multiverseid = Integer.parseInt(getEntry(str, "Multiverseid"));
         reprint.watermark = getEntry(str, "Watermark");
 
+        String otherPart = getEntry(str, "OtherPart");
+        if (otherPart != null && !card.otherPart.contains(otherPart)) {
+            card.otherPart.add(otherPart);
+        }
+
         String rating = getEntry(str, "Rating");
         if (rating != null) {
             reprint.rating = Float.parseFloat(getEntry(str, "Rating"));
@@ -608,16 +625,20 @@ public class CardAnalyzer {
             reprint.votes = Integer.parseInt(getEntry(str, "Votes"));
         }
 
-        if (card.superTypes.size() > 0) {
-            for (String special : SpecialList) {
-                for (String types : card.superTypes) {
-                    if (types.equals(special)) {
+        if (card.types.size() > 0) {
+            for (String type : card.types) {
+                for (String special : SpecialTypeList) {
+                    if (type.equals(special)) {
                         reprint.specialType = special;
                         break;
                     }
                 }
+                if (reprint.specialType != null) {
+                    break;
+                }
             }
         }
+
         if (!card.isInCore) {
             for (String[] s : CardParser.SetList) {
                 if (reprint.set.equals(s[0])) {
@@ -695,7 +716,6 @@ public class CardAnalyzer {
                     }
             }
         } else {
-            int index = 0;
             switch (reprint.set) {
                 case "Archenemy":
                     reprint.code = "Schemes";
@@ -1057,7 +1077,7 @@ public class CardAnalyzer {
 
         public String name;
         public String simpleName;
-        public String otherPart;
+        public Vector<String> otherPart;
         public int partIndex;
         public boolean isSplit;
         public boolean isDoubleFaced;
@@ -1103,9 +1123,21 @@ public class CardAnalyzer {
                 } else if (Integer.toString(partIndex).endsWith("3")) {
                     suffix = "rd";
                 }
-                str.append(partIndex + suffix
-                        + " part of the card, other part is <" + otherPart
-                        + ">\n");
+                if (otherPart.size() >= 2) {
+                    str.append(partIndex + suffix + " part of the card, other parts are ");
+                    for (int i = 0; i < otherPart.size(); i++) {
+                        str.append("<" + otherPart.get(i) + ">");
+                        if (i == otherPart.size() - 1) {
+                            str.append("\n");
+                        } else if (i == otherPart.size() - 2) {
+                            str.append(" and ");
+                        } else {
+                            str.append(" , ");
+                        }
+                    }
+                } else if (otherPart.size() == 1) {
+                    str.append(partIndex + suffix + " part of the card, other part is <" + otherPart.get(0) + ">\n");
+                }
             }
             if (superTypes.size() > 0) {
                 for (int i = 0; i < superTypes.size(); i++) {
@@ -1196,21 +1228,11 @@ public class CardAnalyzer {
                     break;
                 }
             }
-            long[] setInfos = new long[reprints.size()];
-            for (int i = 0; i < setInfos.length; i++) {
-                setInfos[i] = reprints.get(i).multiverseid;
-            }
-            Arrays.sort(setInfos);
-            for (long num : setInfos) {
-                for (ReprintInfo info : reprints) {
-                    if (info.set.equals("Media Inserts")) {
-                        continue;
-                    }
-                    if (num == info.multiverseid) {
-                        str.append(info);
-                        break;
-                    }
+            for (ReprintInfo info : reprints) {
+                if (info.set.equals("Media Inserts")) {
+                    continue;
                 }
+                str.append(info);
             }
             Vector<String> flavors = new Vector<>();
             for (ReprintInfo info : reprints) {

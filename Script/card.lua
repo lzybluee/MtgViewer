@@ -1,7 +1,7 @@
 --[[
 name -> String
 simpleName -> String
-otherPart -> String
+otherPart -> StringArray
 partIndex -> Integer
 isSplit -> Boolean
 isDoubleFaced -> Boolean
