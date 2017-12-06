@@ -460,7 +460,7 @@ public class CardAnalyzer {
             if (num.charAt(num.length() - 1) >= 'a') {
                 card.partIndex = num.charAt(num.length() - 1) - 'a' + 1;
             }
-            if (card.name.contains("(")) {
+            if (card.name.contains("(") && card.name.contains("/")) {
                 card.isSplit = true;
             } else if (card.partIndex == 2 && getEntry(str, "ManaCost") == null) {
                 card.isDoubleFaced = true;
@@ -610,9 +610,26 @@ public class CardAnalyzer {
         reprint.multiverseid = Integer.parseInt(getEntry(str, "Multiverseid"));
         reprint.watermark = getEntry(str, "Watermark");
 
+        if (reprint.rarity == null) {
+            reprint.rarity = "Special";
+        }
+
         String otherPart = getEntry(str, "OtherPart");
         if (otherPart != null && !card.otherPart.contains(otherPart)) {
             card.otherPart.add(otherPart);
+            if (card.otherPart.size() == 2) {
+                card.isDoubleFaced = false;
+                card.isMeld = true;
+                for (String name : card.otherPart) {
+                    CardInfo otherCard = cardDatabase.get(name);
+                    otherCard.isDoubleFaced = false;
+                    otherCard.isMeld = true;
+                }
+                String text = cardDatabase.get(card.otherPart.get(0)).text;
+                if (!text.contains("(Melds with ")) {
+                    Collections.reverse(card.otherPart);
+                }
+            }
         }
 
         String rating = getEntry(str, "Rating");
@@ -1067,9 +1084,9 @@ public class CardAnalyzer {
         public boolean latest;
 
         public String toString() {
-            return multiverseid + " " + set
-                    + (specialType == null ? "" : " [" + specialType + "]")
-                    + " : " + number + " (" + rarity + ") " + artist + " (" + rating + "|" + votes + ") " + "\n";
+            return multiverseid + " " + set + (specialType == null ? "" : " [" + specialType + "]") + " : " + number
+                    + " (" + rarity + ") " + artist
+                    + (rating > 0 || votes > 0 ? " (" + rating + "|" + votes + ")" : "");
         }
     }
 
@@ -1082,6 +1099,7 @@ public class CardAnalyzer {
         public boolean isSplit;
         public boolean isDoubleFaced;
         public boolean isFlip;
+        public boolean isMeld;
         public boolean isLegendary;
         public boolean isFun;
         public boolean isInCore;
@@ -1232,13 +1250,10 @@ public class CardAnalyzer {
                 if (info.set.equals("Media Inserts")) {
                     continue;
                 }
-                str.append(info);
+                str.append(info + "\n");
             }
             Vector<String> flavors = new Vector<>();
             for (ReprintInfo info : reprints) {
-                if (info.set.equals("Media Inserts")) {
-                    continue;
-                }
                 if (info.flavor != null) {
                     boolean flag = false;
                     for (String s : flavors) {

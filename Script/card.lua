@@ -6,6 +6,7 @@ partIndex -> Integer
 isSplit -> Boolean
 isDoubleFaced -> Boolean
 isFlip -> Boolean
+isMeld -> Boolean
 isLegendary -> Boolean
 isFun -> Boolean
 isInCore -> Boolean

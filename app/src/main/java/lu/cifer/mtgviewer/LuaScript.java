@@ -17,6 +17,7 @@ public class LuaScript {
         luaPushBoolean("isSplit", card.isSplit);
         luaPushBoolean("isDoubleFaced", card.isDoubleFaced);
         luaPushBoolean("isFlip", card.isFlip);
+        luaPushBoolean("isMeld", card.isMeld);
         luaPushBoolean("isFun", card.isFun);
         luaPushBoolean("isInCore", card.isInCore);
         luaPushBoolean("isLegendary", card.isLegendary);
