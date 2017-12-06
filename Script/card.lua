@@ -214,6 +214,7 @@ pm = permanent
 split = isSplit
 double = isDoubleFaced
 flip = isFlip
+meld = isMeld
 legend = isLegendary
 
 reprint = reprintIndex
