@@ -134,11 +134,11 @@ jstring Java_lu_cifer_mtgviewer_LuaScript_runScript(JNIEnv *env, jobject thiz, j
     {
         error = true;
         const char *e = lua_tostring(state, -1);
-        __android_log_print(ANDROID_LOG_ERROR, "LUA", "Error : %s", e);
+        // __android_log_print(ANDROID_LOG_ERROR, "LUA", "Error : %s", e);
         stream << "Error: " << e;
     } else {
         error = false;
-        __android_log_print(ANDROID_LOG_ERROR, "LUA", "Finished");
+        // __android_log_print(ANDROID_LOG_ERROR, "LUA", "Finished");
         stream << "Finished";
     }
 

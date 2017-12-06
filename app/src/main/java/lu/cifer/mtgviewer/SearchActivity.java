@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,7 +24,7 @@ import java.util.Vector;
 
 public class SearchActivity extends Activity {
 
-    static String[] SpecailFolder = new String[]{"Token", "Promo", "Special"};
+    static String[] SpecialFolder = new String[]{"Token", "Promo", "Special"};
     static int SpecialCards = 4408;
     static String mLastCode = "";
     static String mInitOutput = "";
@@ -35,6 +36,19 @@ public class SearchActivity extends Activity {
     boolean mStop;
     int mFound;
     int mChecked;
+
+    private void setScreenOn(final boolean on) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(on) {
+                    SearchActivity.this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                } else {
+                    SearchActivity.this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                }
+            }
+        });
+    }
 
     private void saveCode(String code) {
         SharedPreferences sp = getSharedPreferences("code", Context.MODE_PRIVATE);
@@ -111,7 +125,11 @@ public class SearchActivity extends Activity {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
+                setScreenOn(true);
+
                 mInitOutput = CardAnalyzer.initData();
+
+                setScreenOn(false);
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -136,6 +154,7 @@ public class SearchActivity extends Activity {
     }
 
     private void searchDatabase(final boolean inResult) {
+
         initDatabase(new Runnable() {
             @Override
             public void run() {
@@ -144,7 +163,11 @@ public class SearchActivity extends Activity {
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
+                        setScreenOn(true);
+
                         final int ret = CardAnalyzer.searchCard(mCode.getText().toString(), inResult);
+
+                        setScreenOn(false);
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -240,12 +263,16 @@ public class SearchActivity extends Activity {
                 mFound = 0;
                 mChecked = 0;
 
-                for (String s : SpecailFolder) {
+                setScreenOn(true);
+
+                for (String s : SpecialFolder) {
                     File folder = new File(MainActivity.SDPath + "/MTG/" + s);
                     processFolder(folder, search, anyWord, cards);
                 }
 
                 if (cards.isEmpty()) {
+                    setScreenOn(false);
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -258,6 +285,7 @@ public class SearchActivity extends Activity {
                             Toast.makeText(SearchActivity.this, "Found No Card!", Toast.LENGTH_SHORT).show();
                         }
                     });
+
                     return;
                 }
 
@@ -276,6 +304,8 @@ public class SearchActivity extends Activity {
                 for (int i = 0; i < CardAnalyzer.results.length; i++) {
                     CardAnalyzer.results[i] = cards.get(i);
                 }
+
+                setScreenOn(false);
 
                 runOnUiThread(new Runnable() {
                     @Override
