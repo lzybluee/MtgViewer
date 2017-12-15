@@ -607,8 +607,12 @@ public class CardAnalyzer {
         reprint.flavor = getEntry(str, "Flavor");
         reprint.artist = getEntry(str, "Artist");
         reprint.rarity = getEntry(str, "Rarity");
-        reprint.multiverseid = Integer.parseInt(getEntry(str, "Multiverseid"));
         reprint.watermark = getEntry(str, "Watermark");
+
+        String idEntry = getEntry(str, "Multiverseid");
+        if (idEntry != null) {
+            reprint.multiverseid = Integer.parseInt(idEntry);
+        }
 
         if (reprint.rarity == null) {
             reprint.rarity = "Special";
