@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -54,6 +55,19 @@ public class MainActivity extends Activity {
     String mProcessSet;
     int mLoadCards;
     boolean mStop;
+
+    private void setScreenOn(final boolean on) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(on) {
+                    MainActivity.this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                } else {
+                    MainActivity.this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                }
+            }
+        });
+    }
 
     public static List<File> ListFiles(File file) {
         List<File> files = Arrays.asList(file.listFiles());
@@ -223,6 +237,8 @@ public class MainActivity extends Activity {
                 mStop = false;
                 mLoadCards = 0;
 
+                setScreenOn(true);
+
                 for (String s : paths) {
                     File file = new File(SDPath + "/MTG/" + s);
                     if (file.exists() && file.isDirectory()) {
@@ -238,6 +254,8 @@ public class MainActivity extends Activity {
                         Collections.reverse(mCardPath);
                     }
                 }
+
+                setScreenOn(false);
 
                 runOnUiThread(new Runnable() {
                     @Override
