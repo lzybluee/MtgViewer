@@ -135,7 +135,7 @@ Duel: Mind vs Might,Reprint/DDS,DDS
 Duel: Nissa vs Ob Nixilis,Reprint/DDR,DDR
 Duel: Blessed vs Cursed,Reprint/DDQ,DDQ
 Duel: Zendikar vs Eldrazi,Reprint/DDP,DDP
-Duel: Kiora vs Elspeth,Reprint/DDO,DDO
+Duel: Elspeth vs Kiora,Reprint/DDO,DDO
 Duel: Speed vs Cunning,Reprint/DDN,DDN
 Duel: Jace vs Vraska,Reprint/DDM,DDM
 Duel: Heroes vs Monsters,Reprint/DDL,DDL
