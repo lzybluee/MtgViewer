@@ -1,3 +1,5 @@
+Rivals of Ixalan,Modern/RIX,RIX
+Ixalan,Modern/XLN,XLN
 Hour of Devastation,Modern/HOU,HOU
 Amonkhet,Modern/AKH,AKH
 Aether Revolt,Modern/AER,AER
@@ -101,7 +103,6 @@ Commander 2014 Edition,Commander/C14,C14
 Commander 2013 Edition,Commander/C13,C13
 Commander,Commander/CMD,CMD
 
-Planechase Anthology,Planechase/PCA,PCA
 Planechase 2012 Edition,Planechase/PC2,PC2
 Planechase,Planechase/HOP,PCH
 
@@ -122,15 +123,22 @@ Unglued,Unset/UGL,UG
 Archenemy: Nicol Bolas,Archenemy/E01,E01
 Archenemy,Archenemy/ARC,ARC
 
+Masters 25,Reprint/A25,A25
+Iconic Masters,Reprint/IMA,IMA
 Modern Masters 2017 Edition,Reprint/MM3,MM3
 Modern Masters 2015 Edition,Reprint/MM2,MM2
 Modern Masters,Reprint/MMA,MMA
 Eternal Masters,Reprint/EMA,EMA
 Vintage Masters,Reprint/VMA,VMA
 
-Welcome Deck 2017,Reprint/W17,W17
-Welcome Deck 2016,Reprint/W16,W16
+Welcome Deck 2017,Modern/W17,W17
+Welcome Deck 2016,Modern/W16,W16
 
+Commander Anthology,Reprint/CMA,CMA
+Planechase Anthology,Reprint/PCA,PCA
+Commander's Arsenal,Reprint/CM1,CM1
+
+Duel: Merfolk vs Goblins,Reprint/DDT,DDT
 Duel: Mind vs Might,Reprint/DDS,DDS
 Duel: Nissa vs Ob Nixilis,Reprint/DDR,DDR
 Duel: Blessed vs Cursed,Reprint/DDQ,DDQ
@@ -151,6 +159,7 @@ Duel: Divine vs Demonic,Reprint/DDC,DVD
 Duel: Jace vs Chandra,Reprint/DD2,JVC
 Duel: Elves vs Goblins,Reprint/EVG,EVG
 
+From the Vault: Transform,Reprint/V17,V17
 From the Vault: Lore,Reprint/V16,V16
 From the Vault: Angels,Reprint/V15,V15
 From the Vault: Annihilation,Reprint/V14,V14
@@ -170,7 +179,6 @@ MTGO Masters Edition III,Reprint/ME3,ME3
 MTGO Masters Edition II,Reprint/ME2,ME2
 MTGO Masters Edition,Reprint/MED,MED
 
-Commander's Arsenal,Reprint/CMA,CMA
 Chronicles,Reprint/CHR,CH
 
 Amonkhet Invocations,Reprint/MPSAKH,MPSAKH
