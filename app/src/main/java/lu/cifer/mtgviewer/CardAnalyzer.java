@@ -43,7 +43,7 @@ public class CardAnalyzer {
     static Vector<ReprintInfo> resultCards;
     static String lastCode;
     static boolean single;
-    static HashMap<String, Vector<ReprintInfo>> setCards;
+
     static Comparator<ReprintInfo> editionComparator = new Comparator<ReprintInfo>() {
         @Override
         public int compare(ReprintInfo left, ReprintInfo right) {
@@ -768,7 +768,7 @@ public class CardAnalyzer {
         return reprint;
     }
 
-    public static ReprintInfo processCard(String str) {
+    public static ReprintInfo processCard(String str, HashMap<String, Object> map) {
         ReprintInfo reprint = null;
         String name = getEntry(str, "Name");
 
@@ -781,12 +781,21 @@ public class CardAnalyzer {
             reprint = addReprintCard(str, card);
         }
 
-        if (setCards.containsKey(name)) {
-            setCards.get(name).add(reprint);
+        if (map.containsKey(name)) {
+            Object obj = map.get(name);
+            if (obj instanceof ReprintInfo) {
+                ReprintInfo info = (ReprintInfo) obj;
+                info.sameIndex = 1;
+                reprint.sameIndex = 2;
+                map.put(name, 2);
+            } else {
+                int n = (Integer) map.get(name);
+                n++;
+                reprint.sameIndex = n;
+                map.put(name, n);
+            }
         } else {
-            Vector<ReprintInfo> vector = new Vector<>();
-            vector.add(reprint);
-            setCards.put(name, vector);
+            map.put(name, reprint);
         }
 
         return reprint;
@@ -795,14 +804,14 @@ public class CardAnalyzer {
     public static void processSet(File file) {
         System.out.println("Process Oracle: " + file);
         BufferedReader reader;
-        setCards = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>();
         try {
             reader = new BufferedReader(new FileReader(file));
             String str;
             String card = "";
             while ((str = reader.readLine()) != null) {
                 if (str.isEmpty()) {
-                    processCard(card);
+                    processCard(card, map);
                     card = "";
                 } else {
                     card += str + "\n";
@@ -811,16 +820,6 @@ public class CardAnalyzer {
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        for (String s : setCards.keySet()) {
-            if (setCards.get(s).size() > 1) {
-                int index = 1;
-                for (ReprintInfo reprint : setCards.get(s)) {
-                    reprint.sameIndex = index;
-                    index++;
-                }
-            }
         }
     }
 
