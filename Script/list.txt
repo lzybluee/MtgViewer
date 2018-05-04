@@ -1,3 +1,4 @@
+Dominaria,Modern/DOM,DOM
 Rivals of Ixalan,Modern/RIX,RIX
 Ixalan,Modern/XLN,XLN
 Hour of Devastation,Modern/HOU,HOU
@@ -131,8 +132,8 @@ Modern Masters,Reprint/MMA,MMA
 Eternal Masters,Reprint/EMA,EMA
 Vintage Masters,Reprint/VMA,VMA
 
-Welcome Deck 2017,Modern/W17,W17
-Welcome Deck 2016,Modern/W16,W16
+Welcome Deck 2017,Reprint/W17,W17
+Welcome Deck 2016,Reprint/W16,W16
 
 Commander Anthology,Reprint/CMA,CMA
 Planechase Anthology,Reprint/PCA,PCA
