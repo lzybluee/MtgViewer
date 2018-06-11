@@ -24,7 +24,7 @@ import java.util.Vector;
 
 public class SearchActivity extends Activity {
 
-    static String[] SpecialFolder = new String[]{"Token", "Promo", "Special"};
+    static String[] SpecialFolder = new String[]{"Promo", "Special", "Token", "Vanguard"};
     static int SpecialCards = 4408;
     static String mLastCode = "";
     static String mInitOutput = "";

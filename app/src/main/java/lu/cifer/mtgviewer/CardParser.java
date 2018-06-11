@@ -150,6 +150,14 @@ public class CardParser {
                         card += "Other: " + str + "\n";
                         continue;
                     }
+                    if (!isRule && str.startsWith("<Hand>")) {
+                        card += "Hand Modifier: " + str + "\n";
+                        continue;
+                    }
+                    if (!isRule && str.startsWith("<Life>")) {
+                        card += "Life Modifier: " + str + "\n";
+                        continue;
+                    }
                     if (!str.startsWith("<Block>") && !str.startsWith("<Standard>")
                             && !str.startsWith("<Extended>")
                             && !str.startsWith("<Classic>")
