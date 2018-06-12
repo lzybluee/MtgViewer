@@ -25,7 +25,7 @@ import java.util.Vector;
 public class SearchActivity extends Activity {
 
     static String[] SpecialFolder = new String[]{"Promo", "Special", "Token", "Vanguard"};
-    static int SpecialCards = 4408;
+    static int SpecialCards;
     static String mLastCode = "";
     static String mInitOutput = "";
     EditText mCode;
@@ -68,6 +68,16 @@ public class SearchActivity extends Activity {
     private String loadFilter() {
         SharedPreferences sp = getSharedPreferences("filter", Context.MODE_PRIVATE);
         return sp.getString("filter", "Modern");
+    }
+
+    private void savePromos(int num) {
+        SharedPreferences sp = getSharedPreferences("promos", Context.MODE_PRIVATE);
+        sp.edit().putInt("promos", num).apply();
+    }
+
+    private int loadPromos() {
+        SharedPreferences sp = getSharedPreferences("promos", Context.MODE_PRIVATE);
+        return sp.getInt("promos", 6666);
     }
 
     @Override
@@ -229,7 +239,7 @@ public class SearchActivity extends Activity {
 
     private void searchSpecial(final String search, final boolean anyWord) {
         CardAnalyzer.exclude = 0;
-        initProgress(SpecialCards, "Searching...", false);
+        initProgress(loadPromos(), "Searching...", false);
         mProgress.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -269,6 +279,8 @@ public class SearchActivity extends Activity {
                     File folder = new File(MainActivity.SDPath + "/MTG/" + s);
                     processFolder(folder, search, anyWord, cards);
                 }
+
+                savePromos(mChecked);
 
                 if (cards.isEmpty()) {
                     setScreenOn(false);
