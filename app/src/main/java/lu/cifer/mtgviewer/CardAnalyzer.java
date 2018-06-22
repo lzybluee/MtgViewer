@@ -38,11 +38,11 @@ public class CardAnalyzer {
     static int foundCards;
     static boolean reverse;
     static int sortType = 0;
-    static String[] sortName = new String[]{"Edition", "Name", "Cmc", "Color", "Rating", "Random"};
+    static String[] sortName = new String[]{"Random", "Edition", "Name", "Cmc", "Color", "Rating"};
     static boolean stop;
     static Vector<ReprintInfo> resultCards;
     static String lastCode;
-    static boolean single;
+    static boolean single = true;
 
     static Comparator<ReprintInfo> editionComparator = new Comparator<ReprintInfo>() {
         @Override
@@ -1008,6 +1008,11 @@ public class CardAnalyzer {
         }
 
         switch (sortName[sortType]) {
+            case "Random":
+                if (!single) {
+                    Collections.shuffle(cards);
+                }
+                break;
             case "Edition":
                 Collections.sort(cards, editionComparator);
                 break;
@@ -1023,12 +1028,7 @@ public class CardAnalyzer {
             case "Rating":
                 Collections.sort(cards, ratingComparator);
                 break;
-            case "Random":
-                if (!single) {
-                    Collections.shuffle(cards);
-                }
-                break;
-        }
+         }
 
         if (single) {
             Vector<String> names = new Vector<>();
