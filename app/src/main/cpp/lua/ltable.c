@@ -330,17 +330,34 @@ static void setnodevector (lua_State *L, Table *t, unsigned int size) {
 }
 
 
+typedef struct {
+  Table *t;
+  unsigned int nhsize;
+} AuxsetnodeT;
+
+
+static void auxsetnode (lua_State *L, void *ud) {
+  AuxsetnodeT *asn = cast(AuxsetnodeT *, ud);
+  setnodevector(L, asn->t, asn->nhsize);
+}
+
+
 void luaH_resize (lua_State *L, Table *t, unsigned int nasize,
                                           unsigned int nhsize) {
   unsigned int i;
   int j;
+  AuxsetnodeT asn;
   unsigned int oldasize = t->sizearray;
   int oldhsize = allocsizenode(t);
   Node *nold = t->node;  /* save old hash ... */
   if (nasize > oldasize)  /* array part must grow? */
     setarrayvector(L, t, nasize);
   /* create new hash part with appropriate size */
-  setnodevector(L, t, nhsize);
+  asn.t = t; asn.nhsize = nhsize;
+  if (luaD_rawrunprotected(L, auxsetnode, &asn) != LUA_OK) {  /* mem. error? */
+    setarrayvector(L, t, oldasize);  /* array back to its original size */
+    luaD_throw(L, LUA_ERRMEM);  /* rethrow memory error */
+  }  
   if (nasize < oldasize) {  /* array part must shrink? */
     t->sizearray = nasize;
     /* re-insert elements from vanishing slice */
