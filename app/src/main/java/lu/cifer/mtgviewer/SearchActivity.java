@@ -41,7 +41,7 @@ public class SearchActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(on) {
+                if (on) {
                     SearchActivity.this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                 } else {
                     SearchActivity.this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -78,13 +78,6 @@ public class SearchActivity extends Activity {
     private int loadPromos() {
         SharedPreferences sp = getSharedPreferences("promos", Context.MODE_PRIVATE);
         return sp.getInt("promos", 6666);
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(SearchActivity.this, MainActivity.class);
-        startActivity(intent);
-        super.onBackPressed();
     }
 
     private void initProgress(int max, String title, boolean timer) {
@@ -205,6 +198,7 @@ public class SearchActivity extends Activity {
                                 }
 
                                 Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 finish();
                             }
@@ -329,6 +323,7 @@ public class SearchActivity extends Activity {
                         }
 
                         Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         finish();
                     }
@@ -459,6 +454,7 @@ public class SearchActivity extends Activity {
                 String picture = CardAnalyzer.getWrongCard();
                 if (picture != null) {
                     Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
                 } else {

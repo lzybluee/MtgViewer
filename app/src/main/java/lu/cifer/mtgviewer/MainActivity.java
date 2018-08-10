@@ -40,12 +40,16 @@ import java.util.Vector;
 
 public class MainActivity extends Activity {
 
+    public static final int SORT_SUFFLE = 0;
+    public static final int SORT_ASCEND = 1;
+    public static final int SORT_DESCEND = 2;
+    public static final String[] SORT_DESC = new String[]{"Shuffle", "Ascending", "Descending"};
+
     public static File SDPath;
     public static String urlInfo = "";
     Gallery mGallery;
     Vector<String> mCardPath = new Vector<>();
-    boolean mShuffle = true;
-    boolean mAscending = false;
+    int mSort = SORT_SUFFLE;
     boolean mSelect = false;
     String mSets = "";
     String[] mMiscSets = null;
@@ -55,19 +59,6 @@ public class MainActivity extends Activity {
     String mProcessSet;
     int mLoadCards;
     boolean mStop;
-
-    private void setScreenOn(final boolean on) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(on) {
-                    MainActivity.this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                } else {
-                    MainActivity.this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                }
-            }
-        });
-    }
 
     public static List<File> ListFiles(File file) {
         List<File> files = Arrays.asList(file.listFiles());
@@ -84,6 +75,19 @@ public class MainActivity extends Activity {
             }
         });
         return files;
+    }
+
+    private void setScreenOn(final boolean on) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (on) {
+                    MainActivity.this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                } else {
+                    MainActivity.this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                }
+            }
+        });
     }
 
     void processFile(File file) {
@@ -246,11 +250,11 @@ public class MainActivity extends Activity {
                     }
                 }
 
-                if (mShuffle) {
+                if (mSort == SORT_SUFFLE) {
                     Collections.shuffle(mCardPath);
                 } else {
                     Collections.sort(mCardPath);
-                    if (!mAscending) {
+                    if (mSort == SORT_DESCEND) {
                         Collections.reverse(mCardPath);
                     }
                 }
@@ -316,22 +320,21 @@ public class MainActivity extends Activity {
         menu.add(Menu.NONE, 0, 1, "MTG");
         menu.add(Menu.NONE, 1, 2, "Modern");
         menu.add(Menu.NONE, 2, 3, "Search");
-        menu.add(Menu.NONE, 3, 4, "Bundle");
-        menu.add(Menu.NONE, 4, 5, "Numerical");
+        menu.add(Menu.NONE, 3, 4, "All");
+        menu.add(Menu.NONE, 4, 5, "Sort");
         menu.add(Menu.NONE, 5, 6, "Select");
         menu.add(Menu.NONE, 6, 7, "Done");
-        menu.add(Menu.NONE, 7, 8, "Shuffle");
-        menu.add(Menu.NONE, 8, 9, "All");
-        menu.add(Menu.NONE, 9, 10, "Ancient");
-        menu.add(Menu.NONE, 10, 11, "Token");
-        menu.add(Menu.NONE, 11, 12, "Promo");
-        menu.add(Menu.NONE, 12, 13, "Special");
-        menu.add(Menu.NONE, 13, 14, "Vanguard");
+        menu.add(Menu.NONE, 7, 8, "Bundle");
+        menu.add(Menu.NONE, 8, 9, "Ancient");
+        menu.add(Menu.NONE, 9, 10, "Token");
+        menu.add(Menu.NONE, 10, 11, "Promo");
+        menu.add(Menu.NONE, 11, 12, "Special");
+        menu.add(Menu.NONE, 12, 13, "Vanguard");
         for (int i = 0; i < CardParser.SetList.length; i++) {
-            menu.add(Menu.NONE, i + 14, i + 15, CardParser.SetList[i][0]);
+            menu.add(Menu.NONE, i + 13, i + 14, CardParser.SetList[i][0]);
         }
         for (int i = 0; i < mMiscSets.length; i++) {
-            menu.add(Menu.NONE, i + CardParser.SetList.length + 14, i + CardParser.SetList.length + 15,
+            menu.add(Menu.NONE, i + CardParser.SetList.length + 13, i + CardParser.SetList.length + 14,
                     mMiscSets[i].substring(mMiscSets[i].lastIndexOf("/") + 1));
         }
         return super.onCreateOptionsMenu(menu);
@@ -348,15 +351,12 @@ public class MainActivity extends Activity {
         } else if (n == 2) {
             Intent intent = new Intent(MainActivity.this, SearchActivity.class);
             startActivity(intent);
-            finish();
         } else if (n == 3) {
-            CardBundle.showDialog(this);
+            init("Ancient|Modern|Commander|Planechase|Archenemy|Conspiracy|Starter|Special/MBP|Unset|Reprint");
         } else if (n == 4) {
-            mShuffle = false;
-            mAscending = !mAscending;
-            CardAnalyzer.setReverse(!mAscending);
-            Toast.makeText(this, mAscending ? "Ascending" : "Descending",
-                    Toast.LENGTH_SHORT).show();
+            mSort = (mSort + 1) % 3;
+            CardAnalyzer.setReverse(mSort == SORT_DESCEND);
+            Toast.makeText(this, SORT_DESC[mSort], Toast.LENGTH_SHORT).show();
         } else if (n == 5) {
             mSelect = true;
             showSelectedSets();
@@ -371,24 +371,21 @@ public class MainActivity extends Activity {
                 init(mSets);
             }
         } else if (n == 7) {
-            mShuffle = true;
-            Toast.makeText(this, "Shuffle", Toast.LENGTH_SHORT).show();
+            CardBundle.showDialog(this);
         } else if (n == 8) {
-            init("Ancient|Modern|Commander|Planechase|Archenemy|Conspiracy|Starter|Special/MBP|Unset|Reprint");
-        } else if (n == 9) {
             init("Ancient");
-        } else if (n == 10) {
+        } else if (n == 9) {
             init("Token");
-        } else if (n == 11) {
+        } else if (n == 10) {
             init("Promo");
-        } else if (n == 12) {
+        } else if (n == 11) {
             init("Special");
-        } else if (n == 13) {
+        } else if (n == 12) {
             init("Vanguard");
-        } else if (n <= 13 + CardParser.SetList.length) {
-            init(CardParser.SetList[n - 14][1]);
+        } else if (n <= 12 + CardParser.SetList.length) {
+            init(CardParser.SetList[n - 13][1]);
         } else {
-            init(mMiscSets[n - 14 - CardParser.SetList.length]);
+            init(mMiscSets[n - 13 - CardParser.SetList.length]);
         }
 
         return false;

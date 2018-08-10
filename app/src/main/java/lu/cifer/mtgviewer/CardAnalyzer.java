@@ -1028,7 +1028,7 @@ public class CardAnalyzer {
             case "Rating":
                 Collections.sort(cards, ratingComparator);
                 break;
-         }
+        }
 
         if (single) {
             Vector<String> names = new Vector<>();
