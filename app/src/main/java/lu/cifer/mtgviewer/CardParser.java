@@ -99,7 +99,7 @@ public class CardParser {
                 if (str.equals("<No>" + num + "</No>")) {
                     flag = true;
                     rating = "";
-                    if (!justRule) {
+                    if (justRule) {
                         if (setInfo.equals("")) {
                             MainActivity.urlInfo = "";
                         } else {
@@ -132,7 +132,7 @@ public class CardParser {
                                 || str.contains(">Mountain<") || str.contains(">Forest<");
                     }
                     if (str.startsWith("<Multiverseid>")) {
-                        if (justRule) {
+                        if (!justRule) {
                             String id = str.replaceAll("<Multiverseid>", "")
                                     .replaceAll("</Multiverseid>", "");
                             if (!id.equals("0")) {

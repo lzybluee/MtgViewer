@@ -77,6 +77,17 @@ public class MainActivity extends Activity {
         return files;
     }
 
+    private void openUrl() {
+        if (urlInfo == null || urlInfo.isEmpty()) {
+            return;
+        }
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.VIEW");
+        Uri content_url = Uri.parse(urlInfo);
+        intent.setData(content_url);
+        startActivity(intent);
+    }
+
     private void setScreenOn(final boolean on) {
         runOnUiThread(new Runnable() {
             @Override
@@ -320,21 +331,22 @@ public class MainActivity extends Activity {
         menu.add(Menu.NONE, 0, 1, "MTG");
         menu.add(Menu.NONE, 1, 2, "Modern");
         menu.add(Menu.NONE, 2, 3, "Search");
-        menu.add(Menu.NONE, 3, 4, "All");
+        menu.add(Menu.NONE, 3, 4, "Comment");
         menu.add(Menu.NONE, 4, 5, "Sort");
-        menu.add(Menu.NONE, 5, 6, "Select");
-        menu.add(Menu.NONE, 6, 7, "Done");
-        menu.add(Menu.NONE, 7, 8, "Bundle");
-        menu.add(Menu.NONE, 8, 9, "Ancient");
-        menu.add(Menu.NONE, 9, 10, "Token");
-        menu.add(Menu.NONE, 10, 11, "Promo");
-        menu.add(Menu.NONE, 11, 12, "Special");
-        menu.add(Menu.NONE, 12, 13, "Vanguard");
+        menu.add(Menu.NONE, 5, 6, "All");
+        menu.add(Menu.NONE, 6, 7, "Select");
+        menu.add(Menu.NONE, 7, 8, "Done");
+        menu.add(Menu.NONE, 8, 9, "Bundle");
+        menu.add(Menu.NONE, 9, 10, "Ancient");
+        menu.add(Menu.NONE, 10, 11, "Token");
+        menu.add(Menu.NONE, 11, 12, "Promo");
+        menu.add(Menu.NONE, 12, 13, "Special");
+        menu.add(Menu.NONE, 13, 14, "Vanguard");
         for (int i = 0; i < CardParser.SetList.length; i++) {
-            menu.add(Menu.NONE, i + 13, i + 14, CardParser.SetList[i][0]);
+            menu.add(Menu.NONE, i + 14, i + 15, CardParser.SetList[i][0]);
         }
         for (int i = 0; i < mMiscSets.length; i++) {
-            menu.add(Menu.NONE, i + CardParser.SetList.length + 13, i + CardParser.SetList.length + 14,
+            menu.add(Menu.NONE, i + CardParser.SetList.length + 14, i + CardParser.SetList.length + 15,
                     mMiscSets[i].substring(mMiscSets[i].lastIndexOf("/") + 1));
         }
         return super.onCreateOptionsMenu(menu);
@@ -352,15 +364,17 @@ public class MainActivity extends Activity {
             Intent intent = new Intent(MainActivity.this, SearchActivity.class);
             startActivity(intent);
         } else if (n == 3) {
-            init("Ancient|Modern|Commander|Planechase|Archenemy|Conspiracy|Starter|Special/MBP|Unset|Reprint");
+            openUrl();
         } else if (n == 4) {
             mSort = (mSort + 1) % 3;
             CardAnalyzer.setReverse(mSort == SORT_DESCEND);
             Toast.makeText(this, SORT_DESC[mSort], Toast.LENGTH_SHORT).show();
         } else if (n == 5) {
+            init("Ancient|Modern|Commander|Planechase|Archenemy|Conspiracy|Starter|Special/MBP|Unset|Reprint");
+        } else if (n == 6) {
             mSelect = true;
             showSelectedSets();
-        } else if (n == 6) {
+        } else if (n == 7) {
             if (!mSelect) {
                 mSets = "";
                 saveSelectedSets(mSets);
@@ -370,22 +384,22 @@ public class MainActivity extends Activity {
                 saveSelectedSets(mSets);
                 init(mSets);
             }
-        } else if (n == 7) {
-            CardBundle.showDialog(this);
         } else if (n == 8) {
-            init("Ancient");
+            CardBundle.showDialog(this);
         } else if (n == 9) {
-            init("Token");
+            init("Ancient");
         } else if (n == 10) {
-            init("Promo");
+            init("Token");
         } else if (n == 11) {
-            init("Special");
+            init("Promo");
         } else if (n == 12) {
+            init("Special");
+        } else if (n == 13) {
             init("Vanguard");
-        } else if (n <= 12 + CardParser.SetList.length) {
-            init(CardParser.SetList[n - 13][1]);
+        } else if (n <= 13 + CardParser.SetList.length) {
+            init(CardParser.SetList[n - 14][1]);
         } else {
-            init(mMiscSets[n - 13 - CardParser.SetList.length]);
+            init(mMiscSets[n - 14 - CardParser.SetList.length]);
         }
 
         return false;
@@ -488,12 +502,8 @@ public class MainActivity extends Activity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            if ((keyCode == KeyEvent.KEYCODE_SEARCH || (keyCode == KeyEvent.KEYCODE_MENU && event.getRepeatCount() > 0)) && !urlInfo.equals("")) {
-                Intent intent = new Intent();
-                intent.setAction("android.intent.action.VIEW");
-                Uri content_url = Uri.parse(urlInfo);
-                intent.setData(content_url);
-                startActivity(intent);
+            if (keyCode == KeyEvent.KEYCODE_SEARCH || (keyCode == KeyEvent.KEYCODE_MENU && event.getRepeatCount() > 0)) {
+                openUrl();
                 return true;
             }
         }
