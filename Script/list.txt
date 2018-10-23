@@ -1,3 +1,4 @@
+Core Set 2019,Modern/M19,M19
 Dominaria,Modern/DOM,DOM
 Rivals of Ixalan,Modern/RIX,RIX
 Ixalan,Modern/XLN,XLN
