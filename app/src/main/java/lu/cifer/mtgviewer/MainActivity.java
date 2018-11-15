@@ -8,10 +8,13 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -348,6 +351,12 @@ public class MainActivity extends Activity {
         for (int i = 0; i < mMiscSets.length; i++) {
             menu.add(Menu.NONE, i + CardParser.SetList.length + 14, i + CardParser.SetList.length + 15,
                     mMiscSets[i].substring(mMiscSets[i].lastIndexOf("/") + 1));
+        }
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            SpannableString spanString = new SpannableString(menu.getItem(i).getTitle());
+            spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0);
+            item.setTitle(spanString);
         }
         return super.onCreateOptionsMenu(menu);
     }
