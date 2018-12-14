@@ -130,6 +130,9 @@ public class CardParser {
                     if (!isRule && str.startsWith("<Name>")) {
                         isBasic = str.contains(">Plains<") || str.contains(">Island<") || str.contains(">Swamp<")
                                 || str.contains(">Mountain<") || str.contains(">Forest<");
+                        if(str.contains("]<")) {
+                            str = str.replaceAll(" \\[(\\w)\\]</Name>", "</Name>\n<Variant>(Variant $1)</Variant>");
+                        }
                     }
                     if (str.startsWith("<Multiverseid>")) {
                         if (!justRule) {
