@@ -187,7 +187,7 @@ public class CardParser {
                                             break;
                                         }
                                     }
-                                } else if (str.contains("Modern>Legal<") && !isModern && !isBasic) {
+                                } else if (str.contains("Modern>Legal<") && !isModern && !isBasic && !url.contains("/Misc/")) {
                                     card += "Legal in Modern\n";
                                 }
                             } else {
