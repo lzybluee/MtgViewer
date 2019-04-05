@@ -296,4 +296,13 @@ public class CardParser {
             }
         }
     }
+
+    public static boolean containsCode(String code) {
+        for(String[] strs : SetList) {
+            if(strs[2].equals(code)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

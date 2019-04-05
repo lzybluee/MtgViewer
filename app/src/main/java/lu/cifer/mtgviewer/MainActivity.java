@@ -448,7 +448,9 @@ public class MainActivity extends Activity {
         if (file1.exists()) {
             for (File f : ListFiles(file1)) {
                 if (f.isDirectory()) {
-                    v1.add(f.getName());
+                    if(!CardParser.containsCode(f.getName())) {
+                        v1.add(f.getName());
+                    }
                 }
             }
         }
@@ -458,7 +460,9 @@ public class MainActivity extends Activity {
         if (file2.exists()) {
             for (File f : ListFiles(file2)) {
                 if (f.isDirectory()) {
-                    v2.add(f.getName());
+                    if(!CardParser.containsCode(f.getName())) {
+                        v2.add(f.getName());
+                    }
                 }
             }
         }
@@ -467,7 +471,7 @@ public class MainActivity extends Activity {
 
         int j = 0;
         for (int i = 0; i < v1.size(); i++) {
-            mMiscSets[j] = "/Misc/" + v1.get(i);
+            mMiscSets[j] = "Misc/" + v1.get(i);
             j++;
         }
         for (int i = 0; i < v2.size(); i++) {
