@@ -55,7 +55,7 @@ public class CardParser {
             setInfo = "cns";
         }
 
-        if (url.contains("/Special/") && !url.contains("/MBP/")) {
+        if (url.contains("/Special/")) {
             return url;
         }
 
