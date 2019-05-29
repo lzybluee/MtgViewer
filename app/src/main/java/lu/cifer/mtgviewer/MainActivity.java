@@ -366,7 +366,7 @@ public class MainActivity extends Activity {
         int n = item.getItemId();
 
         if (n == 0) {
-            init("Ancient|Modern|Commander|Planechase/PC2|Conspiracy|Starter|Special/MBP");
+            init("Ancient|Modern|Commander|Planechase/PC2|Conspiracy|Starter|Other");
         } else if (n == 1) {
             init("Modern");
         } else if (n == 2) {
@@ -379,7 +379,7 @@ public class MainActivity extends Activity {
             CardAnalyzer.setReverse(mSort == SORT_DESCEND);
             Toast.makeText(this, SORT_DESC[mSort], Toast.LENGTH_SHORT).show();
         } else if (n == 5) {
-            init("Ancient|Modern|Commander|Planechase|Archenemy|Conspiracy|Starter|Special/MBP|Unset|Reprint");
+            init("Ancient|Modern|Commander|Planechase|Archenemy|Conspiracy|Starter|Other|Unset|Reprint");
         } else if (n == 6) {
             mSelect = true;
             showSelectedSets();
