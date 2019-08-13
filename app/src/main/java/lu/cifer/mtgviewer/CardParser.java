@@ -99,13 +99,6 @@ public class CardParser {
                 if (str.equals("<No>" + num + "</No>")) {
                     flag = true;
                     rating = "";
-                    if (justRule) {
-                        if (setInfo.equals("")) {
-                            MainActivity.urlInfo = "";
-                        } else {
-                            MainActivity.urlInfo = "http://magiccards.info/" + setInfo + "/en/" + num + ".html";
-                        }
-                    }
                     isRule = justRule;
                 }
                 if (flag) {
@@ -135,14 +128,16 @@ public class CardParser {
                         }
                     }
                     if (str.startsWith("<Multiverseid>")) {
-                        if (!justRule) {
-                            String id = str.replaceAll("<Multiverseid>", "")
-                                    .replaceAll("</Multiverseid>", "");
-                            if (!id.equals("0")) {
+                        String id = str.replaceAll("<Multiverseid>", "")
+                                .replaceAll("</Multiverseid>", "");
+                        if (!id.equals("0")) {
+                            if (!justRule) {
                                 MainActivity.urlInfo = "http://gatherer.wizards.com/Pages/Card/Discussion.aspx?multiverseid=" + id;
                             } else {
-                                MainActivity.urlInfo = "";
+                                MainActivity.urlInfo = "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + id;
                             }
+                        } else {
+                            MainActivity.urlInfo = "";
                         }
                     }
                     if (!isRule && str.startsWith("<ColorIndicator>")) {
