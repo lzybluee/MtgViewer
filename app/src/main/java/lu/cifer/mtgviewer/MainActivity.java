@@ -419,8 +419,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         String pictures[] = new String[0];
-        if (CardAnalyzer.results != null) {
+        if (CardAnalyzer.showResults && CardAnalyzer.results != null) {
             pictures = CardAnalyzer.results;
+            CardAnalyzer.showResults = false;
         }
 
         SDPath = Environment.getExternalStorageDirectory();
@@ -439,6 +440,13 @@ public class MainActivity extends Activity {
                     }
                 }
             }
+        }
+
+        File test = new File(SDPath + "/MTG");
+        if(test.listFiles() == null) {
+            Toast.makeText(this, "Need read permission!", Toast.LENGTH_LONG).show();
+            finish();
+            return;
         }
 
         CardParser.initOracle();

@@ -307,6 +307,7 @@ public class SearchActivity extends Activity {
                 }
 
                 CardAnalyzer.results = new String[cards.size()];
+                CardAnalyzer.showResults = true;
                 for (int i = 0; i < CardAnalyzer.results.length; i++) {
                     CardAnalyzer.results[i] = cards.get(i);
                 }

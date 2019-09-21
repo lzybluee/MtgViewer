@@ -43,6 +43,7 @@ public class CardAnalyzer {
     static Vector<ReprintInfo> resultCards;
     static String lastCode;
     static boolean single = true;
+    static boolean showResults = false;
 
     static Comparator<ReprintInfo> editionComparator = new Comparator<ReprintInfo>() {
         @Override
@@ -917,7 +918,14 @@ public class CardAnalyzer {
         } else {
             for (String s : strs) {
                 if (!s.isEmpty()) {
-                    if (containsText(text, s)) {
+                    if(s.startsWith("^")) {
+                        if(!containsText(text, s.substring(1))) {
+                            ret = true;
+                        } else {
+                            ret = false;
+                            break;
+                        }
+                    } else if (containsText(text, s)) {
                         ret = true;
                     } else {
                         ret = false;
@@ -945,6 +953,7 @@ public class CardAnalyzer {
         } else if (result == 2) {
             wrongCard = reprint.picture;
             results = new String[]{wrongCard};
+            showResults = true;
             return false;
         }
         return true;
@@ -1070,6 +1079,7 @@ public class CardAnalyzer {
 
         exclude = cards.size() - results.length;
 
+        showResults = true;
         return results.length;
     }
 
