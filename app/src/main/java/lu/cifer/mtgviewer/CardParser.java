@@ -1,10 +1,14 @@
 package lu.cifer.mtgviewer;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CardParser {
 
@@ -69,13 +73,14 @@ public class CardParser {
             return url;
         }
 
-        String num = url.substring(0, url.lastIndexOf("."));
-        num = num.substring(num.lastIndexOf("/") + 1);
-        while (num.startsWith("0")) {
-            num = num.substring(1);
-        }
+        String fileName = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf("."));
+        Pattern pattern = Pattern.compile("([^\\d]*)0*(\\d+)([^\\d]*)");
+        Matcher matcher = pattern.matcher(fileName);
 
-        if (num.length() == 0 || !(num.charAt(0) >= '0' && num.charAt(0) <= '9')) {
+        String num = "";
+        if (matcher.find()) {
+            num = matcher.group(1) + matcher.group(2) + matcher.group(3);
+        } else {
             return url;
         }
 
