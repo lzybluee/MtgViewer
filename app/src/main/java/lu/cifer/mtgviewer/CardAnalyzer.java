@@ -1,5 +1,7 @@
 package lu.cifer.mtgviewer;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -298,18 +300,16 @@ public class CardAnalyzer {
                 && Math.sqrt(power / count) <= 8;
     }
 
-    private static String getFormatedNumber(String name, int length) {
-        char c = name.charAt(name.length() - 1);
-        if (c >= '0' && c <= '9') {
-            while (name.length() < length) {
-                name = "0" + name;
-            }
+    private static String getFormatedNumber(String name) {
+        Pattern pattern = Pattern.compile("([^\\d]*)(\\d+)([^\\d]*)");
+        Matcher matcher = pattern.matcher(name);
+
+        if (matcher.find()) {
+            int num = Integer.parseInt(matcher.group(2));
+            return matcher.group(1) + String.format("%03d", num) + matcher.group(3);
         } else {
-            while (name.length() < length + 1) {
-                name = "0" + name;
-            }
+            return null;
         }
-        return name;
     }
 
     private static boolean compareFilter() {
@@ -462,8 +462,12 @@ public class CardAnalyzer {
                 card.isSplit = true;
             } else if (card.partIndex == 2 && getEntry(str, "ManaCost") == null) {
                 card.isDoubleFaced = true;
-                otherCard = cardDatabase.get(entry);
-                otherCard.isDoubleFaced = true;
+                for (String other : entry.split(" ; ")) {
+                    otherCard = cardDatabase.get(other);
+                    if(otherCard != null) {
+                        otherCard.isDoubleFaced = true;
+                    }
+                }
             } else if (card.partIndex == 2) {
                 card.isFlip = true;
                 otherCard = cardDatabase.get(entry);
@@ -669,23 +673,6 @@ public class CardAnalyzer {
                 }
             }
         }
-        if (reprint.multiverseid == 0) {
-            String entry;
-            if (card.name.contains("Who/What/When/Where/Why")) {
-                entry = "Who (Who/What/When/Where/Why)";
-            } else {
-                entry = getEntry(str, "OtherPart");
-            }
-            if (entry != null) {
-                Vector<ReprintInfo> vector = cardDatabase.get(entry).reprints;
-                for (ReprintInfo info : vector) {
-                    if (reprint.set.equals(info.set)) {
-                        reprint.multiverseid = info.multiverseid;
-                        break;
-                    }
-                }
-            }
-        }
         if (!card.rarityChanged) {
             Vector<ReprintInfo> vector = card.reprints;
             for (ReprintInfo info : vector) {
@@ -704,64 +691,19 @@ public class CardAnalyzer {
             }
         }
 
-        if (reprint.specialType == null || reprint.specialType.equals("Conspiracy")) {
-            reprint.formatedNumber = getFormatedNumber(reprint.number, 3);
-        } else {
-            reprint.formatedNumber = getFormatedNumber(reprint.number, 2);
+        for (String[] strs : CardParser.SetList) {
+            if (reprint.set.equals(strs[0])) {
+                reprint.code = strs[2];
+                reprint.folder = strs[1];
+                reprint.altCode = strs[2];
+                break;
+            }
         }
 
-        if (reprint.specialType == null || reprint.specialType.equals("Conspiracy")) {
-            switch (reprint.set) {
-                case "Eighth Edition Box Set":
-                    reprint.code = "8EB";
-                    reprint.folder = "Modern/8ED/8EB";
-                    reprint.altCode = "8EB";
-                    break;
-                case "Ninth Edition Box Set":
-                    reprint.code = "9EB";
-                    reprint.folder = "Modern/9ED/9EB";
-                    reprint.altCode = "9EB";
-                    break;
-                case "M19 Gift Pack":
-                    reprint.code = "G18";
-                    reprint.folder = "Modern/M19/G18";
-                    reprint.altCode = "G18";
-                    break;
-                default:
-                    for (String[] strs : CardParser.SetList) {
-                        String set = reprint.set.replace("Premium Deck Series:", "Premium:").replace("Duel Decks:", "Duel:")
-                                .replace("Global Series:", "Global:").replace("The Coalition", "Coalition").replace(" vs. ", " vs ");
-                        if (set.equals(strs[0])) {
-                            reprint.code = strs[1].substring(strs[1].lastIndexOf("/") + 1);
-                            reprint.folder = strs[1];
-                            reprint.altCode = strs[2];
-                            break;
-                        }
-                    }
-            }
-        } else {
-            switch (reprint.set) {
-                case "Archenemy":
-                    reprint.code = "Schemes";
-                    reprint.folder = "Archenemy/Scheme";
-                    reprint.altCode = "Scheme";
-                    break;
-                case "Planechase 2012 Edition":
-                    reprint.code = "Plane2012";
-                    reprint.folder = "Planechase/Plane2012";
-                    reprint.altCode = "Plane2012";
-                    break;
-                case "Planechase":
-                    reprint.code = "Plane";
-                    reprint.folder = "Planechase/Plane";
-                    reprint.altCode = "Plane";
-                    break;
-                case "Archenemy: Nicol Bolas":
-                    reprint.code = "SchemeNicolBolas";
-                    reprint.folder = "Archenemy/SchemeNicolBolas";
-                    reprint.altCode = "SchemeNicolBolas";
-                    break;
-            }
+        reprint.formatedNumber = getFormatedNumber(reprint.number);
+
+        if(reprint.folder == null || reprint.formatedNumber == null) {
+            Log.e("MtgViewer", "No picture " + reprint.set + " " + reprint.number);
         }
 
         reprint.picture = reprint.folder + "/" + reprint.formatedNumber + ".jpg";
