@@ -1,193 +1,230 @@
-Core Set 2019,Modern/M19,M19
-Dominaria,Modern/DOM,DOM
-Rivals of Ixalan,Modern/RIX,RIX
-Ixalan,Modern/XLN,XLN
-Hour of Devastation,Modern/HOU,HOU
-Amonkhet,Modern/AKH,AKH
+2016 Heroes of the Realm,Modern/HTR16,HTR16
+2017 Heroes of the Realm,Modern/HTR17,HTR17
+2018 Heroes of the Realm,Modern/HTR18,HTR18
+2019 Heroes of the Realm,Modern/HTR19,HTR19
+Adventures in the Forgotten Realms,Modern/AFR,AFR
 Aether Revolt,Modern/AER,AER
-Kaladesh,Modern/KLD,KLD
-Eldritch Moon,Modern/EMN,EMN
-Shadows over Innistrad,Modern/SOI,SOI
-Oath of the Gatewatch,Modern/OGW,OGW
-Battle for Zendikar,Modern/BFZ,BFZ
-Magic Origins,Modern/ORI,ORI
-Dragons of Tarkir,Modern/DTK,DTK
-Fate Reforged,Modern/FRF,FRF
-Khans of Tarkir,Modern/KTK,KTK
-Magic 2015,Modern/M15,M15
-Journey into Nyx,Modern/JOU,JOU
-Born of the Gods,Modern/BNG,BNG
-Theros,Modern/THS,THS
-Magic 2014,Modern/M14,M14
-Dragon's Maze,Modern/DGM,DGM
-Gatecrash,Modern/GTC,GTC
-Return to Ravnica,Modern/RTR,RTR
-Magic 2013,Modern/M13,M13
-Avacyn Restored,Modern/AVR,AVR
-Dark Ascension,Modern/DKA,DKA
-Innistrad,Modern/ISD,ISD
-Magic 2012,Modern/M12,M12
-New Phyrexia,Modern/NPH,NPH
-Mirrodin Besieged,Modern/MBS,MBS
-Scars of Mirrodin,Modern/SOM,SOM
-Magic 2011,Modern/M11,M11
-Rise of the Eldrazi,Modern/ROE,ROE
-Worldwake,Modern/WWK,WWK
-Zendikar,Modern/ZEN,ZEN
-Magic 2010,Modern/M10,M10
 Alara Reborn,Modern/ARB,ARB
-Conflux,Modern/CFX,CFX
-Shards of Alara,Modern/ALA,ALA
-Eventide,Modern/EVE,EVE
-Shadowmoor,Modern/SHM,SHM
-Morningtide,Modern/MOR,MT
-Lorwyn,Modern/LRW,LW
-Tenth Edition,Modern/10E,10E
-Future Sight,Modern/FUT,FUT
-Planar Chaos,Modern/PLC,PC
-Time Spiral "Timeshifted",Modern/TSB,TSTS
-Time Spiral,Modern/TSP,TS
-Coldsnap,Modern/CSP,CS
-Dissension,Modern/DIS,DI
-Guildpact,Modern/GPT,GP
-Ravnica: City of Guilds,Modern/RAV,RAV
-Ninth Edition,Modern/9ED,9E,9EB
-Saviors of Kamigawa,Modern/SOK,SOK
+Alliances,Modern/ALL,ALL
+Amonkhet Invocations,Modern/MP2,MP2
+Amonkhet,Modern/AKH,AKH
+Antiquities,Modern/ATQ,ATQ
+Apocalypse,Modern/APC,APC
+Arabian Nights,Modern/ARN,ARN
+Archenemy Schemes,Modern/OARC,OARC
+Archenemy,Modern/ARC,ARC
+Archenemy: Nicol Bolas Schemes,Modern/OE01,OE01
+Archenemy: Nicol Bolas,Modern/E01,E01
+Avacyn Restored,Modern/AVR,AVR
+Battle for Zendikar,Modern/BFZ,BFZ
+Battlebond,Modern/BBD,BBD
 Betrayers of Kamigawa,Modern/BOK,BOK
+Born of the Gods,Modern/BNG,BNG
 Champions of Kamigawa,Modern/CHK,CHK
+Chronicles,Modern/CHR,CHR
+Classic Sixth Edition,Modern/6ED,6ED
+Coldsnap,Modern/CSP,CSP
+Commander 2011,Modern/CMD,CMD
+Commander 2013,Modern/C13,C13
+Commander 2014,Modern/C14,C14
+Commander 2015,Modern/C15,C15
+Commander 2016,Modern/C16,C16
+Commander 2017,Modern/C17,C17
+Commander 2018,Modern/C18,C18
+Commander 2019,Modern/C19,C19
+Commander 2020,Modern/C20,C20
+Commander 2021,Modern/C21,C21
+Commander Anthology Volume II,Modern/CM2,CM2
+Commander Anthology,Modern/CMA,CMA
+Commander Legends,Modern/CMR,CMR
+Commander's Arsenal,Modern/CM1,CM1
+Conflux,Modern/CFX,CFX
+Conspiracy,Modern/CNS,CNS
+Conspiracy: Take the Crown,Modern/CN2,CN2
+Core Set 2019,Modern/M19,M19
+Core Set 2020,Modern/M20,M20
+Core Set 2021,Modern/M21,M21
+Crimson Vow Commander,Modern/VOC,VOC
+Dark Ascension,Modern/DKA,DKA
+Darksteel,Modern/DST,DST
+Dissension,Modern/DIS,DIS
+Dominaria,Modern/DOM,DOM
+Double Masters,Modern/2XM,2XM
+Dragon's Maze,Modern/DGM,DGM
+Dragons of Tarkir,Modern/DTK,DTK
+Duel Decks: Ajani vs. Nicol Bolas,Modern/DDH,DDH
+Duel Decks: Blessed vs. Cursed,Modern/DDQ,DDQ
+Duel Decks: Divine vs. Demonic,Modern/DDC,DDC
+Duel Decks: Elspeth vs. Kiora,Modern/DDO,DDO
+Duel Decks: Elspeth vs. Tezzeret,Modern/DDF,DDF
+Duel Decks: Elves vs. Goblins,Modern/DD1,DD1
+Duel Decks: Elves vs. Inventors,Modern/DDU,DDU
+Duel Decks: Garruk vs. Liliana,Modern/DDD,DDD
+Duel Decks: Heroes vs. Monsters,Modern/DDL,DDL
+Duel Decks: Izzet vs. Golgari,Modern/DDJ,DDJ
+Duel Decks: Jace vs. Chandra,Modern/DD2,DD2
+Duel Decks: Jace vs. Vraska,Modern/DDM,DDM
+Duel Decks: Knights vs. Dragons,Modern/DDG,DDG
+Duel Decks: Merfolk vs. Goblins,Modern/DDT,DDT
+Duel Decks: Mind vs. Might,Modern/DDS,DDS
+Duel Decks: Mirrodin Pure vs. New Phyrexia,Modern/TD2,TD2
+Duel Decks: Nissa vs. Ob Nixilis,Modern/DDR,DDR
+Duel Decks: Phyrexia vs. the Coalition,Modern/DDE,DDE
+Duel Decks: Sorin vs. Tibalt,Modern/DDK,DDK
+Duel Decks: Speed vs. Cunning,Modern/DDN,DDN
+Duel Decks: Venser vs. Koth,Modern/DDI,DDI
+Duel Decks: Zendikar vs. Eldrazi,Modern/DDP,DDP
+Eighth Edition,Modern/8ED,8ED
+Eldritch Moon,Modern/EMN,EMN
+Eternal Masters,Modern/EMA,EMA
+Eventide,Modern/EVE,EVE
+Exodus,Modern/EXO,EXO
+Explorers of Ixalan,Modern/E02,E02
+Fallen Empires,Modern/FEM,FEM
+Fate Reforged,Modern/FRF,FRF
 Fifth Dawn,Modern/5DN,5DN
-Darksteel,Modern/DST,DS
-Mirrodin,Modern/MRD,MI
-Eighth Edition,Modern/8ED,8E,8EB
-
-Scourge,Ancient/SCG,SC
-Legions,Ancient/LGN,LE
-Onslaught,Ancient/ONS,ON
-Judgment,Ancient/JUD,JU
-Torment,Ancient/TOR,TR
-Odyssey,Ancient/ODY,OD
-Apocalypse,Ancient/APC,AP
-Seventh Edition,Ancient/7ED,7E
-Planeshift,Ancient/PLS,PS
-Invasion,Ancient/INV,IN
-Prophecy,Ancient/PCY,PR
-Nemesis,Ancient/NMS,NE
-Mercadian Masques,Ancient/MMQ,MM
-Urza's Destiny,Ancient/UDS,UD
-Classic Sixth Edition,Ancient/6ED,6E
-Urza's Legacy,Ancient/ULG,UL
-Urza's Saga,Ancient/USG,US
-Exodus,Ancient/EXO,EX
-Stronghold,Ancient/STH,SH
-Tempest,Ancient/TMP,TP
-Weatherlight,Ancient/WTH,WL
-Fifth Edition,Ancient/5ED,5E
-Visions,Ancient/VIS,VI
-Mirage,Ancient/MIR,MR
-Alliances,Ancient/ALL,AI
-Homelands,Ancient/HML,HL
-Ice Age,Ancient/ICE,IA
-Fourth Edition,Ancient/4ED,4E
-Fallen Empires,Ancient/FEM,FE
-The Dark,Ancient/DRK,DK
-Legends,Ancient/LEG,LG
-Revised Edition,Ancient/3ED,RV
-Antiquities,Ancient/ATQ,AQ
-Arabian Nights,Ancient/ARN,AN
-Unlimited Edition,Ancient/2ED,UN
-Limited Edition Beta,Ancient/LEB,BE
-Limited Edition Alpha,Ancient/LEA,AL
-
-Commander 2017 Edition,Commander/C17,C17
-Commander 2016 Edition,Commander/C16,C16
-Commander 2015 Edition,Commander/C15,C15
-Commander 2014 Edition,Commander/C14,C14
-Commander 2013 Edition,Commander/C13,C13
-Commander,Commander/CMD,CMD
-
-Planechase 2012 Edition,Planechase/PC2,PC2
-Planechase,Planechase/HOP,PCH
-
-Conspiracy: Take the Crown,Conspiracy/CN2,CN2
-Conspiracy,Conspiracy/CNS,CNS
-
-Portal Three Kingdoms,Starter/PTK,P3K
-Portal Second Age,Starter/PO2,PO2
-Portal,Starter/POR,PO
-Starter 1999,Starter/S99,ST
-
-Media Inserts,Special/MBP,MBP
-
-Unstable,Unset/UST,UST
-Unhinged,Unset/UNH,UH
-Unglued,Unset/UGL,UG
-
-Archenemy: Nicol Bolas,Archenemy/E01,E01
-Archenemy,Archenemy/ARC,ARC
-
-Masters 25,Reprint/A25,A25
-Iconic Masters,Reprint/IMA,IMA
-Modern Masters 2017 Edition,Reprint/MM3,MM3
-Modern Masters 2015 Edition,Reprint/MM2,MM2
-Modern Masters,Reprint/MMA,MMA
-Eternal Masters,Reprint/EMA,EMA
-Vintage Masters,Reprint/VMA,VMA
-
-Welcome Deck 2017,Reprint/W17,W17
-Welcome Deck 2016,Reprint/W16,W16
-
-Commander Anthology,Reprint/CMA,CMA
-Planechase Anthology,Reprint/PCA,PCA
-Commander's Arsenal,Reprint/CM1,CM1
-
-Duel: Merfolk vs Goblins,Reprint/DDT,DDT
-Duel: Mind vs Might,Reprint/DDS,DDS
-Duel: Nissa vs Ob Nixilis,Reprint/DDR,DDR
-Duel: Blessed vs Cursed,Reprint/DDQ,DDQ
-Duel: Zendikar vs Eldrazi,Reprint/DDP,DDP
-Duel: Elspeth vs Kiora,Reprint/DDO,DDO
-Duel: Speed vs Cunning,Reprint/DDN,DDN
-Duel: Jace vs Vraska,Reprint/DDM,DDM
-Duel: Heroes vs Monsters,Reprint/DDL,DDL
-Duel: Sorin vs Tibalt,Reprint/DDK,DDK
-Duel: Izzet vs Golgari,Reprint/DDJ,DDJ
-Duel: Venser vs Koth,Reprint/DDI,DDI
-Duel: Ajani vs Nicol Bolas,Reprint/DDH,DDH
-Duel: Knights vs Dragons,Reprint/DDG,DDG
-Duel: Elspeth vs Tezzeret,Reprint/DDF,DDF
-Duel: Phyrexia vs Coalition,Reprint/DDE,PVC
-Duel: Garruk vs Liliana,Reprint/DDD,GVL
-Duel: Divine vs Demonic,Reprint/DDC,DVD
-Duel: Jace vs Chandra,Reprint/DD2,JVC
-Duel: Elves vs Goblins,Reprint/EVG,EVG
-
-From the Vault: Transform,Reprint/V17,V17
-From the Vault: Lore,Reprint/V16,V16
-From the Vault: Angels,Reprint/V15,V15
-From the Vault: Annihilation,Reprint/V14,V14
-From the Vault: Twenty,Reprint/V13,V13
-From the Vault: Realms,Reprint/V12,V12
-From the Vault: Legends,Reprint/V11,FVL
-From the Vault: Relics,Reprint/V10,FVR
-From the Vault: Exiled,Reprint/V09,FVE
-From the Vault: Dragons,Reprint/DRB,FVD
-
-Premium: Graveborn,Reprint/PD3,PD3
-Premium: Fire and Lightning,Reprint/PD2,PD2
-Premium: Slivers,Reprint/H09,PDS
-
-MTGO Masters Edition IV,Reprint/ME4,ME4
-MTGO Masters Edition III,Reprint/ME3,ME3
-MTGO Masters Edition II,Reprint/ME2,ME2
-MTGO Masters Edition,Reprint/MED,MED
-
-Chronicles,Reprint/CHR,CH
-
-Amonkhet Invocations,Reprint/MPSAKH,MPSAKH
-Kaladesh Inventions,Reprint/MPSKLD,MPSKLD
-Zendikar Expeditions,Reprint/EXP,EXP
-
-Planechase 2012 Planes,Planechase/Plane2012,Plane2012
-Planechase Planes,Planechase/Plane,Plane
-Nicol Bolas Schemes,Archenemy/SchemeNicolBolas,SchemeNicolBolas
-Archenemy Schemes,Archenemy/Scheme,Scheme
+Fifth Edition,Modern/5ED,5ED
+Forgotten Realms Commander,Modern/AFC,AFC
+Fourth Edition,Modern/4ED,4ED
+From the Vault: Angels,Modern/V15,V15
+From the Vault: Annihilation,Modern/V14,V14
+From the Vault: Dragons,Modern/DRB,DRB
+From the Vault: Exiled,Modern/V09,V09
+From the Vault: Legends,Modern/V11,V11
+From the Vault: Lore,Modern/V16,V16
+From the Vault: Realms,Modern/V12,V12
+From the Vault: Relics,Modern/V10,V10
+From the Vault: Transform,Modern/V17,V17
+From the Vault: Twenty,Modern/V13,V13
+Future Sight,Modern/FUT,FUT
+Game Night 2019,Modern/GN2,GN2
+Game Night,Modern/GNT,GNT
+Gatecrash,Modern/GTC,GTC
+Global Series Jiang Yanggu & Mu Yanling,Modern/GS1,GS1
+GRN Guild Kit,Modern/GK1,GK1
+Guildpact,Modern/GPT,GPT
+Guilds of Ravnica,Modern/GRN,GRN
+Happy Holidays,Modern/HHO,HHO
+Homelands,Modern/HML,HML
+Hour of Devastation,Modern/HOU,HOU
+Ice Age,Modern/ICE,ICE
+Iconic Masters,Modern/IMA,IMA
+Ikoria: Lair of Behemoths,Modern/IKO,IKO
+Innistrad,Modern/ISD,ISD
+Innistrad: Crimson Vow,Modern/VOW,VOW
+Innistrad: Midnight Hunt,Modern/MID,MID
+Invasion,Modern/INV,INV
+Ixalan,Modern/XLN,XLN
+Journey into Nyx,Modern/JOU,JOU
+Judgment,Modern/JUD,JUD
+Jumpstart,Modern/JMP,JMP
+Kaladesh Inventions,Modern/MPS,MPS
+Kaladesh,Modern/KLD,KLD
+Kaldheim Commander,Modern/KHC,KHC
+Kaldheim,Modern/KHM,KHM
+Khans of Tarkir,Modern/KTK,KTK
+Legends,Modern/LEG,LEG
+Legions,Modern/LGN,LGN
+Limited Edition Alpha,Modern/LEA,LEA
+Limited Edition Beta,Modern/LEB,LEB
+Lorwyn,Modern/LRW,LRW
+M19 Gift Pack,Modern/G18,G18
+Magic 2010,Modern/M10,M10
+Magic 2011,Modern/M11,M11
+Magic 2012,Modern/M12,M12
+Magic 2013,Modern/M13,M13
+Magic 2014,Modern/M14,M14
+Magic 2015,Modern/M15,M15
+Magic Online Avatars,Modern/PMOA,PMOA
+Magic Origins,Modern/ORI,ORI
+Masters 25,Modern/A25,A25
+Masters Edition II,Modern/ME2,ME2
+Masters Edition III,Modern/ME3,ME3
+Masters Edition IV,Modern/ME4,ME4
+Masters Edition,Modern/ME1,ME1
+Mercadian Masques,Modern/MMQ,MMQ
+Midnight Hunt Commander,Modern/MIC,MIC
+Mirage,Modern/MIR,MIR
+Mirrodin Besieged,Modern/MBS,MBS
+Mirrodin,Modern/MRD,MRD
+Modern Horizons 2,Modern/MH2,MH2
+Modern Horizons,Modern/MH1,MH1
+Modern Masters 2015,Modern/MM2,MM2
+Modern Masters 2017,Modern/MM3,MM3
+Modern Masters,Modern/MMA,MMA
+Morningtide,Modern/MOR,MOR
+Mystery Booster Playtest Cards 2019,Modern/CMB1,CMB1
+Mythic Edition,Modern/MED,MED
+Nemesis,Modern/NEM,NEM
+New Phyrexia,Modern/NPH,NPH
+Ninth Edition,Modern/9ED,9ED
+Oath of the Gatewatch,Modern/OGW,OGW
+Odyssey,Modern/ODY,ODY
+Onslaught,Modern/ONS,ONS
+Planar Chaos,Modern/PLC,PLC
+Planechase 2012 Planes,Modern/OPC2,OPC2
+Planechase 2012,Modern/PC2,PC2
+Planechase Anthology Planes,Modern/OPCA,OPCA
+Planechase Anthology,Modern/PCA,PCA
+Planechase Planes,Modern/OHOP,OHOP
+Planechase,Modern/HOP,HOP
+Planeshift,Modern/PLS,PLS
+Portal Second Age,Modern/P02,P02
+Portal Three Kingdoms,Modern/PTK,PTK
+Portal,Modern/POR,POR
+Premium Deck Series: Fire and Lightning,Modern/PD2,PD2
+Premium Deck Series: Graveborn,Modern/PD3,PD3
+Premium Deck Series: Slivers,Modern/H09,H09
+Promotional Planes,Modern/PHOP,PHOP
+Promotional Schemes,Modern/PARC,PARC
+Prophecy,Modern/PCY,PCY
+Ravnica Allegiance,Modern/RNA,RNA
+Ravnica: City of Guilds,Modern/RAV,RAV
+Return to Ravnica,Modern/RTR,RTR
+Revised Edition,Modern/3ED,3ED
+Rise of the Eldrazi,Modern/ROE,ROE
+Rivals of Ixalan,Modern/RIX,RIX
+RNA Guild Kit,Modern/GK2,GK2
+Saviors of Kamigawa,Modern/SOK,SOK
+Scars of Mirrodin,Modern/SOM,SOM
+Scourge,Modern/SCG,SCG
+Secret Lair Drop,Modern/SLD,SLD
+Seventh Edition,Modern/7ED,7ED
+Shadowmoor,Modern/SHM,SHM
+Shadows over Innistrad,Modern/SOI,SOI
+Shards of Alara,Modern/ALA,ALA
+Starter 1999,Modern/S99,S99
+Strixhaven Mystical Archive,Modern/STA,STA
+Strixhaven: School of Mages,Modern/STX,STX
+Stronghold,Modern/STH,STH
+Tempest,Modern/TMP,TMP
+Tenth Edition,Modern/10E,10E
+The Dark,Modern/DRK,DRK
+Theros Beyond Death,Modern/THB,THB
+Theros,Modern/THS,THS
+Throne of Eldraine,Modern/ELD,ELD
+Time Spiral Timeshifted,Modern/TSB,TSB
+Time Spiral,Modern/TSP,TSP
+Torment,Modern/TOR,TOR
+Ultimate Masters,Modern/UMA,UMA
+Unglued,Modern/UGL,UGL
+Unhinged,Modern/UNH,UNH
+Unlimited Edition,Modern/2ED,2ED
+Unsanctioned,Modern/UND,UND
+Unstable,Modern/UST,UST
+Urza's Destiny,Modern/UDS,UDS
+Urza's Legacy,Modern/ULG,ULG
+Urza's Saga,Modern/USG,USG
+Vanguard Series,Modern/PVAN,PVAN
+Vintage Masters,Modern/VMA,VMA
+Visions,Modern/VIS,VIS
+War of the Spark,Modern/WAR,WAR
+Weatherlight,Modern/WTH,WTH
+Welcome Deck 2016,Modern/W16,W16
+Welcome Deck 2017,Modern/W17,W17
+Worldwake,Modern/WWK,WWK
+Zendikar Expeditions,Modern/EXP,EXP
+Zendikar Rising Commander,Modern/ZNC,ZNC
+Zendikar Rising Expeditions,Modern/ZNE,ZNE
+Zendikar Rising,Modern/ZNR,ZNR
+Zendikar,Modern/ZEN,ZEN

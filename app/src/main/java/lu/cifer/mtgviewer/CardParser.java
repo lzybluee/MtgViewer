@@ -284,7 +284,7 @@ public class CardParser {
                     if (s.isEmpty() || s.startsWith("#")) {
                         continue;
                     }
-                    vector.add(s.replaceAll(" \\(.*\\)", "").split(","));
+                    vector.add(s.split(","));
                 }
                 reader.close();
                 SetList = new String[vector.size()][];
