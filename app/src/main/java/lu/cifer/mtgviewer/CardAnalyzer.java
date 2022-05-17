@@ -682,7 +682,7 @@ public class CardAnalyzer {
                 }
             }
         }
-        if (reprint.set.equals("Unhinged") || reprint.set.equals("Unglued")) {
+        if (reprint.picture.contains("Funny/")) {
             if (!card.name.equals("Plains") && !card.name.equals("Island")
                     && !card.name.equals("Swamp")
                     && !card.name.equals("Mountain")
@@ -1214,9 +1214,6 @@ public class CardAnalyzer {
                 }
             }
             for (ReprintInfo info : reprints) {
-                if (info.set.equals("Media Inserts")) {
-                    continue;
-                }
                 str.append(info + "\n");
             }
             Vector<String> flavors = new Vector<>();

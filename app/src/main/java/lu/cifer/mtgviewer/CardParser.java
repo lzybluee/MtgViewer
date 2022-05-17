@@ -28,39 +28,17 @@ public class CardParser {
     }
 
     public static String getCardInfo(String url, boolean justRule) {
-        String setInfo = "";
         boolean isModern = false;
 
         File file = null;
-        int idx = 0;
         for (String[] strs : SetList) {
-            int index;
-            if ((index = url.lastIndexOf(strs[1] + "/")) >= 0 && !url.contains("/Misc/")) {
-                if (url.substring(index + strs[1].length() + 1).contains("/")
-                        && strs.length >= 4) {
-                    file = loadOracle(strs[3]);
-                    setInfo = strs[3].toLowerCase();
-                    if (strs[1].startsWith("Modern/")) {
-                        isModern = true;
-                    }
-                } else {
-                    file = loadOracle(strs[2]);
-                    setInfo = strs[2].toLowerCase();
-                    if (strs[1].startsWith("Modern/")) {
-                        isModern = true;
-                    }
+            if (url.lastIndexOf(strs[1] + "/") >= 0 && !url.contains("/Misc/")) {
+                file = loadOracle(strs[2]);
+                if (strs[1].startsWith("Modern/")) {
+                    isModern = true;
                 }
                 break;
             }
-            idx++;
-        }
-
-        if (url.contains("/Conspiracy/")) {
-            setInfo = "cns";
-        }
-
-        if (url.contains("/Special/")) {
-            return url;
         }
 
         if (file == null) {
@@ -251,29 +229,11 @@ public class CardParser {
                     .replaceAll("</Flavor>", "]").replaceAll("<[^>]+>", "");
         }
 
-        while (card.endsWith("\n")) {
-            card = card.substring(0, card.length() - 1);
-        }
-
-        return card;
+        return card.trim();
     }
 
     public static void initOracle() {
-        File file = new File(MainActivity.SDPath + "/MTG/Script/oracle.txt");
-        if (file.exists()) {
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(file));
-                String s = reader.readLine();
-                if (new File(MainActivity.SDPath + "/MTG/" + s).exists()) {
-                    oracleFolder = s;
-                }
-                reader.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        file = new File(MainActivity.SDPath + "/MTG/Script/list.txt");
+        File file = new File(MainActivity.SDPath + "/MTG/Script/list.txt");
         if (file.exists()) {
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(file));

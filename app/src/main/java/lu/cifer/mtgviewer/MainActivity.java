@@ -62,6 +62,7 @@ public class MainActivity extends Activity {
     String mProcessSet;
     int mLoadCards;
     boolean mStop;
+    boolean mChinese = false;
 
     public static List<File> ListFiles(File file) {
         List<File> files = Arrays.asList(file.listFiles());
@@ -331,22 +332,16 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(Menu.NONE, 0, 1, "MTG");
+        menu.add(Menu.NONE, 0, 1, "All");
         menu.add(Menu.NONE, 1, 2, "Modern");
         menu.add(Menu.NONE, 2, 3, "Search");
-        menu.add(Menu.NONE, 3, 4, "Comment");
+        menu.add(Menu.NONE, 3, 4, "Chinese");
         menu.add(Menu.NONE, 4, 5, "Sort");
-        menu.add(Menu.NONE, 5, 6, "All");
-        menu.add(Menu.NONE, 6, 7, "Select");
-        menu.add(Menu.NONE, 7, 8, "Done");
-        menu.add(Menu.NONE, 8, 9, "Bundle");
-        menu.add(Menu.NONE, 9, 10, "Ancient");
-        menu.add(Menu.NONE, 10, 11, "Token");
-        menu.add(Menu.NONE, 11, 12, "Promo");
-        menu.add(Menu.NONE, 12, 13, "Special");
-        menu.add(Menu.NONE, 13, 14, "Vanguard");
+        menu.add(Menu.NONE, 5, 6, "Select");
+        menu.add(Menu.NONE, 6, 7, "Done");
+        menu.add(Menu.NONE, 7, 8, "Bundle");
         for (int i = 0; i < CardParser.SetList.length; i++) {
-            menu.add(Menu.NONE, i + 14, i + 15, CardParser.SetList[i][0]);
+            menu.add(Menu.NONE, i + 8, i + 9, CardParser.SetList[i][0]);
         }
         for (int i = 0; i < mMiscSets.length; i++) {
             menu.add(Menu.NONE, i + CardParser.SetList.length + 14, i + CardParser.SetList.length + 15,
@@ -366,24 +361,30 @@ public class MainActivity extends Activity {
         int n = item.getItemId();
 
         if (n == 0) {
-            init("Ancient|Modern|Commander|Planechase/PC2|Conspiracy|Starter|Other");
+            init("Ancient|Modern|Commander|Supplemental|Starter|Reprint|Funny|Special");
         } else if (n == 1) {
             init("Modern");
         } else if (n == 2) {
             Intent intent = new Intent(MainActivity.this, SearchActivity.class);
             startActivity(intent);
         } else if (n == 3) {
-            openUrl();
+            mChinese = !mChinese;
+            if(mChinese) {
+                CardParser.oracleFolder = "Chinese";
+                Toast.makeText(this, "Chinese", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                CardParser.oracleFolder = "Oracle";
+                Toast.makeText(this, "Oracle", Toast.LENGTH_SHORT).show();
+            }
         } else if (n == 4) {
             mSort = (mSort + 1) % 3;
             CardAnalyzer.setReverse(mSort == SORT_DESCEND);
             Toast.makeText(this, SORT_DESC[mSort], Toast.LENGTH_SHORT).show();
         } else if (n == 5) {
-            init("Ancient|Modern|Commander|Planechase|Archenemy|Conspiracy|Starter|Other|Unset|Reprint");
-        } else if (n == 6) {
             mSelect = true;
             showSelectedSets();
-        } else if (n == 7) {
+        } else if (n == 6) {
             if (!mSelect) {
                 mSets = "";
                 saveSelectedSets(mSets);
@@ -393,22 +394,12 @@ public class MainActivity extends Activity {
                 saveSelectedSets(mSets);
                 init(mSets);
             }
-        } else if (n == 8) {
+        } else if (n == 7) {
             CardBundle.showDialog(this);
-        } else if (n == 9) {
-            init("Ancient");
-        } else if (n == 10) {
-            init("Token");
-        } else if (n == 11) {
-            init("Promo");
-        } else if (n == 12) {
-            init("Special");
-        } else if (n == 13) {
-            init("Vanguard");
-        } else if (n <= 13 + CardParser.SetList.length) {
-            init(CardParser.SetList[n - 14][1]);
+        } else if (n <= 7 + CardParser.SetList.length) {
+            init(CardParser.SetList[n - 8][1]);
         } else {
-            init(mMiscSets[n - 14 - CardParser.SetList.length]);
+            init(mMiscSets[n - 8 - CardParser.SetList.length]);
         }
 
         return false;
