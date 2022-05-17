@@ -14,7 +14,7 @@ types -> StringArray
 subTypes -> StringArray
 superTypes -> StringArray
 mana -> String
-converted -> Integer
+value -> Integer
 colorIndicator -> String
 power -> String
 toughness -> String
@@ -34,7 +34,6 @@ votes -> Integer
 set -> String
 code -> String
 folder -> String
-altCode -> String
 number -> String
 flavor -> String
 artist -> String
@@ -206,7 +205,7 @@ t = tribal
 
 m = multicolor
 
-cmc = converted
+cmc = value
 
 permanent = a or c or e or l or p
 pm = permanent

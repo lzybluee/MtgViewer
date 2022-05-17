@@ -558,19 +558,17 @@ public class CardAnalyzer {
                 card.mana = entry;
                 card.value = 0;
 
-                for (String mana : entry.split("\\{|\\}")) {
-                    if(!mana.isEmpty()) {
-                        if (mana.matches("\\d+")) {
-                            card.value += Integer.parseInt(mana);
-                        } else if(mana.matches("[WUBRGCS]")) {
-                            card.value += 1;
-                        } else if(mana.matches("[WUBRG]/[WUBRGP]")) {
-                            card.value += 1;
-                        } else if(mana.matches("[XYZ]")) {
-                            card.value += 0;
-                        } else if(mana.matches("2/[WUBRGP]")) {
-                            card.value += 2;
-                        }
+                for (String mana : entry.substring(1).split("[\\{\\}]+")) {
+                    if (mana.matches("\\d+")) {
+                        card.value += Integer.parseInt(mana);
+                    } else if(mana.matches("[WUBRGCS]")) {
+                        card.value += 1;
+                    } else if(mana.matches("[WUBRG]/[WUBRGP]")) {
+                        card.value += 1;
+                    } else if(mana.matches("[XYZ]")) {
+                        card.value += 0;
+                    } else if(mana.matches("2/[WUBRGP]")) {
+                        card.value += 2;
                     }
                 }
             }
