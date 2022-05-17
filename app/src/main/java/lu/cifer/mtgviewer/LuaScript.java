@@ -25,7 +25,7 @@ public class LuaScript {
         luaPushStringArray("subTypes", card.subTypes.toArray(new String[card.subTypes.size()]));
         luaPushStringArray("superTypes", card.superTypes.toArray(new String[card.superTypes.size()]));
         luaPushString("mana", card.mana);
-        luaPushInteger("converted", card.converted);
+        luaPushInteger("value", card.value);
         luaPushString("colorIndicator", card.colorIndicator);
         luaPushString("power", card.power);
         luaPushString("toughness", card.toughness);
@@ -45,7 +45,6 @@ public class LuaScript {
         luaPushString("set", reprint.set);
         luaPushString("code", reprint.code);
         luaPushString("folder", reprint.folder);
-        luaPushString("altCode", reprint.altCode);
         luaPushString("number", reprint.number);
         luaPushString("flavor", reprint.flavor);
         luaPushString("artist", reprint.artist);

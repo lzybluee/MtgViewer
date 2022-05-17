@@ -79,14 +79,14 @@ public class CardAnalyzer {
         @Override
         public int compare(ReprintInfo left, ReprintInfo right) {
             int ret;
-            if (left.card.converted == right.card.converted) {
+            if (left.card.value == right.card.value) {
                 if (left.order == right.order) {
                     ret = left.formatedNumber.compareTo(right.formatedNumber);
                 } else {
                     ret = left.order - right.order;
                 }
             } else {
-                ret = left.card.converted - right.card.converted;
+                ret = left.card.value - right.card.value;
             }
             return reverse ? -ret : ret;
         }
@@ -118,14 +118,14 @@ public class CardAnalyzer {
             int leftColorMask = getColorMask(left.card);
             int rightColorMask = getColorMask(right.card);
             if (leftColorMask == rightColorMask) {
-                if (left.card.converted == right.card.converted) {
+                if (left.card.value == right.card.value) {
                     if (left.order == right.order) {
                         ret = left.formatedNumber.compareTo(right.formatedNumber);
                     } else {
                         ret = left.order - right.order;
                     }
                 } else {
-                    ret = left.card.converted - right.card.converted;
+                    ret = left.card.value - right.card.value;
                 }
             } else {
                 ret = leftColorMask - rightColorMask;
@@ -408,11 +408,9 @@ public class CardAnalyzer {
                     break;
                 }
                 progress++;
-                for (int i = 2; i < s.length; i++) {
-                    setOrder.add(s[i]);
-                    processSet(new File(MainActivity.SDPath + "/MTG/" + CardParser.oracleFolder
-                            + "/MtgOracle_" + s[i] + ".txt"));
-                }
+                setOrder.add(s[2]);
+                processSet(new File(MainActivity.SDPath + "/MTG/" + CardParser.oracleFolder
+                        + "/MtgOracle_" + s[2] + ".txt"));
             }
         }
 
@@ -557,13 +555,22 @@ public class CardAnalyzer {
             }
         } else {
             if (entry != null) {
-                pattern = Pattern.compile("([^( ]+)( \\(([^)]+)\\))?");
-                matcher = pattern.matcher(entry);
+                card.mana = entry;
+                card.value = 0;
 
-                if (matcher.find()) {
-                    card.mana = matcher.group(1);
-                    if (matcher.group(3) != null) {
-                        card.converted = (int) Float.parseFloat(matcher.group(3));
+                for (String mana : entry.split("\\{|\\}")) {
+                    if(!mana.isEmpty()) {
+                        if (mana.matches("\\d+")) {
+                            card.value += Integer.parseInt(mana);
+                        } else if(mana.matches("[WUBRGCS]")) {
+                            card.value += 1;
+                        } else if(mana.matches("[WUBRG]/[WUBRGP]")) {
+                            card.value += 1;
+                        } else if(mana.matches("[XYZ]")) {
+                            card.value += 0;
+                        } else if(mana.matches("2/[WUBRGP]")) {
+                            card.value += 2;
+                        }
                     }
                 }
             }
@@ -682,20 +689,11 @@ public class CardAnalyzer {
                 }
             }
         }
-        if (reprint.picture.contains("Funny/")) {
-            if (!card.name.equals("Plains") && !card.name.equals("Island")
-                    && !card.name.equals("Swamp")
-                    && !card.name.equals("Mountain")
-                    && !card.name.equals("Forest")) {
-                card.isFun = true;
-            }
-        }
 
         for (String[] strs : CardParser.SetList) {
             if (reprint.set.equals(strs[0])) {
                 reprint.code = strs[2];
                 reprint.folder = strs[1];
-                reprint.altCode = strs[2];
                 break;
             }
         }
@@ -708,7 +706,16 @@ public class CardAnalyzer {
 
         reprint.picture = reprint.folder + "/" + reprint.formatedNumber + ".jpg";
 
-        reprint.order = setOrder.indexOf(reprint.altCode);
+        if (reprint.picture.contains("Funny/")) {
+            if (!card.name.equals("Plains") && !card.name.equals("Island")
+                    && !card.name.equals("Swamp")
+                    && !card.name.equals("Mountain")
+                    && !card.name.equals("Forest")) {
+                card.isFun = true;
+            }
+        }
+
+        reprint.order = setOrder.indexOf(reprint.code);
 
         reprint.card = card;
         card.reprints.add(reprint);
@@ -1035,7 +1042,6 @@ public class CardAnalyzer {
         public String set;
         public String code;
         public String folder;
-        public String altCode;
         public String number;
         public String flavor;
         public String artist;
@@ -1076,7 +1082,7 @@ public class CardAnalyzer {
         public Vector<String> superTypes;
 
         public String mana;
-        public int converted;
+        public int value;
         public String colorIndicator;
 
         public String power;
@@ -1163,7 +1169,7 @@ public class CardAnalyzer {
             }
             str.append("\n");
             if (mana != null) {
-                str.append(mana + " (" + converted + ")" + "\n");
+                str.append(mana + " (" + value + ")" + "\n");
             }
             if (colorIndicator != null) {
                 str.append("(Color Indicator: " + colorIndicator + ")\n");
