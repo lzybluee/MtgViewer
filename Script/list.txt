@@ -1,3 +1,5 @@
+Streets of New Capenna,Modern/SNC,SNC
+Kamigawa: Neon Dynasty,Modern/NEO,NEO
 Innistrad: Crimson Vow,Modern/VOW,VOW
 Innistrad: Midnight Hunt,Modern/MID,MID
 Adventures in the Forgotten Realms,Modern/AFR,AFR

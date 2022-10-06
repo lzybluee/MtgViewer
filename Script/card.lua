@@ -51,7 +51,7 @@ function table_contains_case(t, element)
 function table_contains(t, element)
 function string_contains_case(s, str)
 function string_contains(s, str)
-function table_contains_case(t, str)
+function table_contains_str_case(t, str)
 function table_contains_str(t, str)
 ]]
 
@@ -206,6 +206,7 @@ t = tribal
 m = multicolor
 
 cmc = value
+mv = value
 
 permanent = a or c or e or l or p
 pm = permanent

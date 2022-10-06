@@ -38,7 +38,7 @@ function string_contains(s, str)
 	end
 end
 
-function table_contains_case(t, str)
+function table_contains_str_case(t, str)
 	if(not t) then
 		return false
 	end
