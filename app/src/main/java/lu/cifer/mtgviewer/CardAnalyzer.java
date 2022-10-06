@@ -40,7 +40,7 @@ public class CardAnalyzer {
     static int foundCards;
     static boolean reverse;
     static int sortType = 0;
-    static String[] sortName = new String[]{"Random", "Edition", "Name", "Cmc", "Color", "Rating"};
+    static String[] sortName = new String[]{"Random", "Edition", "Name", "Value", "Color"};
     static boolean stop;
     static Vector<ReprintInfo> resultCards;
     static String lastCode;
@@ -980,7 +980,7 @@ public class CardAnalyzer {
             case "Name":
                 Collections.sort(cards, nameComparator);
                 break;
-            case "Cmc":
+            case "Value":
                 Collections.sort(cards, cmcComparator);
                 break;
             case "Color":

@@ -182,15 +182,12 @@ public class SearchActivity extends Activity {
                                     mTimer.cancel();
                                 }
 
-                                ((Button) findViewById(R.id.help_button)).setText("?");
-
                                 switch (ret) {
                                     case 0:
                                         mOutput.setText("Found No Card!");
                                         return;
                                     case -1:
                                         mOutput.setText(LuaScript.getOutput());
-                                        ((Button) findViewById(R.id.help_button)).setText("!");
                                         return;
                                     case -2:
                                         mOutput.setText("Empty Result!");
@@ -358,6 +355,19 @@ public class SearchActivity extends Activity {
         }
     }
 
+    private void addFuncButton(int id) {
+        final Button button = (Button) findViewById(id);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = mCode.getText().toString();
+                text += button.getHint();
+                mCode.setText(text);
+                mCode.setSelection(text.length());
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -433,73 +443,96 @@ public class SearchActivity extends Activity {
         cleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mLastCode = mCode.getText().toString();
-                mCode.setText("");
+                String text = mCode.getText().toString();
+                text = text.substring(0, text.length() - 1);
+                mCode.setText(text);
+                mCode.setSelection(text.length());
             }
         });
         cleanButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (!mLastCode.isEmpty()) {
-                    mCode.setText(mLastCode);
-                }
-                return true;
-            }
-        });
-
-        final Button helpButton = (Button) findViewById(R.id.help_button);
-        helpButton.setText("?");
-        helpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String picture = CardAnalyzer.getWrongCard();
-                if (picture != null) {
-                    Intent intent = new Intent(SearchActivity.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    openFile("/MTG/Script/card.lua");
-                }
-            }
-        });
-        helpButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                openFile("/MTG/Script/global.lua");
-                return true;
-            }
-        });
-
-        final Button specialButton = (Button) findViewById(R.id.special_button);
-        specialButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text = mCode.getText().toString().trim();
-                mCode.setText(text);
-                saveCode(text);
-                searchSpecial(mCode.getText().toString(), false);
-            }
-        });
-        specialButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                String text = mCode.getText().toString().trim();
-                mCode.setText(text);
-                saveCode(text);
-                searchSpecial(mCode.getText().toString(), true);
+                mCode.setText("");
                 return true;
             }
         });
 
         final Button singleButton = (Button) findViewById(R.id.single_button);
-        singleButton.setText(CardAnalyzer.getSingleMode() ? "1!" : "1+");
+        singleButton.setText(CardAnalyzer.getSingleMode() ? "Unique" : "All");
         singleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean single = CardAnalyzer.switchSingleMode();
-                singleButton.setText(single ? "1!" : "1+");
+                singleButton.setText(single ? "Unique" : "All");
             }
         });
+
+        int[] buttons = {
+                R.id.search_text_button,
+                R.id.return_button,
+                R.id.space_button,
+                R.id.left_button,
+                R.id.right_button,
+                R.id.and_button,
+                R.id.or_button,
+                R.id.not_button,
+                R.id.equal_button,
+                R.id.greater_button,
+                R.id.lesser_button,
+                R.id.greater_equal_button,
+                R.id.lesser_equal_button,
+                R.id.not_equal_button,
+                R.id.quote_button,
+                R.id.white_button,
+                R.id.blue_button,
+                R.id.black_button,
+                R.id.red_button,
+                R.id.green_button,
+                R.id.colors_button,
+                R.id.multicolor_button,
+                R.id.text_button,
+                R.id.mana_button,
+                R.id.value_button,
+                R.id.name_button,
+                R.id.flavor_button,
+                R.id.creature_button,
+                R.id.instant_button,
+                R.id.sorcery_button,
+                R.id.enchantment_button,
+                R.id.land_button,
+                R.id.artifact_button,
+                R.id.planeswalker_button,
+                R.id.power_button,
+                R.id.toughness_button,
+                R.id.loyalty_button,
+                R.id.pn_button,
+                R.id.tn_button,
+                R.id.ln_button,
+                R.id.hasname_button,
+                R.id.hastext_button,
+                R.id.containstype_button,
+                R.id.legendary_button,
+                R.id.cw_button,
+                R.id.cu_button,
+                R.id.cb_button,
+                R.id.cr_button,
+                R.id.cg_button,
+                R.id.common_button,
+                R.id.uncommon_button,
+                R.id.Rare_button,
+                R.id.mythic_button,
+                R.id.part_index_button,
+                R.id.double_button,
+                R.id.split_button,
+                R.id.set_button,
+                R.id.code_button,
+                R.id.artist_button,
+                R.id.watermark_button,
+                R.id.string_contains_button,
+                R.id.string_contains_case_button,
+        };
+        for(int button : buttons) {
+            addFuncButton(button);
+        }
     }
 }

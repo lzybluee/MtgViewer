@@ -35,22 +35,10 @@
             android:text="1+" />
 
         <Button
-            android:id="@+id/special_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Spec" />
-
-        <Button
             android:id="@+id/clean_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Clean" />
-
-        <Button
-            android:id="@+id/help_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="\?" />
 
     </LinearLayout>
 
@@ -66,5 +54,530 @@
         android:hint="Code here"
         android:ems="10"
         android:id="@+id/code" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/search_text_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" @ "
+            android:hint="@" />
+
+        <Button
+            android:id="@+id/return_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="return"
+            android:hint="return " />
+
+        <Button
+            android:id="@+id/space_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="space"
+            android:hint=" " />
+
+        <Button
+            android:id="@+id/left_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" ( "
+            android:hint="(" />
+
+        <Button
+            android:id="@+id/right_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" ) "
+            android:hint=")" />
+
+        <Button
+            android:id="@+id/and_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="and"
+            android:hint=" and " />
+
+        <Button
+            android:id="@+id/or_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="or"
+            android:hint=" or "/>
+
+        <Button
+            android:id="@+id/not_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="not"
+            android:hint="not " />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/equal_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" == "
+            android:hint=" == " />
+
+        <Button
+            android:id="@+id/greater_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" &gt; "
+            android:hint=" &gt; " />
+
+        <Button
+            android:id="@+id/lesser_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" &lt; "
+            android:hint=" &lt; " />
+
+        <Button
+            android:id="@+id/greater_equal_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" &gt;= "
+            android:hint=" &gt;= " />
+
+        <Button
+            android:id="@+id/lesser_equal_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" &lt;= "
+            android:hint=" &lt;= " />
+
+        <Button
+            android:id="@+id/not_equal_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" != "
+            android:hint=" != " />
+
+        <Button
+            android:id="@+id/quote_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" &quot; "
+            android:hint="&quot;" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/white_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="White"
+            android:hint="w" />
+
+        <Button
+            android:id="@+id/blue_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Blue"
+            android:hint="u" />
+
+        <Button
+            android:id="@+id/black_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Black"
+            android:hint="b" />
+
+        <Button
+            android:id="@+id/red_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Red"
+            android:hint="r" />
+
+        <Button
+            android:id="@+id/green_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Green"
+            android:hint="g" />
+
+        <Button
+            android:id="@+id/colors_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Colors"
+            android:hint="colors" />
+
+        <Button
+            android:id="@+id/multicolor_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="M"
+            android:hint="m" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/text_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:hint="text" />
+
+        <Button
+            android:id="@+id/mana_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mana"
+            android:hint="mana" />
+
+        <Button
+            android:id="@+id/value_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Value"
+            android:hint="value" />
+
+        <Button
+            android:id="@+id/name_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:hint="name" />
+
+        <Button
+            android:id="@+id/flavor_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Flavor"
+            android:hint="flavor" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/creature_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Creature"
+            android:hint="c" />
+
+        <Button
+            android:id="@+id/instant_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Instant"
+            android:hint="i" />
+
+        <Button
+            android:id="@+id/sorcery_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sorcery"
+            android:hint="s" />
+
+        <Button
+            android:id="@+id/enchantment_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enchantment"
+            android:hint="e" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/land_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Land"
+            android:hint="l" />
+
+        <Button
+            android:id="@+id/artifact_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Artifact"
+            android:hint="a" />
+
+        <Button
+            android:id="@+id/planeswalker_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Planeswalker"
+            android:hint="p" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/power_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Power"
+            android:hint="power" />
+
+        <Button
+            android:id="@+id/toughness_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Toughness"
+            android:hint="toughness" />
+
+        <Button
+            android:id="@+id/loyalty_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loyalty"
+            android:hint="loyalty" />
+
+        <Button
+            android:id="@+id/pn_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PN"
+            android:hint="pn" />
+
+        <Button
+            android:id="@+id/tn_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TN"
+            android:hint="tn" />
+
+        <Button
+            android:id="@+id/ln_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LN"
+            android:hint="ln" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/hasname_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="hasname"
+            android:hint="hasname(" />
+
+        <Button
+            android:id="@+id/hastext_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="hastext"
+            android:hint="hastext(" />
+
+        <Button
+            android:id="@+id/containstype_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="containstype"
+            android:hint="containstype(" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/legendary_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Legendary"
+            android:hint="legend" />
+
+        <Button
+            android:id="@+id/cw_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CW"
+            android:hint="cw"/>
+
+        <Button
+            android:id="@+id/cu_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CU"
+            android:hint="cu"/>
+
+        <Button
+            android:id="@+id/cb_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CB"
+            android:hint="cb"/>
+
+        <Button
+            android:id="@+id/cr_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CR"
+            android:hint="cr"/>
+
+        <Button
+            android:id="@+id/cg_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CG"
+            android:hint="cg"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/common_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Common"
+            android:hint="common" />
+
+        <Button
+            android:id="@+id/uncommon_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Uncommon"
+            android:hint="uncommon" />
+
+        <Button
+            android:id="@+id/Rare_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rare"
+            android:hint="rare" />
+
+        <Button
+            android:id="@+id/mythic_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mythic"
+            android:hint="mythic" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/part_index_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Part Index"
+            android:hint="partIndex" />
+
+        <Button
+            android:id="@+id/double_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Double"
+            android:hint="double" />
+
+        <Button
+            android:id="@+id/split_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Split"
+            android:hint="split" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/set_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set"
+            android:hint="set" />
+
+        <Button
+            android:id="@+id/code_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Code"
+            android:hint="code" />
+
+        <Button
+            android:id="@+id/artist_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Artist"
+            android:hint="artist" />
+
+        <Button
+            android:id="@+id/watermark_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Watermark"
+            android:hint="watermark" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/string_contains_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="string_contains"
+            android:hint="string_contains" />
+
+        <Button
+            android:id="@+id/string_contains_case_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="string_contains_case"
+            android:hint="string_contains_case" />
+
+    </LinearLayout>
 
 </LinearLayout>
