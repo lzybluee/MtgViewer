@@ -143,6 +143,13 @@
             android:hint=" == " />
 
         <Button
+            android:id="@+id/greater_equal_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" &gt;= "
+            android:hint=" &gt;= " />
+
+        <Button
             android:id="@+id/greater_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -155,13 +162,6 @@
             android:layout_height="wrap_content"
             android:text=" &lt; "
             android:hint=" &lt; " />
-
-        <Button
-            android:id="@+id/greater_equal_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" &gt;= "
-            android:hint=" &gt;= " />
 
         <Button
             android:id="@+id/lesser_equal_button"
