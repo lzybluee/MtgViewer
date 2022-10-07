@@ -234,6 +234,26 @@ public class SearchActivity extends Activity {
             uniqueButton.setText(single ? "Unique" : "All");
         });
 
+        final Button otherButton = findViewById(R.id.other_button);
+        otherButton.setText(CardAnalyzer.getIncludeOther() ? "Other" : "Face");
+        otherButton.setOnClickListener(view -> {
+            boolean other = CardAnalyzer.switchIncludeOther();
+            otherButton.setText(other ? "Other" : "Face");
+        });
+
+        final Button cleanButton = findViewById(R.id.clear_button);
+        cleanButton.setOnClickListener(view -> {
+            String text = mCode.getText().toString();
+            text = text.substring(0, text.length() - 1);
+            mCode.setText(text);
+            mCode.setSelection(text.length());
+        });
+        cleanButton.setOnLongClickListener(view -> {
+            mCode.setText("");
+            return true;
+        });
+
+
         final Button helpButton = findViewById(R.id.help_button);
         helpButton.setOnClickListener(view -> new AlertDialog.Builder(SearchActivity.this)
                 .setTitle("Help")
@@ -286,18 +306,6 @@ public class SearchActivity extends Activity {
                         "function table_contains_str_case(t, str)\n" +
                         "function table_contains(t, element)\n" +
                         "function table_contains_case(t, element)").show());
-
-        final Button cleanButton = findViewById(R.id.clear_button);
-        cleanButton.setOnClickListener(view -> {
-            String text = mCode.getText().toString();
-            text = text.substring(0, text.length() - 1);
-            mCode.setText(text);
-            mCode.setSelection(text.length());
-        });
-        cleanButton.setOnLongClickListener(view -> {
-            mCode.setText("");
-            return true;
-        });
 
         int[] buttons = {
                 R.id.search_name_button,

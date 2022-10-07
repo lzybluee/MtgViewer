@@ -45,6 +45,7 @@ public class CardAnalyzer {
     static Vector<ReprintInfo> resultCards;
     static String lastCode;
     static boolean unique = true;
+    static boolean includeOther = false;
     static boolean showResults = false;
 
     static Comparator<ReprintInfo> editionComparator = new Comparator<ReprintInfo>() {
@@ -221,6 +222,15 @@ public class CardAnalyzer {
     public static boolean switchUniqueMode() {
         unique = !unique;
         return unique;
+    }
+
+    public static boolean getIncludeOther() {
+        return includeOther;
+    }
+
+    public static boolean switchIncludeOther() {
+        includeOther = !includeOther;
+        return includeOther;
     }
 
     public static boolean isReverse() {
@@ -827,7 +837,7 @@ public class CardAnalyzer {
         return ret;
     }
 
-    private static boolean hasWrongCard(ReprintInfo reprint, String script, Vector<ReprintInfo> cards) {
+    private static boolean checkCard(ReprintInfo reprint, String script, Vector<ReprintInfo> cards) {
         progress++;
         int result;
 
@@ -844,9 +854,9 @@ public class CardAnalyzer {
             wrongCard = reprint.picture;
             results = new String[]{wrongCard};
             showResults = true;
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     public static int searchCard(String script, boolean searchResult) {
@@ -882,7 +892,7 @@ public class CardAnalyzer {
                     if (stop) {
                         break;
                     }
-                    if (hasWrongCard(reprint, script, cards)) {
+                    if (!checkCard(reprint, script, cards)) {
                         return -1;
                     }
                 }
@@ -894,7 +904,7 @@ public class CardAnalyzer {
                     CardInfo card = cardDatabase.get(name);
                     if (card != null) {
                         for (ReprintInfo reprint : card.reprints) {
-                            if (hasWrongCard(reprint, script, cards)) {
+                            if (!checkCard(reprint, script, cards)) {
                                 return -1;
                             }
                         }
@@ -967,6 +977,30 @@ public class CardAnalyzer {
         }
 
         exclude = cards.size() - results.length;
+
+        if (includeOther) {
+            Vector<String> whole = new Vector<>();
+            for (String result : results) {
+                if (result.contains("a.jpg")) {
+                    if (!whole.contains(result)) {
+                        whole.add(result);
+                        whole.add(result.replace("a.jpg", "b.jpg"));
+                    }
+                } else if (result.contains("b.jpg")) {
+                    if (!whole.contains(result)) {
+                        whole.add(result);
+                        whole.add(result.replace("b.jpg", "a.jpg"));
+                    }
+                } else {
+                    whole.add(result);
+                }
+            }
+            results = new String[whole.size()];
+
+            for (int i = 0; i < results.length; i++) {
+                results[i] = whole.get(i);
+            }
+        }
 
         showResults = true;
         return results.length;

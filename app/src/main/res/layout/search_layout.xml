@@ -32,19 +32,25 @@
             android:id="@+id/unique_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1+" />
+            android:text="Unique" />
 
         <Button
-            android:id="@+id/help_button"
+            android:id="@+id/other_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Help" />
+            android:text="Face" />
 
         <Button
             android:id="@+id/clear_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Clear" />
+
+        <Button
+            android:id="@+id/help_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="?" />
 
     </LinearLayout>
 
