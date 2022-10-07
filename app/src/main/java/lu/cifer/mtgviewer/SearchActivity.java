@@ -169,12 +169,19 @@ public class SearchActivity extends Activity {
     private void addFuncButton(int id) {
         final Button button = findViewById(id);
         button.setOnClickListener(view -> {
-            int cursor = mCode.getSelectionEnd();
+            int cursorStart = mCode.getSelectionStart();
+            int cursorEnd = mCode.getSelectionEnd();
             String text = mCode.getText().toString();
             String code = button.getHint().toString();
-            text = text.substring(0, cursor) + code + text.substring(cursor);
-            mCode.setText(text);
-            mCode.setSelection(cursor + code.length());
+            if (cursorStart == cursorEnd) {
+                text = text.substring(0, cursorEnd) + code + text.substring(cursorEnd);
+                mCode.setText(text);
+                mCode.setSelection(cursorEnd + code.length());
+            } else {
+                text = text.substring(0, cursorStart) + code + text.substring(cursorEnd);
+                mCode.setText(text);
+                mCode.setSelection(cursorStart + code.length());
+            }
         });
     }
 
@@ -245,12 +252,19 @@ public class SearchActivity extends Activity {
 
         final Button cleanButton = findViewById(R.id.clear_button);
         cleanButton.setOnClickListener(view -> {
-            int cursor = mCode.getSelectionEnd();
-            if (cursor > 0) {
-                String text = mCode.getText().toString();
-                text = text.substring(0, cursor - 1) + text.substring(cursor);
+            int cursorStart = mCode.getSelectionStart();
+            int cursorEnd = mCode.getSelectionEnd();
+            String text = mCode.getText().toString();
+            if (cursorStart == cursorEnd) {
+                if (cursorEnd > 0) {
+                    text = text.substring(0, cursorEnd - 1) + text.substring(cursorEnd);
+                    mCode.setText(text);
+                    mCode.setSelection(cursorEnd - 1);
+                }
+            } else {
+                text = text.substring(0, cursorStart) + text.substring(cursorEnd);
                 mCode.setText(text);
-                mCode.setSelection(cursor - 1);
+                mCode.setSelection(cursorStart);
             }
         });
         cleanButton.setOnLongClickListener(view -> {
