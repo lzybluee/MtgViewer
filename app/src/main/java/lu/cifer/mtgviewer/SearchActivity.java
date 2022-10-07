@@ -169,10 +169,12 @@ public class SearchActivity extends Activity {
     private void addFuncButton(int id) {
         final Button button = findViewById(id);
         button.setOnClickListener(view -> {
+            int cursor = mCode.getSelectionEnd();
             String text = mCode.getText().toString();
-            text += button.getHint();
+            String code = button.getHint().toString();
+            text = text.substring(0, cursor) + code + text.substring(cursor);
             mCode.setText(text);
-            mCode.setSelection(text.length());
+            mCode.setSelection(cursor + code.length());
         });
     }
 
@@ -243,10 +245,13 @@ public class SearchActivity extends Activity {
 
         final Button cleanButton = findViewById(R.id.clear_button);
         cleanButton.setOnClickListener(view -> {
-            String text = mCode.getText().toString();
-            text = text.substring(0, text.length() - 1);
-            mCode.setText(text);
-            mCode.setSelection(text.length());
+            int cursor = mCode.getSelectionEnd();
+            if (cursor > 0) {
+                String text = mCode.getText().toString();
+                text = text.substring(0, cursor - 1) + text.substring(cursor);
+                mCode.setText(text);
+                mCode.setSelection(cursor - 1);
+            }
         });
         cleanButton.setOnLongClickListener(view -> {
             mCode.setText("");
