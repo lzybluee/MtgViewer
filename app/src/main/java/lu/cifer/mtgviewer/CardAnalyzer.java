@@ -442,11 +442,9 @@ public class CardAnalyzer {
                         case "KHM":
                         case "STX":
                             card.isModalDoubleFaced = true;
-                            card.isDoubleFaced = true;
                             otherCard = cardDatabase.get(entry);
                             if (otherCard != null) {
                                 otherCard.isModalDoubleFaced = true;
-                                otherCard.isDoubleFaced = true;
                             }
                             break;
                         case "CHK":
@@ -693,10 +691,12 @@ public class CardAnalyzer {
                 reprint.sameIndex = 2;
                 map.put(name, 2);
             } else {
-                int n = (Integer) map.get(name);
-                n++;
-                reprint.sameIndex = n;
-                map.put(name, n);
+                Integer n = (Integer) map.get(name);
+                if (n != null) {
+                    n++;
+                    reprint.sameIndex = n;
+                    map.put(name, n);
+                }
             }
         } else {
             map.put(name, reprint);
@@ -827,7 +827,7 @@ public class CardAnalyzer {
         return ret;
     }
 
-    private static boolean checkCard(ReprintInfo reprint, String script, Vector<ReprintInfo> cards) {
+    private static boolean hasWrongCard(ReprintInfo reprint, String script, Vector<ReprintInfo> cards) {
         progress++;
         int result;
 
@@ -844,9 +844,9 @@ public class CardAnalyzer {
             wrongCard = reprint.picture;
             results = new String[]{wrongCard};
             showResults = true;
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public static int searchCard(String script, boolean searchResult) {
@@ -882,7 +882,7 @@ public class CardAnalyzer {
                     if (stop) {
                         break;
                     }
-                    if (!checkCard(reprint, script, cards)) {
+                    if (hasWrongCard(reprint, script, cards)) {
                         return -1;
                     }
                 }
@@ -894,7 +894,7 @@ public class CardAnalyzer {
                     CardInfo card = cardDatabase.get(name);
                     if (card != null) {
                         for (ReprintInfo reprint : card.reprints) {
-                            if (!checkCard(reprint, script, cards)) {
+                            if (hasWrongCard(reprint, script, cards)) {
                                 return -1;
                             }
                         }

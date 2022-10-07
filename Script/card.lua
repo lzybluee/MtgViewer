@@ -172,6 +172,8 @@ permanent = a or c or e or l or p
 legend = isLegendary
 double = isDoubleFaced
 
+rm = rare or mythic
+
 part = partIndex
 reprint = reprintIndex
 id = multiverseId

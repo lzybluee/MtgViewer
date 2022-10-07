@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
             });
             return files;
         }
-        return Arrays.asList();
+        return Collections.emptyList();
     }
 
     private void openUrl() {
@@ -242,11 +242,10 @@ public class MainActivity extends Activity {
 
             if (mSort == SORT_SHUFFLE) {
                 Collections.shuffle(mCardPath);
-            } else {
+            } else if (mSort == SORT_ASCEND) {
                 Collections.sort(mCardPath);
-                if (mSort == SORT_DESCEND) {
-                    Collections.reverse(mCardPath);
-                }
+            } else if (mSort == SORT_DESCEND) {
+                Collections.reverse(mCardPath);
             }
 
             setScreenOn(false);
@@ -417,34 +416,25 @@ public class MainActivity extends Activity {
         if (file1.exists()) {
             for (File f : ListFiles(file1)) {
                 if (f.isDirectory()) {
-                    if (!CardParser.containsCode(f.getName())) {
+                    boolean found = false;
+                    for (String[] set : CardParser.SetList) {
+                        if (set[2].equals(f.getName())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
                         v1.add(f.getName());
                     }
                 }
             }
         }
 
-        Vector<String> v2 = new Vector<>();
-        File file2 = new File(SDPath + "/Misc/");
-        if (file2.exists()) {
-            for (File f : ListFiles(file2)) {
-                if (f.isDirectory()) {
-                    if (!CardParser.containsCode(f.getName())) {
-                        v2.add(f.getName());
-                    }
-                }
-            }
-        }
-
-        mMiscSets = new String[v1.size() + v2.size()];
+        mMiscSets = new String[v1.size()];
 
         int j = 0;
         for (int i = 0; i < v1.size(); i++) {
             mMiscSets[j] = "Misc/" + v1.get(i);
-            j++;
-        }
-        for (int i = 0; i < v2.size(); i++) {
-            mMiscSets[j] = "../Misc/" + v2.get(i);
             j++;
         }
 

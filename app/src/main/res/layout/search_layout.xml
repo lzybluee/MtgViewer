@@ -557,6 +557,13 @@
             android:text="Mythic"
             android:hint="mythic" />
 
+        <Button
+            android:id="@+id/rare_and_mythic_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RM"
+            android:hint="rm" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -584,6 +591,13 @@
             android:layout_height="wrap_content"
             android:text="Double"
             android:hint="double" />
+
+        <Button
+            android:id="@+id/mdfc_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MDFC"
+            android:hint="isMDFC" />
 
         <Button
             android:id="@+id/split_button"
