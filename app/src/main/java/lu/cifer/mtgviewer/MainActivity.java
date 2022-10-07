@@ -2,7 +2,6 @@ package lu.cifer.mtgviewer;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -22,9 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
@@ -33,7 +29,6 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,7 +38,7 @@ import java.util.Vector;
 
 public class MainActivity extends Activity {
 
-    public static final int SORT_SUFFLE = 0;
+    public static final int SORT_SHUFFLE = 0;
     public static final int SORT_ASCEND = 1;
     public static final int SORT_DESCEND = 2;
     public static final String[] SORT_DESC = new String[]{"Shuffle", "Ascending", "Descending"};
@@ -52,7 +47,7 @@ public class MainActivity extends Activity {
     public static String urlInfo = "";
     Gallery mGallery;
     Vector<String> mCardPath = new Vector<>();
-    int mSort = SORT_SUFFLE;
+    int mSort = SORT_SHUFFLE;
     boolean mSelect = false;
     String mSets = "";
     String[] mMiscSets = null;
@@ -65,10 +60,10 @@ public class MainActivity extends Activity {
     boolean mChinese = false;
 
     public static List<File> ListFiles(File file) {
-        List<File> files = Arrays.asList(file.listFiles());
-        Collections.sort(files, new Comparator<File>() {
-            @Override
-            public int compare(File f1, File f2) {
+        File[] listFiles = file.listFiles();
+        if (listFiles != null) {
+            List<File> files = Arrays.asList(listFiles);
+            Collections.sort(files, (f1, f2) -> {
                 if (f1.isDirectory() && f2.isFile()) {
                     return -1;
                 }
@@ -76,9 +71,10 @@ public class MainActivity extends Activity {
                     return 1;
                 }
                 return f1.getAbsolutePath().compareTo(f2.getAbsolutePath());
-            }
-        });
-        return files;
+            });
+            return files;
+        }
+        return Arrays.asList();
     }
 
     private void openUrl() {
@@ -93,14 +89,11 @@ public class MainActivity extends Activity {
     }
 
     private void setScreenOn(final boolean on) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (on) {
-                    MainActivity.this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                } else {
-                    MainActivity.this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                }
+        runOnUiThread(() -> {
+            if (on) {
+                MainActivity.this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            } else {
+                MainActivity.this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
         });
     }
@@ -123,50 +116,42 @@ public class MainActivity extends Activity {
     }
 
     void showSelectedSets() {
-        String str = "Selected Sets:\n";
+        StringBuilder str = new StringBuilder("Selected Sets:\n");
         if (mSets.equals("")) {
-            str += "All";
+            str.append("All");
         } else {
             String[] paths = mSets.split("\\|");
             int i = 0;
             for (String s : paths) {
                 i++;
-                str += s + ((i == paths.length) ? "" : "\n");
+                str.append(s).append((i == paths.length) ? "" : "\n");
             }
         }
 
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, str.toString(), Toast.LENGTH_SHORT).show();
     }
 
     void initGallery() {
-        mGallery = (Gallery) findViewById(R.id.gallery);
+        mGallery = findViewById(R.id.gallery);
         mGallery.setAdapter(new GalleryAdapter());
         mGallery.setBackgroundColor(0x222222);
         mGallery.setSpacing(20);
 
-        mGallery.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                CardParser.rulePage++;
-                Toast.makeText(
-                        MainActivity.this,
-                        "[" + (position + 1) + " / " + mCardPath.size() + "]\n"
-                                + CardParser.getCardInfo(mCardPath.get(position), false),
-                        Toast.LENGTH_LONG).show();
-            }
+        mGallery.setOnItemClickListener((parent, view, position, id) -> {
+            CardParser.rulePage++;
+            Toast.makeText(
+                    MainActivity.this,
+                    "[" + (position + 1) + " / " + mCardPath.size() + "]\n"
+                            + CardParser.getCardInfo(mCardPath.get(position), false),
+                    Toast.LENGTH_LONG).show();
         });
 
-        mGallery.setOnItemLongClickListener(new OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View v,
-                                           int position, long id) {
-                Toast.makeText(
-                        MainActivity.this,
-                        CardParser.getCardInfo(mCardPath.get(position), true),
-                        Toast.LENGTH_LONG).show();
-                return false;
-            }
-
+        mGallery.setOnItemLongClickListener((parent, view, position, id) -> {
+            Toast.makeText(
+                    MainActivity.this,
+                    CardParser.getCardInfo(mCardPath.get(position), true),
+                    Toast.LENGTH_LONG).show();
+            return false;
         });
     }
 
@@ -224,12 +209,7 @@ public class MainActivity extends Activity {
             mProgress.setIndeterminate(true);
             mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mProgress.setCanceledOnTouchOutside(false);
-            mProgress.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    mStop = true;
-                }
-            });
+            mProgress.setOnCancelListener(dialog -> mStop = true);
             mProgress.setMessage("Processing...\n");
             mProgress.show();
 
@@ -238,61 +218,52 @@ public class MainActivity extends Activity {
 
                 @Override
                 public void run() {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (mProgress != null && mProcessSet != null) {
-                                mProgress.setMessage("Processing...\n" + mProcessSet + (mLoadCards > 0 ? "\n(" + mLoadCards + " cards)" : ""));
-                            }
+                    runOnUiThread(() -> {
+                        if (mProgress != null && mProcessSet != null) {
+                            mProgress.setMessage("Processing...\n" + mProcessSet + (mLoadCards > 0 ? "\n(" + mLoadCards + " cards)" : ""));
                         }
                     });
                 }
             }, 0, 200);
         }
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                mStop = false;
-                mLoadCards = 0;
+        Runnable runnable = () -> {
+            mStop = false;
+            mLoadCards = 0;
 
-                setScreenOn(true);
+            setScreenOn(true);
 
-                for (String s : paths) {
-                    File file = new File(SDPath + "/MTG/" + s);
-                    if (file.exists() && file.isDirectory()) {
-                        processFile(file);
-                    }
+            for (String s : paths) {
+                File file = new File(SDPath + "/MTG/" + s);
+                if (file.exists() && file.isDirectory()) {
+                    processFile(file);
                 }
-
-                if (mSort == SORT_SUFFLE) {
-                    Collections.shuffle(mCardPath);
-                } else {
-                    Collections.sort(mCardPath);
-                    if (mSort == SORT_DESCEND) {
-                        Collections.reverse(mCardPath);
-                    }
-                }
-
-                setScreenOn(false);
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        initGallery();
-
-                        Toast.makeText(MainActivity.this, "Total Cards : " + mCardPath.size(),
-                                Toast.LENGTH_SHORT).show();
-
-                        if (mProgress != null) {
-                            mProgress.dismiss();
-                            mProgress = null;
-                            mTimer.cancel();
-                            mProcessSet = null;
-                        }
-                    }
-                });
             }
+
+            if (mSort == SORT_SHUFFLE) {
+                Collections.shuffle(mCardPath);
+            } else {
+                Collections.sort(mCardPath);
+                if (mSort == SORT_DESCEND) {
+                    Collections.reverse(mCardPath);
+                }
+            }
+
+            setScreenOn(false);
+
+            runOnUiThread(() -> {
+                initGallery();
+
+                Toast.makeText(MainActivity.this, "Total Cards : " + mCardPath.size(),
+                        Toast.LENGTH_SHORT).show();
+
+                if (mProgress != null) {
+                    mProgress.dismiss();
+                    mProgress = null;
+                    mTimer.cancel();
+                    mProcessSet = null;
+                }
+            });
         };
 
         new Thread(runnable).start();
@@ -369,11 +340,10 @@ public class MainActivity extends Activity {
             startActivity(intent);
         } else if (n == 3) {
             mChinese = !mChinese;
-            if(mChinese) {
+            if (mChinese) {
                 CardParser.oracleFolder = "Chinese";
                 Toast.makeText(this, "Chinese", Toast.LENGTH_SHORT).show();
-            }
-            else {
+            } else {
                 CardParser.oracleFolder = "Oracle";
                 Toast.makeText(this, "Oracle", Toast.LENGTH_SHORT).show();
             }
@@ -388,7 +358,7 @@ public class MainActivity extends Activity {
             if (!mSelect) {
                 mSets = "";
                 saveSelectedSets(mSets);
-                Toast.makeText(this, "Clear all selectd sets", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Clear all selected sets", Toast.LENGTH_SHORT).show();
             } else {
                 mSelect = false;
                 saveSelectedSets(mSets);
@@ -409,7 +379,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String pictures[] = new String[0];
+        String[] pictures = new String[0];
         if (CardAnalyzer.showResults && CardAnalyzer.results != null) {
             pictures = CardAnalyzer.results;
             CardAnalyzer.showResults = false;
@@ -434,7 +404,7 @@ public class MainActivity extends Activity {
         }
 
         File test = new File(SDPath + "/MTG");
-        if(test.listFiles() == null) {
+        if (test.listFiles() == null) {
             Toast.makeText(this, "Need read permission!", Toast.LENGTH_LONG).show();
             finish();
             return;
@@ -447,7 +417,7 @@ public class MainActivity extends Activity {
         if (file1.exists()) {
             for (File f : ListFiles(file1)) {
                 if (f.isDirectory()) {
-                    if(!CardParser.containsCode(f.getName())) {
+                    if (!CardParser.containsCode(f.getName())) {
                         v1.add(f.getName());
                     }
                 }
@@ -459,7 +429,7 @@ public class MainActivity extends Activity {
         if (file2.exists()) {
             for (File f : ListFiles(file2)) {
                 if (f.isDirectory()) {
-                    if(!CardParser.containsCode(f.getName())) {
+                    if (!CardParser.containsCode(f.getName())) {
                         v2.add(f.getName());
                     }
                 }
@@ -483,7 +453,7 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.main_layout);
 
-        if (pictures != null && pictures.length > 0) {
+        if (pictures.length > 0) {
             init(pictures, CardAnalyzer.exclude);
         } else {
             init("Back");

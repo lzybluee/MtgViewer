@@ -27,7 +27,7 @@ banned -> StringArray
 reserved -> Boolean
 reprintTimes -> Integer
 
-multiverseid -> Integer
+multiverseId -> Integer
 set -> String
 code -> String
 folder -> String
@@ -38,7 +38,7 @@ rarity -> String
 watermark -> String
 picture -> String
 sameIndex -> Integer
-formatedNumber -> String
+formattedNumber -> String
 setOrder -> Integer
 reprintIndex -> Integer
 
@@ -174,4 +174,4 @@ double = isDoubleFaced
 
 part = partIndex
 reprint = reprintIndex
-id = multiverseid
+id = multiverseId

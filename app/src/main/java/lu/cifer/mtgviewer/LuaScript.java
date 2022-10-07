@@ -38,7 +38,7 @@ public class LuaScript {
         luaPushBoolean("reserved", card.reserved);
         luaPushInteger("reprintTimes", card.reprintTimes);
 
-        luaPushInteger("multiverseid", reprint.multiverseid);
+        luaPushInteger("multiverseId", reprint.multiverseId);
         luaPushString("set", reprint.set);
         luaPushString("code", reprint.code);
         luaPushString("folder", reprint.folder);
@@ -49,7 +49,7 @@ public class LuaScript {
         luaPushString("watermark", reprint.watermark);
         luaPushString("picture", reprint.picture);
         luaPushInteger("sameIndex", reprint.sameIndex);
-        luaPushString("formatedNumber", reprint.formatedNumber);
+        luaPushString("formattedNumber", reprint.formattedNumber);
         luaPushInteger("setOrder", reprint.setOrder);
         luaPushInteger("reprintIndex", reprint.reprintIndex);
     }

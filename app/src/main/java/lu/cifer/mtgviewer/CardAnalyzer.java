@@ -52,7 +52,7 @@ public class CardAnalyzer {
         public int compare(ReprintInfo left, ReprintInfo right) {
             int ret;
             if (left.setOrder == right.setOrder) {
-                ret = left.formatedNumber.compareTo(right.formatedNumber);
+                ret = left.formattedNumber.compareTo(right.formattedNumber);
             } else {
                 ret = left.setOrder - right.setOrder;
             }
@@ -65,7 +65,7 @@ public class CardAnalyzer {
             int ret;
             if (left.card.name.equals(right.card.name)) {
                 if (left.setOrder == right.setOrder) {
-                    ret = left.formatedNumber.compareTo(right.formatedNumber);
+                    ret = left.formattedNumber.compareTo(right.formattedNumber);
                 } else {
                     ret = left.setOrder - right.setOrder;
                 }
@@ -81,7 +81,7 @@ public class CardAnalyzer {
             int ret;
             if (left.card.value == right.card.value) {
                 if (left.setOrder == right.setOrder) {
-                    ret = left.formatedNumber.compareTo(right.formatedNumber);
+                    ret = left.formattedNumber.compareTo(right.formattedNumber);
                 } else {
                     ret = left.setOrder - right.setOrder;
                 }
@@ -100,7 +100,7 @@ public class CardAnalyzer {
             if (leftColorMask == rightColorMask) {
                 if (left.card.value == right.card.value) {
                     if (left.setOrder == right.setOrder) {
-                        ret = left.formatedNumber.compareTo(right.formatedNumber);
+                        ret = left.formattedNumber.compareTo(right.formattedNumber);
                     } else {
                         ret = left.setOrder - right.setOrder;
                     }
@@ -280,16 +280,18 @@ public class CardAnalyzer {
                 && Math.sqrt(power / count) <= 8;
     }
 
-    private static String getFormatedNumber(String name) {
+    private static String getFormattedNumber(String name) {
         Pattern pattern = Pattern.compile("([^\\d]*)(\\d+)([^\\d]*)");
         Matcher matcher = pattern.matcher(name);
 
         if (matcher.find()) {
-            int num = Integer.parseInt(matcher.group(2));
-            return matcher.group(1) + String.format("%03d", num) + matcher.group(3);
-        } else {
-            return null;
+            String text = matcher.group(2);
+            if (text != null) {
+                int num = Integer.parseInt(text);
+                return matcher.group(1) + String.format("%03d", num) + matcher.group(3);
+            }
         }
+        return null;
     }
 
     private static boolean compareFilter() {
@@ -346,14 +348,11 @@ public class CardAnalyzer {
             card.reprints.get(0).reprintIndex = 1;
             return;
         }
-        Collections.sort(card.reprints, new Comparator<ReprintInfo>() {
-            @Override
-            public int compare(ReprintInfo left, ReprintInfo right) {
-                if (left.multiverseid == right.multiverseid) {
-                    return left.formatedNumber.compareTo(right.formatedNumber);
-                }
-                return left.multiverseid - right.multiverseid;
+        Collections.sort(card.reprints, (left, right) -> {
+            if (left.multiverseId == right.multiverseId) {
+                return left.formattedNumber.compareTo(right.formattedNumber);
             }
+            return left.multiverseId - right.multiverseId;
         });
     }
 
@@ -397,9 +396,11 @@ public class CardAnalyzer {
         int count = 0;
         while (keys.hasMoreElements()) {
             CardInfo info = cardDatabase.get(keys.nextElement());
-            sortReprint(info);
-            allName[count] = info.name;
-            count++;
+            if (info != null) {
+                sortReprint(info);
+                allName[count] = info.name;
+                count++;
+            }
         }
 
         Arrays.sort(allName);
@@ -416,9 +417,11 @@ public class CardAnalyzer {
 
         card.name = getEntry(str, "Name");
 
-        card.simpleName = card.name.replaceAll(" \\(.+/.+\\)", "").replaceAll("®", "")
-                .replaceAll("[àáâ]", "a").replaceAll("é", "e").replaceAll("í", "i")
-                .replaceAll("ö", "o").replaceAll("[úû]", "u").replaceAll("Æ", "AE");
+        if (card.name != null) {
+            card.simpleName = card.name.replaceAll(" \\(.+/.+\\)", "").replaceAll("®", "")
+                    .replaceAll("[àáâ]", "a").replaceAll("é", "e").replaceAll("í", "i")
+                    .replaceAll("ö", "o").replaceAll("[úû]", "u").replaceAll("Æ", "AE");
+        }
 
         card.otherPart = new Vector<>();
 
@@ -426,41 +429,54 @@ public class CardAnalyzer {
         if (entry != null) {
             card.otherPart.add(entry);
             String num = getEntry(str, "No");
-            if (num.charAt(num.length() - 1) >= 'a') {
+            if (num != null && num.charAt(num.length() - 1) >= 'a') {
                 card.partIndex = num.charAt(num.length() - 1) - 'a' + 1;
             }
             if (card.name.contains("(") && card.name.contains("/")) {
                 card.isSplit = true;
             } else if (card.partIndex == 2) {
                 String code = getEntry(str, "SetId");
-                if (code.equals("ZNR") || code.equals("KHM") || code.equals("STX")) {
-                    card.isModalDoubleFaced = true;
-                    card.isDoubleFaced = true;
-                    otherCard = cardDatabase.get(entry);
-                    if(otherCard != null) {
-                        otherCard.isModalDoubleFaced = true;
-                        otherCard.isDoubleFaced = true;
-                    }
-                } else if (code.equals("CHK") || code.equals("BOK") || code.equals("SOK") ||
-                        code.equals("CMD") || code.equals("C18") || code.equals("CM2")) {
-                    card.isFlip = true;
-                    otherCard = cardDatabase.get(entry);
-                    if(otherCard != null) {
-                        otherCard.isFlip = true;
-                    }
-                } else if (code.equals("ELD")) {
-                    card.isAdventure = true;
-                    otherCard = cardDatabase.get(entry);
-                    if (otherCard != null) {
-                        otherCard.isAdventure = true;
-                    }
-                } else {
-                    card.isDoubleFaced = true;
-                    for (String other : entry.split(" ; ")) {
-                        otherCard = cardDatabase.get(other);
-                        if(otherCard != null) {
-                            otherCard.isDoubleFaced = true;
-                        }
+                if (code != null) {
+                    switch (code) {
+                        case "ZNR":
+                        case "KHM":
+                        case "STX":
+                            card.isModalDoubleFaced = true;
+                            card.isDoubleFaced = true;
+                            otherCard = cardDatabase.get(entry);
+                            if (otherCard != null) {
+                                otherCard.isModalDoubleFaced = true;
+                                otherCard.isDoubleFaced = true;
+                            }
+                            break;
+                        case "CHK":
+                        case "BOK":
+                        case "SOK":
+                        case "CMD":
+                        case "C18":
+                        case "CM2":
+                            card.isFlip = true;
+                            otherCard = cardDatabase.get(entry);
+                            if (otherCard != null) {
+                                otherCard.isFlip = true;
+                            }
+                            break;
+                        case "ELD":
+                            card.isAdventure = true;
+                            otherCard = cardDatabase.get(entry);
+                            if (otherCard != null) {
+                                otherCard.isAdventure = true;
+                            }
+                            break;
+                        default:
+                            card.isDoubleFaced = true;
+                            for (String other : entry.split(" ; ")) {
+                                otherCard = cardDatabase.get(other);
+                                if (otherCard != null) {
+                                    otherCard.isDoubleFaced = true;
+                                }
+                            }
+                            break;
                     }
                 }
             }
@@ -468,67 +484,72 @@ public class CardAnalyzer {
 
         entry = getEntry(str, "Type");
 
-        Pattern pattern = Pattern.compile(" ([^ ]+)/([^ ]+)");
-        Matcher matcher = pattern.matcher(entry);
+        if (entry != null) {
+            Pattern pattern = Pattern.compile(" ([^ ]+)/([^ ]+)");
+            Matcher matcher = pattern.matcher(entry);
 
-        if (matcher.find()) {
-            card.power = matcher.group(1);
-            card.toughness = matcher.group(2);
-            entry = entry.substring(0, entry.indexOf(card.power));
-        }
-
-        pattern = Pattern.compile("\\(Loyalty: ([^)]+)\\)");
-        matcher = pattern.matcher(entry);
-
-        if (matcher.find()) {
-            card.loyalty = matcher.group(1);
-            entry = entry.substring(0, entry.indexOf(matcher.group(0)));
-        }
-
-        pattern = Pattern.compile("([^—]+)(—(.+))?");
-        matcher = pattern.matcher(entry);
-
-        String types = null;
-        String subtypes = null;
-
-        if (matcher.find()) {
-            types = matcher.group(1);
-            subtypes = matcher.group(3);
-        }
-
-        card.types = new Vector<>();
-        card.subTypes = new Vector<>();
-        card.superTypes = new Vector<>();
-
-        if (types != null) {
-            for (String s : types.trim().split(" ")) {
-                boolean flag = false;
-                for (String t : TypeList) {
-                    if (s.equals(t)) {
-                        card.types.add(s);
-                        flag = true;
-                        break;
-                    }
-                }
-                for (String t : SpecialTypeList) {
-                    if (s.equals(t)) {
-                        card.types.add(s);
-                        flag = true;
-                        break;
-                    }
-                }
-                if (flag) {
-                    continue;
-                }
-                if (s.equals("Legendary")) {
-                    card.isLegendary = true;
-                }
-                card.superTypes.add(s);
+            if (matcher.find()) {
+                card.power = matcher.group(1);
+                card.toughness = matcher.group(2);
+                entry = entry.substring(0, entry.indexOf(card.power));
             }
-        }
 
-        if (subtypes != null) {
-            card.subTypes.addAll(Arrays.asList(subtypes.trim().split(" ")));
+            pattern = Pattern.compile("\\(Loyalty: ([^)]+)\\)");
+            matcher = pattern.matcher(entry);
+
+            if (matcher.find()) {
+                String text = matcher.group(0);
+                if (text != null) {
+                    card.loyalty = matcher.group(1);
+                    entry = entry.substring(0, entry.indexOf(text));
+                }
+            }
+
+            pattern = Pattern.compile("([^—]+)(—(.+))?");
+            matcher = pattern.matcher(entry);
+
+            String types = null;
+            String subtypes = null;
+
+            if (matcher.find()) {
+                types = matcher.group(1);
+                subtypes = matcher.group(3);
+            }
+
+            card.types = new Vector<>();
+            card.subTypes = new Vector<>();
+            card.superTypes = new Vector<>();
+
+            if (types != null) {
+                for (String s : types.trim().split(" ")) {
+                    boolean flag = false;
+                    for (String t : TypeList) {
+                        if (s.equals(t)) {
+                            card.types.add(s);
+                            flag = true;
+                            break;
+                        }
+                    }
+                    for (String t : SpecialTypeList) {
+                        if (s.equals(t)) {
+                            card.types.add(s);
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        continue;
+                    }
+                    if (s.equals("Legendary")) {
+                        card.isLegendary = true;
+                    }
+                    card.superTypes.add(s);
+                }
+            }
+
+            if (subtypes != null) {
+                card.subTypes.addAll(Arrays.asList(subtypes.trim().split(" ")));
+            }
         }
 
         entry = getEntry(str, "ManaCost");
@@ -551,16 +572,16 @@ public class CardAnalyzer {
                 card.mana = entry;
                 card.value = 0;
 
-                for (String mana : entry.substring(1).split("[\\{\\}]+")) {
+                for (String mana : entry.substring(1).split("[{}]+")) {
                     if (mana.matches("\\d+")) {
                         card.value += Integer.parseInt(mana);
-                    } else if(mana.matches("[WUBRGCS]")) {
+                    } else if (mana.matches("[WUBRGCS]")) {
                         card.value += 1;
-                    } else if(mana.matches("[WUBRG]/[WUBRGP]")) {
+                    } else if (mana.matches("[WUBRG]/[WUBRGP]")) {
                         card.value += 1;
-                    } else if(mana.matches("[XYZ]")) {
+                    } else if (mana.matches("[XYZ]")) {
                         card.value += 0;
-                    } else if(mana.matches("2/[WUBRGP]")) {
+                    } else if (mana.matches("2/[WUBRGP]")) {
                         card.value += 2;
                     }
                 }
@@ -611,28 +632,28 @@ public class CardAnalyzer {
 
         String idEntry = getEntry(str, "Multiverseid");
         if (idEntry != null) {
-            reprint.multiverseid = Integer.parseInt(idEntry);
+            reprint.multiverseId = Integer.parseInt(idEntry);
         }
 
         if (reprint.rarity == null) {
             reprint.rarity = "Special";
         }
 
-        for (String[] strs : CardParser.SetList) {
-            if (reprint.set.equals(strs[0])) {
-                reprint.code = strs[2];
-                reprint.folder = strs[1];
+        for (String[] set : CardParser.SetList) {
+            if (reprint.set.equals(set[0])) {
+                reprint.code = set[2];
+                reprint.folder = set[1];
                 break;
             }
         }
 
-        reprint.formatedNumber = getFormatedNumber(reprint.number);
+        reprint.formattedNumber = getFormattedNumber(reprint.number);
 
-        if(reprint.folder == null || reprint.formatedNumber == null) {
+        if (reprint.folder == null || reprint.formattedNumber == null) {
             Log.e("MtgViewer", "No picture " + reprint.set + " " + reprint.number);
         }
 
-        reprint.picture = reprint.folder + "/" + reprint.formatedNumber + ".jpg";
+        reprint.picture = reprint.folder + "/" + reprint.formattedNumber + ".jpg";
 
         if (reprint.picture.contains("Funny/")) {
             if (!card.name.equals("Plains") && !card.name.equals("Island")
@@ -651,8 +672,8 @@ public class CardAnalyzer {
         return reprint;
     }
 
-    public static ReprintInfo processCard(String str, HashMap<String, Object> map) {
-        ReprintInfo reprint = null;
+    public static void processCard(String str, HashMap<String, Object> map) {
+        ReprintInfo reprint;
         String name = getEntry(str, "Name");
 
         if (cardDatabase.containsKey(name)) {
@@ -680,8 +701,6 @@ public class CardAnalyzer {
         } else {
             map.put(name, reprint);
         }
-
-        return reprint;
     }
 
     public static void processSet(File file) {
@@ -691,13 +710,13 @@ public class CardAnalyzer {
         try {
             reader = new BufferedReader(new FileReader(file));
             String str;
-            String card = "";
+            StringBuilder card = new StringBuilder();
             while ((str = reader.readLine()) != null) {
                 if (str.isEmpty()) {
-                    processCard(card, map);
-                    card = "";
+                    processCard(card.toString(), map);
+                    card = new StringBuilder();
                 } else {
-                    card += str + "\n";
+                    card.append(str).append("\n");
                 }
             }
             reader.close();
@@ -708,12 +727,6 @@ public class CardAnalyzer {
 
     public static String getFilterString() {
         return filterString;
-    }
-
-    public static String getWrongCard() {
-        String card = wrongCard;
-        wrongCard = null;
-        return card;
     }
 
     public static void setFilter(String sets) {
@@ -784,19 +797,19 @@ public class CardAnalyzer {
         }
 
         boolean ret = false;
-        String[] strs = search.contains("|") ? search.split("\\|") : search.split(" ");
+        String[] set = search.contains("|") ? search.split("\\|") : search.split(" ");
 
         if (anyWord) {
-            for (String s : strs) {
+            for (String s : set) {
                 if (!s.isEmpty() && containsText(text, s)) {
                     return true;
                 }
             }
         } else {
-            for (String s : strs) {
+            for (String s : set) {
                 if (!s.isEmpty()) {
-                    if(s.startsWith("^")) {
-                        if(!containsText(text, s.substring(1))) {
+                    if (s.startsWith("^")) {
+                        if (!containsText(text, s.substring(1))) {
                             ret = true;
                         } else {
                             ret = false;
@@ -847,7 +860,7 @@ public class CardAnalyzer {
         foundCards = 0;
         exclude = 0;
 
-        if (lastCode != null && !script.isEmpty() && script.equals(lastCode)) {
+        if (!script.isEmpty() && script.equals(lastCode)) {
             skipSearch = true;
         }
 
@@ -879,9 +892,11 @@ public class CardAnalyzer {
                         break;
                     }
                     CardInfo card = cardDatabase.get(name);
-                    for (ReprintInfo reprint : card.reprints) {
-                        if (!checkCard(reprint, script, cards)) {
-                            return -1;
+                    if (card != null) {
+                        for (ReprintInfo reprint : card.reprints) {
+                            if (!checkCard(reprint, script, cards)) {
+                                return -1;
+                            }
                         }
                     }
                 }
@@ -961,7 +976,7 @@ public class CardAnalyzer {
 
         public CardInfo card;
 
-        public int multiverseid;
+        public int multiverseId;
         public String set;
         public String code;
         public String folder;
@@ -973,12 +988,12 @@ public class CardAnalyzer {
 
         public String picture;
         public int sameIndex;
-        public String formatedNumber;
+        public String formattedNumber;
         public int setOrder;
         public int reprintIndex;
 
         public String toString() {
-            return multiverseid + " " + set + " : " + number
+            return multiverseId + " " + set + " : " + number
                     + " (" + rarity + ") " + artist;
         }
     }
@@ -1023,7 +1038,7 @@ public class CardAnalyzer {
 
         public String toString() {
             StringBuilder str = new StringBuilder();
-            str.append(name + "\n");
+            str.append(name).append("\n");
             if (partIndex > 0) {
                 String suffix = "th";
                 if (Integer.toString(partIndex).endsWith("1")) {
@@ -1034,9 +1049,9 @@ public class CardAnalyzer {
                     suffix = "rd";
                 }
                 if (otherPart.size() >= 2) {
-                    str.append(partIndex + suffix + " part of the card, other parts are ");
+                    str.append(partIndex).append(suffix).append(" part of the card, other parts are ");
                     for (int i = 0; i < otherPart.size(); i++) {
-                        str.append("<" + otherPart.get(i) + ">");
+                        str.append("<").append(otherPart.get(i)).append(">");
                         if (i == otherPart.size() - 1) {
                             str.append("\n");
                         } else if (i == otherPart.size() - 2) {
@@ -1046,7 +1061,7 @@ public class CardAnalyzer {
                         }
                     }
                 } else if (otherPart.size() == 1) {
-                    str.append(partIndex + suffix + " part of the card, other part is <" + otherPart.get(0) + ">\n");
+                    str.append(partIndex).append(suffix).append(" part of the card, other part is <").append(otherPart.get(0)).append(">\n");
                 }
             }
             if (superTypes.size() > 0) {
@@ -1078,26 +1093,26 @@ public class CardAnalyzer {
                 }
             }
             if (power != null) {
-                str.append(" " + power);
+                str.append(" ").append(power);
             }
             if (toughness != null) {
-                str.append("/" + toughness);
+                str.append("/").append(toughness);
             }
             if (loyalty != null) {
-                str.append(" " + "(Loyalty: " + loyalty + ")");
+                str.append(" (Loyalty: ").append(loyalty).append(")");
             }
             str.append("\n");
             if (mana != null) {
-                str.append(mana + " (" + value + ")" + "\n");
+                str.append(mana).append(" (").append(value).append(")").append("\n");
             }
             if (colorIndicator != null) {
-                str.append("(Color Indicator: " + colorIndicator + ")\n");
+                str.append("(Color Indicator: ").append(colorIndicator).append(")\n");
             }
             if (text != null) {
-                str.append(text + "\n");
+                str.append(text).append("\n");
             }
             if (rules != null) {
-                str.append(rules + "\n");
+                str.append(rules).append("\n");
             }
             if (legal.size() > 0) {
                 str.append("Legal in ");
@@ -1134,12 +1149,12 @@ public class CardAnalyzer {
             }
             for (ReprintInfo info : reprints) {
                 if (info.watermark != null) {
-                    str.append("(Watermark: " + info.watermark + ")\n");
+                    str.append("(Watermark: ").append(info.watermark).append(")\n");
                     break;
                 }
             }
             for (ReprintInfo info : reprints) {
-                str.append(info + "\n");
+                str.append(info).append("\n");
             }
             Vector<String> flavors = new Vector<>();
             for (ReprintInfo info : reprints) {
@@ -1157,7 +1172,7 @@ public class CardAnalyzer {
                 }
             }
             for (String s : flavors) {
-                str.append(s + "\n");
+                str.append(s).append("\n");
             }
 
             return str.toString();
