@@ -16,10 +16,10 @@ public class LuaScript {
         luaPushInteger("partIndex", card.partIndex);
         luaPushBoolean("isSplit", card.isSplit);
         luaPushBoolean("isDoubleFaced", card.isDoubleFaced);
+        luaPushBoolean("isMDFC", card.isModalDoubleFaced);
         luaPushBoolean("isFlip", card.isFlip);
-        luaPushBoolean("isMeld", card.isMeld);
+        luaPushBoolean("isAdventure", card.isAdventure);
         luaPushBoolean("isFun", card.isFun);
-        luaPushBoolean("isInCore", card.isInCore);
         luaPushBoolean("isLegendary", card.isLegendary);
         luaPushStringArray("types", card.types.toArray(new String[card.types.size()]));
         luaPushStringArray("subTypes", card.subTypes.toArray(new String[card.subTypes.size()]));
@@ -36,12 +36,9 @@ public class LuaScript {
         luaPushStringArray("restricted", card.restricted.toArray(new String[card.restricted.size()]));
         luaPushStringArray("banned", card.banned.toArray(new String[card.banned.size()]));
         luaPushBoolean("reserved", card.reserved);
-        luaPushBoolean("rarityChanged", card.rarityChanged);
         luaPushInteger("reprintTimes", card.reprintTimes);
 
         luaPushInteger("multiverseid", reprint.multiverseid);
-        luaPushFloat("rating", reprint.rating);
-        luaPushInteger("votes", reprint.votes);
         luaPushString("set", reprint.set);
         luaPushString("code", reprint.code);
         luaPushString("folder", reprint.folder);
@@ -50,13 +47,11 @@ public class LuaScript {
         luaPushString("artist", reprint.artist);
         luaPushString("rarity", reprint.rarity);
         luaPushString("watermark", reprint.watermark);
-        luaPushString("specialType", reprint.specialType);
         luaPushString("picture", reprint.picture);
         luaPushInteger("sameIndex", reprint.sameIndex);
         luaPushString("formatedNumber", reprint.formatedNumber);
-        luaPushInteger("order", reprint.order);
+        luaPushInteger("setOrder", reprint.setOrder);
         luaPushInteger("reprintIndex", reprint.reprintIndex);
-        luaPushBoolean("latest", reprint.latest);
     }
 
     private static String composeScript(String script) {

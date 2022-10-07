@@ -18,10 +18,10 @@ import java.util.regex.Pattern;
 
 public class CardAnalyzer {
 
-    public static String[] LegalList = {"Block", "Modern", "Legacy", "Vintage", "Commander"};
+    public static String[] LegalList = {"Modern", "Legacy", "Vintage", "Commander"};
     public static String[] TypeList = {"Artifact", "Creature", "Enchantment",
             "Instant", "Land", "Planeswalker", "Sorcery", "Tribal"};
-    public static String[] SpecialTypeList = {"Conspiracy", "Phenomenon", "Plane", "Scheme"};
+    public static String[] SpecialTypeList = {"Conspiracy", "Phenomenon", "Plane", "Scheme", "Dungeon"};
 
     public static String[] results;
     public static int exclude;
@@ -35,7 +35,7 @@ public class CardAnalyzer {
     static String filterString = "";
     static Vector<String> lastFilter;
     static Vector<String> filter = new Vector<>();
-    static Vector<String> setOrder = new Vector<>();
+    static Vector<String> setList = new Vector<>();
     static int progress;
     static int foundCards;
     static boolean reverse;
@@ -44,17 +44,17 @@ public class CardAnalyzer {
     static boolean stop;
     static Vector<ReprintInfo> resultCards;
     static String lastCode;
-    static boolean single = true;
+    static boolean unique = true;
     static boolean showResults = false;
 
     static Comparator<ReprintInfo> editionComparator = new Comparator<ReprintInfo>() {
         @Override
         public int compare(ReprintInfo left, ReprintInfo right) {
             int ret;
-            if (left.order == right.order) {
+            if (left.setOrder == right.setOrder) {
                 ret = left.formatedNumber.compareTo(right.formatedNumber);
             } else {
-                ret = left.order - right.order;
+                ret = left.setOrder - right.setOrder;
             }
             return reverse ? -ret : ret;
         }
@@ -64,10 +64,10 @@ public class CardAnalyzer {
         public int compare(ReprintInfo left, ReprintInfo right) {
             int ret;
             if (left.card.name.equals(right.card.name)) {
-                if (left.order == right.order) {
+                if (left.setOrder == right.setOrder) {
                     ret = left.formatedNumber.compareTo(right.formatedNumber);
                 } else {
-                    ret = left.order - right.order;
+                    ret = left.setOrder - right.setOrder;
                 }
             } else {
                 ret = left.card.name.compareTo(right.card.name);
@@ -75,40 +75,20 @@ public class CardAnalyzer {
             return reverse ? -ret : ret;
         }
     };
-    static Comparator<ReprintInfo> cmcComparator = new Comparator<ReprintInfo>() {
+    static Comparator<ReprintInfo> valueComparator = new Comparator<ReprintInfo>() {
         @Override
         public int compare(ReprintInfo left, ReprintInfo right) {
             int ret;
             if (left.card.value == right.card.value) {
-                if (left.order == right.order) {
+                if (left.setOrder == right.setOrder) {
                     ret = left.formatedNumber.compareTo(right.formatedNumber);
                 } else {
-                    ret = left.order - right.order;
+                    ret = left.setOrder - right.setOrder;
                 }
             } else {
                 ret = left.card.value - right.card.value;
             }
             return reverse ? -ret : ret;
-        }
-    };
-    static Comparator<ReprintInfo> ratingComparator = new Comparator<ReprintInfo>() {
-        @Override
-        public int compare(ReprintInfo left, ReprintInfo right) {
-            float ret;
-            if (left.rating == right.rating) {
-                if (left.order == right.order) {
-                    ret = left.formatedNumber.compareTo(right.formatedNumber);
-                } else {
-                    ret = left.order - right.order;
-                }
-            } else {
-                ret = left.rating - right.rating;
-            }
-            if (reverse) {
-                return ret > 0.0f ? 1 : -1;
-            } else {
-                return ret > 0.0f ? -1 : 1;
-            }
         }
     };
     static Comparator<ReprintInfo> colorComparator = new Comparator<ReprintInfo>() {
@@ -119,10 +99,10 @@ public class CardAnalyzer {
             int rightColorMask = getColorMask(right.card);
             if (leftColorMask == rightColorMask) {
                 if (left.card.value == right.card.value) {
-                    if (left.order == right.order) {
+                    if (left.setOrder == right.setOrder) {
                         ret = left.formatedNumber.compareTo(right.formatedNumber);
                     } else {
-                        ret = left.order - right.order;
+                        ret = left.setOrder - right.setOrder;
                     }
                 } else {
                     ret = left.card.value - right.card.value;
@@ -234,13 +214,13 @@ public class CardAnalyzer {
         return sortName[sortType];
     }
 
-    public static boolean getSingleMode() {
-        return single;
+    public static boolean getUniqueMode() {
+        return unique;
     }
 
-    public static boolean switchSingleMode() {
-        single = !single;
-        return single;
+    public static boolean switchUniqueMode() {
+        unique = !unique;
+        return unique;
     }
 
     public static boolean isReverse() {
@@ -364,7 +344,6 @@ public class CardAnalyzer {
 
         if (card.reprints.size() == 1) {
             card.reprints.get(0).reprintIndex = 1;
-            card.reprints.get(0).latest = true;
             return;
         }
         Collections.sort(card.reprints, new Comparator<ReprintInfo>() {
@@ -376,17 +355,11 @@ public class CardAnalyzer {
                 return left.multiverseid - right.multiverseid;
             }
         });
-        for (int i = 0; i < card.reprintTimes; i++) {
-            card.reprints.get(i).reprintIndex = i + 1;
-            if (i == card.reprintTimes - 1) {
-                card.reprints.get(i).latest = true;
-            }
-        }
     }
 
     public static String initData() {
         if (lastFilter != null && compareFilter()) {
-            return setOrder.size() + " Sets and " + allName.length
+            return setList.size() + " Sets and " + allName.length
                     + " Cards" + " (" + reprintCards + " Reprints)";
         }
 
@@ -396,7 +369,7 @@ public class CardAnalyzer {
         progress = 0;
         foundCards = 0;
 
-        setOrder.clear();
+        setList.clear();
         cardDatabase.clear();
         reprintCards = 0;
 
@@ -408,7 +381,7 @@ public class CardAnalyzer {
                     break;
                 }
                 progress++;
-                setOrder.add(s[2]);
+                setList.add(s[2]);
                 processSet(new File(MainActivity.SDPath + "/MTG/" + CardParser.oracleFolder
                         + "/MtgOracle_" + s[2] + ".txt"));
             }
@@ -431,7 +404,7 @@ public class CardAnalyzer {
 
         Arrays.sort(allName);
 
-        return setOrder.size() + " Sets and " + allName.length
+        return setList.size() + " Sets and " + allName.length
                 + " Cards" + " (" + reprintCards + " Reprints)";
     }
 
@@ -458,18 +431,38 @@ public class CardAnalyzer {
             }
             if (card.name.contains("(") && card.name.contains("/")) {
                 card.isSplit = true;
-            } else if (card.partIndex == 2 && getEntry(str, "ManaCost") == null) {
-                card.isDoubleFaced = true;
-                for (String other : entry.split(" ; ")) {
-                    otherCard = cardDatabase.get(other);
+            } else if (card.partIndex == 2) {
+                String code = getEntry(str, "SetId");
+                if (code.equals("ZNR") || code.equals("KHM") || code.equals("STX")) {
+                    card.isModalDoubleFaced = true;
+                    card.isDoubleFaced = true;
+                    otherCard = cardDatabase.get(entry);
                     if(otherCard != null) {
+                        otherCard.isModalDoubleFaced = true;
                         otherCard.isDoubleFaced = true;
                     }
+                } else if (code.equals("CHK") || code.equals("BOK") || code.equals("SOK") ||
+                        code.equals("CMD") || code.equals("C18") || code.equals("CM2")) {
+                    card.isFlip = true;
+                    otherCard = cardDatabase.get(entry);
+                    if(otherCard != null) {
+                        otherCard.isFlip = true;
+                    }
+                } else if (code.equals("ELD")) {
+                    card.isAdventure = true;
+                    otherCard = cardDatabase.get(entry);
+                    if (otherCard != null) {
+                        otherCard.isAdventure = true;
+                    }
+                } else {
+                    card.isDoubleFaced = true;
+                    for (String other : entry.split(" ; ")) {
+                        otherCard = cardDatabase.get(other);
+                        if(otherCard != null) {
+                            otherCard.isDoubleFaced = true;
+                        }
+                    }
                 }
-            } else if (card.partIndex == 2) {
-                card.isFlip = true;
-                otherCard = cardDatabase.get(entry);
-                otherCard.isFlip = true;
             }
         }
 
@@ -625,69 +618,6 @@ public class CardAnalyzer {
             reprint.rarity = "Special";
         }
 
-        String otherPart = getEntry(str, "OtherPart");
-        if (otherPart != null && !card.otherPart.contains(otherPart)) {
-            card.otherPart.add(otherPart);
-            if (card.otherPart.size() == 2) {
-                card.isDoubleFaced = false;
-                card.isMeld = true;
-                for (String name : card.otherPart) {
-                    CardInfo otherCard = cardDatabase.get(name);
-                    otherCard.isDoubleFaced = false;
-                    otherCard.isMeld = true;
-                }
-                String text = cardDatabase.get(card.otherPart.get(0)).text;
-                if (!text.contains("(Melds with ")) {
-                    Collections.reverse(card.otherPart);
-                }
-            }
-        }
-
-        String rating = getEntry(str, "Rating");
-        if (rating != null) {
-            reprint.rating = Float.parseFloat(getEntry(str, "Rating"));
-        }
-
-        String votes = getEntry(str, "Votes");
-        if (votes != null) {
-            reprint.votes = Integer.parseInt(getEntry(str, "Votes"));
-        }
-
-        if (card.types.size() > 0) {
-            for (String type : card.types) {
-                for (String special : SpecialTypeList) {
-                    if (type.equals(special)) {
-                        reprint.specialType = special;
-                        break;
-                    }
-                }
-                if (reprint.specialType != null) {
-                    break;
-                }
-            }
-        }
-
-        if (!card.isInCore) {
-            for (String[] s : CardParser.SetList) {
-                if (reprint.set.equals(s[0])) {
-                    card.isInCore = true;
-                    break;
-                }
-                if (s[0].equals("Limited Edition Alpha")) {
-                    break;
-                }
-            }
-        }
-        if (!card.rarityChanged) {
-            Vector<ReprintInfo> vector = card.reprints;
-            for (ReprintInfo info : vector) {
-                if (!info.rarity.equals(reprint.rarity)) {
-                    card.rarityChanged = true;
-                    break;
-                }
-            }
-        }
-
         for (String[] strs : CardParser.SetList) {
             if (reprint.set.equals(strs[0])) {
                 reprint.code = strs[2];
@@ -713,7 +643,7 @@ public class CardAnalyzer {
             }
         }
 
-        reprint.order = setOrder.indexOf(reprint.code);
+        reprint.setOrder = setList.indexOf(reprint.code);
 
         reprint.card = card;
         card.reprints.add(reprint);
@@ -970,7 +900,7 @@ public class CardAnalyzer {
 
         switch (sortName[sortType]) {
             case "Random":
-                if (!single) {
+                if (!unique) {
                     Collections.shuffle(cards);
                 }
                 break;
@@ -981,17 +911,14 @@ public class CardAnalyzer {
                 Collections.sort(cards, nameComparator);
                 break;
             case "Value":
-                Collections.sort(cards, cmcComparator);
+                Collections.sort(cards, valueComparator);
                 break;
             case "Color":
                 Collections.sort(cards, colorComparator);
                 break;
-            case "Rating":
-                Collections.sort(cards, ratingComparator);
-                break;
         }
 
-        if (single) {
+        if (unique) {
             Vector<String> names = new Vector<>();
             Vector<ReprintInfo> singleCards = new Vector<>();
 
@@ -1035,8 +962,6 @@ public class CardAnalyzer {
         public CardInfo card;
 
         public int multiverseid;
-        public float rating;
-        public int votes;
         public String set;
         public String code;
         public String folder;
@@ -1045,19 +970,16 @@ public class CardAnalyzer {
         public String artist;
         public String rarity;
         public String watermark;
-        public String specialType;
 
         public String picture;
         public int sameIndex;
         public String formatedNumber;
-        public int order;
+        public int setOrder;
         public int reprintIndex;
-        public boolean latest;
 
         public String toString() {
-            return multiverseid + " " + set + (specialType == null ? "" : " [" + specialType + "]") + " : " + number
-                    + " (" + rarity + ") " + artist
-                    + (rating > 0 || votes > 0 ? " (" + rating + "|" + votes + ")" : "");
+            return multiverseid + " " + set + " : " + number
+                    + " (" + rarity + ") " + artist;
         }
     }
 
@@ -1069,11 +991,11 @@ public class CardAnalyzer {
         public int partIndex;
         public boolean isSplit;
         public boolean isDoubleFaced;
+        public boolean isModalDoubleFaced;
         public boolean isFlip;
-        public boolean isMeld;
+        public boolean isAdventure;
         public boolean isLegendary;
         public boolean isFun;
-        public boolean isInCore;
 
         public Vector<String> types;
         public Vector<String> subTypes;
@@ -1096,7 +1018,6 @@ public class CardAnalyzer {
         public boolean reserved;
 
         public Vector<ReprintInfo> reprints;
-        public boolean rarityChanged;
 
         public int reprintTimes;
 

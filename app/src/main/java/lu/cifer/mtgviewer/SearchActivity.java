@@ -1,6 +1,7 @@
 package lu.cifer.mtgviewer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -439,7 +440,75 @@ public class SearchActivity extends Activity {
             }
         });
 
-        final Button cleanButton = (Button) findViewById(R.id.clean_button);
+        final Button uniqueButton = (Button) findViewById(R.id.unique_button);
+        uniqueButton.setText(CardAnalyzer.getUniqueMode() ? "Unique" : "All");
+        uniqueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean single = CardAnalyzer.switchUniqueMode();
+                uniqueButton.setText(single ? "Unique" : "All");
+            }
+        });
+
+        final Button helpButton = (Button) findViewById(R.id.help_button);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog dialog = new AlertDialog.Builder(SearchActivity.this)
+                        .setTitle("Help")
+                        .setMessage("name -> String\n" +
+                                "simpleName -> String\n" +
+                                "otherPart -> StringArray\n" +
+                                "partIndex -> Integer\n" +
+                                "isSplit -> Boolean\n" +
+                                "isDoubleFaced -> Boolean\n" +
+                                "isMDFC -> Boolean\n" +
+                                "isFlip -> Boolean\n" +
+                                "isAdventure -> Boolean\n" +
+                                "isLegendary -> Boolean\n" +
+                                "isFun -> Boolean\n" +
+                                "types -> StringArray\n" +
+                                "subTypes -> StringArray\n" +
+                                "superTypes -> StringArray\n" +
+                                "mana -> String\n" +
+                                "value -> Integer\n" +
+                                "colorIndicator -> String\n" +
+                                "power -> String\n" +
+                                "toughness -> String\n" +
+                                "loyalty -> String\n" +
+                                "text -> String\n" +
+                                "rules -> String\n" +
+                                "legal -> StringArray\n" +
+                                "restricted -> StringArray\n" +
+                                "banned -> StringArray\n" +
+                                "reserved -> Boolean\n" +
+                                "reprintTimes -> Integer\n" +
+                                "\n" +
+                                "multiverseid -> Integer\n" +
+                                "set -> String\n" +
+                                "code -> String\n" +
+                                "folder -> String\n" +
+                                "number -> String\n" +
+                                "flavor -> String\n" +
+                                "artist -> String\n" +
+                                "rarity -> String\n" +
+                                "watermark -> String\n" +
+                                "picture -> String\n" +
+                                "sameIndex -> Integer\n" +
+                                "formatedNumber -> String\n" +
+                                "setOrder -> Integer\n" +
+                                "reprintIndex -> Integer\n" +
+                                "\n" +
+                                "function string_contains(s, str)\n" +
+                                "function string_contains_case(s, str)\n" +
+                                "function table_contains_str(t, str)\n" +
+                                "function table_contains_str_case(t, str)\n" +
+                                "function table_contains(t, element)\n" +
+                                "function table_contains_case(t, element)").show();
+            }
+        });
+
+        final Button cleanButton = (Button) findViewById(R.id.clear_button);
         cleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -457,18 +526,8 @@ public class SearchActivity extends Activity {
             }
         });
 
-        final Button singleButton = (Button) findViewById(R.id.single_button);
-        singleButton.setText(CardAnalyzer.getSingleMode() ? "Unique" : "All");
-        singleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean single = CardAnalyzer.switchSingleMode();
-                singleButton.setText(single ? "Unique" : "All");
-            }
-        });
-
         int[] buttons = {
-                R.id.search_text_button,
+                R.id.search_name_button,
                 R.id.return_button,
                 R.id.space_button,
                 R.id.left_button,
@@ -483,6 +542,8 @@ public class SearchActivity extends Activity {
                 R.id.lesser_equal_button,
                 R.id.not_equal_button,
                 R.id.quote_button,
+                R.id.apos_button,
+                R.id.comma_button,
                 R.id.white_button,
                 R.id.blue_button,
                 R.id.black_button,
@@ -490,12 +551,12 @@ public class SearchActivity extends Activity {
                 R.id.green_button,
                 R.id.colors_button,
                 R.id.multicolor_button,
-                R.id.number_button,
                 R.id.text_button,
                 R.id.mana_button,
                 R.id.value_button,
                 R.id.name_button,
                 R.id.flavor_button,
+                R.id.clean_button,
                 R.id.creature_button,
                 R.id.instant_button,
                 R.id.sorcery_button,
@@ -504,35 +565,43 @@ public class SearchActivity extends Activity {
                 R.id.artifact_button,
                 R.id.planeswalker_button,
                 R.id.tribal_button,
+                R.id.permanent_button,
                 R.id.power_button,
                 R.id.toughness_button,
                 R.id.loyalty_button,
                 R.id.pn_button,
                 R.id.tn_button,
                 R.id.ln_button,
+                R.id.has_button,
                 R.id.hasname_button,
                 R.id.hastext_button,
                 R.id.containstype_button,
+                R.id.hastype_button,
                 R.id.legendary_button,
                 R.id.cw_button,
                 R.id.cu_button,
                 R.id.cb_button,
                 R.id.cr_button,
                 R.id.cg_button,
+                R.id.ccolors_button,
                 R.id.common_button,
                 R.id.uncommon_button,
                 R.id.rare_button,
                 R.id.mythic_button,
+                R.id.reprint_index_button,
                 R.id.part_index_button,
                 R.id.double_button,
                 R.id.split_button,
                 R.id.flip_button,
-                R.id.set_button,
+                R.id.number_button,
                 R.id.code_button,
+                R.id.set_button,
                 R.id.artist_button,
                 R.id.watermark_button,
+                R.id.id_button,
                 R.id.string_contains_button,
                 R.id.string_contains_case_button,
+                R.id.count_str_button,
                 R.id.table_contains_str_button,
                 R.id.table_contains_str_case_button,
         };

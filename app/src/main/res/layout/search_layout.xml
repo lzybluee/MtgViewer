@@ -29,16 +29,22 @@
             android:text="Edition" />
 
         <Button
-            android:id="@+id/single_button"
+            android:id="@+id/unique_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1+" />
 
         <Button
-            android:id="@+id/clean_button"
+            android:id="@+id/help_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Clean" />
+            android:text="Help" />
+
+        <Button
+            android:id="@+id/clear_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear" />
 
     </LinearLayout>
 
@@ -61,7 +67,7 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/search_text_button"
+            android:id="@+id/search_name_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" @ "
@@ -172,6 +178,20 @@
             android:text=" &quot; "
             android:hint="&quot;" />
 
+        <Button
+            android:id="@+id/apos_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" &apos; "
+            android:hint="&apos;" />
+
+        <Button
+            android:id="@+id/comma_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" , "
+            android:hint=" , " />
+
     </LinearLayout>
 
     <LinearLayout
@@ -235,12 +255,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/number_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Number"
-            android:hint="number" />
 
         <Button
             android:id="@+id/text_button"
@@ -276,6 +290,13 @@
             android:layout_height="wrap_content"
             android:text="Flavor"
             android:hint="flavor" />
+
+        <Button
+            android:id="@+id/clean_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clean Text"
+            android:hint="clean" />
 
     </LinearLayout>
 
@@ -347,6 +368,13 @@
             android:text="Tribal"
             android:hint="t" />
 
+        <Button
+            android:id="@+id/permanent_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Permanent"
+            android:hint="permanent" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -404,6 +432,13 @@
         android:layout_height="wrap_content">
 
         <Button
+            android:id="@+id/has_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="has"
+            android:hint="has(" />
+
+        <Button
             android:id="@+id/hasname_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -423,6 +458,13 @@
             android:layout_height="wrap_content"
             android:text="containstype"
             android:hint="containstype(" />
+
+        <Button
+            android:id="@+id/hastype_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="hastype"
+            android:hint="hastype(" />
 
     </LinearLayout>
 
@@ -473,6 +515,13 @@
             android:text="CG"
             android:hint="cg"/>
 
+        <Button
+            android:id="@+id/ccolors_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CColors"
+            android:hint="ccolors"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -516,11 +565,18 @@
         android:layout_height="wrap_content">
 
         <Button
+            android:id="@+id/reprint_index_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reprint"
+            android:hint="reprint" />
+
+        <Button
             android:id="@+id/part_index_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Part Index"
-            android:hint="partIndex" />
+            android:text="Part"
+            android:hint="part" />
 
         <Button
             android:id="@+id/double_button"
@@ -534,14 +590,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Split"
-            android:hint="split" />
+            android:hint="isSplit" />
 
         <Button
             android:id="@+id/flip_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Flip"
-            android:hint="flip" />
+            android:hint="isFlip" />
 
     </LinearLayout>
 
@@ -551,11 +607,11 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/set_button"
+            android:id="@+id/number_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Set"
-            android:hint="set" />
+            android:text="Number"
+            android:hint="number" />
 
         <Button
             android:id="@+id/code_button"
@@ -563,6 +619,13 @@
             android:layout_height="wrap_content"
             android:text="Code"
             android:hint="code" />
+
+        <Button
+            android:id="@+id/set_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set"
+            android:hint="set" />
 
         <Button
             android:id="@+id/artist_button"
@@ -577,6 +640,13 @@
             android:layout_height="wrap_content"
             android:text="Watermark"
             android:hint="watermark" />
+
+        <Button
+            android:id="@+id/id_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ID"
+            android:hint="id" />
 
     </LinearLayout>
 
@@ -598,6 +668,13 @@
             android:layout_height="wrap_content"
             android:text="string_contains_case"
             android:hint="string_contains_case(" />
+
+        <Button
+            android:id="@+id/count_str_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="count_str"
+            android:hint="count_str(" />
 
     </LinearLayout>
 
