@@ -981,14 +981,15 @@ public class CardAnalyzer {
         if (includeOther) {
             Vector<String> whole = new Vector<>();
             for (String result : results) {
-                if (result.contains("a.jpg") && !result.contains("Ancient/") && !result.contains("/UST/") &&
-                        !result.contains("/CHR/") && !result.contains("/ME4/")) {
+                if (result.contains("a.jpg") && !result.contains("Ancient/") &&
+                        !result.contains("/UST/") && !result.contains("/CHR/") && !result.contains("/ME4/") &&
+                        !result.contains("/BFZ/") && !result.contains("/OGW/") && !result.contains("/ZEN/")) {
                     if (!whole.contains(result)) {
                         whole.add(result);
                         whole.add(result.replace("a.jpg", "b.jpg"));
                     }
-                } else if (result.contains("b.jpg") && !result.contains("Ancient/") && !result.contains("/UST/") &&
-                        !result.contains("/CHR/") && !result.contains("/ME4/")) {
+                } else if (result.contains("b.jpg") && !result.contains("Ancient/") &&
+                        !result.contains("/UST/") && !result.contains("/CHR/") && !result.contains("/ME4/")) {
                     if (!whole.contains(result)) {
                         whole.add(result);
                         whole.add(result.replace("b.jpg", "a.jpg"));
