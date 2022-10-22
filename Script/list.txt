@@ -117,6 +117,10 @@ Limited Edition Alpha,Ancient/LEA,LEA
 Modern Horizons 2,Modern/MH2,MH2
 Modern Horizons,Modern/MH1,MH1
 
+M19 Gift Pack,Modern/G18,G18
+Welcome Deck 2017,Modern/W17,W17
+Welcome Deck 2016,Modern/W16,W16
+
 Commander Legends,Commander/CMR,CMR
 Commander 2021,Commander/C21,C21
 Commander 2020,Commander/C20,C20
@@ -182,10 +186,6 @@ Commander's Arsenal,Commander/CM1,CM1
 RNA Guild Kit,Supplemental/GK2,GK2
 GRN Guild Kit,Supplemental/GK1,GK1
 Explorers of Ixalan,Supplemental/E02,E02
-
-M19 Gift Pack,Modern/G18,G18
-Welcome Deck 2017,Modern/W17,W17
-Welcome Deck 2016,Modern/W16,W16
 
 Duel Decks: Elves vs. Inventors,Reprint/DDU,DDU
 Duel Decks: Merfolk vs. Goblins,Reprint/DDT,DDT
