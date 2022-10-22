@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
     public static String urlInfo = "";
     Gallery mGallery;
     Vector<String> mCardPath = new Vector<>();
-    int mSort = SORT_SHUFFLE;
+    static int mSort = SORT_SHUFFLE;
     boolean mSelect = false;
     String mSets = "";
     String[] mMiscSets = null;
@@ -57,7 +57,7 @@ public class MainActivity extends Activity {
     String mProcessSet;
     int mLoadCards;
     boolean mStop;
-    boolean mChinese = false;
+    static boolean mChinese = false;
 
     public static List<File> ListFiles(File file) {
         File[] listFiles = file.listFiles();
