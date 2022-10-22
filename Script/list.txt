@@ -183,9 +183,9 @@ RNA Guild Kit,Supplemental/GK2,GK2
 GRN Guild Kit,Supplemental/GK1,GK1
 Explorers of Ixalan,Supplemental/E02,E02
 
-M19 Gift Pack,Special/G18,G18
-Welcome Deck 2017,Special/W17,W17
-Welcome Deck 2016,Special/W16,W16
+M19 Gift Pack,Modern/G18,G18
+Welcome Deck 2017,Modern/W17,W17
+Welcome Deck 2016,Modern/W16,W16
 
 Duel Decks: Elves vs. Inventors,Reprint/DDU,DDU
 Duel Decks: Merfolk vs. Goblins,Reprint/DDT,DDT
