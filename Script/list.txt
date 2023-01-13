@@ -141,6 +141,8 @@ Planechase 2012,Supplemental/PC2,PC2
 Game Night 2019,Supplemental/GN2,GN2
 Game Night,Supplemental/GNT,GNT
 
+New Capenna Commander,Commander/NCC,NCC
+Neon Dynasty Commander,Commander/NEC,NEC
 Crimson Vow Commander,Commander/VOC,VOC
 Midnight Hunt Commander,Commander/MIC,MIC
 Forgotten Realms Commander,Commander/AFC,AFC
