@@ -309,13 +309,12 @@ public class MainActivity extends Activity {
         menu.add(Menu.NONE, 4, 5, "Sort");
         menu.add(Menu.NONE, 5, 6, "Select");
         menu.add(Menu.NONE, 6, 7, "Done");
-        menu.add(Menu.NONE, 7, 8, "Bundle");
-        menu.add(Menu.NONE, 8, 9, "Token");
+        menu.add(Menu.NONE, 7, 8, "Token");
         for (int i = 0; i < CardParser.SetList.length; i++) {
-            menu.add(Menu.NONE, i + 9, i + 10, CardParser.SetList[i][0]);
+            menu.add(Menu.NONE, i + 8, i + 9, CardParser.SetList[i][0]);
         }
         for (int i = 0; i < mMiscSets.length; i++) {
-            menu.add(Menu.NONE, i + CardParser.SetList.length + 9, i + CardParser.SetList.length + 10,
+            menu.add(Menu.NONE, i + CardParser.SetList.length + 8, i + CardParser.SetList.length + 9,
                     mMiscSets[i].substring(mMiscSets[i].lastIndexOf("/") + 1));
         }
         for (int i = 0; i < menu.size(); i++) {
@@ -365,13 +364,11 @@ public class MainActivity extends Activity {
                 init(mSets);
             }
         } else if (n == 7) {
-            CardBundle.showDialog(this);
-        } else if (n == 8) {
             init("Token");
-        } else if (n <= 8 + CardParser.SetList.length) {
-            init(CardParser.SetList[n - 9][1]);
+        } else if (n <= 7 + CardParser.SetList.length) {
+            init(CardParser.SetList[n - 8][1]);
         } else {
-            init(mMiscSets[n - 9 - CardParser.SetList.length]);
+            init(mMiscSets[n - 8 - CardParser.SetList.length]);
         }
 
         return false;
