@@ -305,7 +305,7 @@ public class MainActivity extends Activity {
         menu.add(Menu.NONE, 0, 1, "All");
         menu.add(Menu.NONE, 1, 2, "Modern");
         menu.add(Menu.NONE, 2, 3, "Search");
-        menu.add(Menu.NONE, 3, 4, "Chinese");
+        menu.add(Menu.NONE, 3, 4, "Language");
         menu.add(Menu.NONE, 4, 5, "Sort");
         menu.add(Menu.NONE, 5, 6, "Select");
         menu.add(Menu.NONE, 6, 7, "Done");
