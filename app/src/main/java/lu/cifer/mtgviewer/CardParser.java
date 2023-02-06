@@ -48,7 +48,7 @@ public class CardParser {
         }
 
         String fileName = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf("."));
-        Pattern pattern = Pattern.compile("([^\\d]*)0*(\\d+)([^\\d]*)");
+        Pattern pattern = Pattern.compile("(\\D*)0*(\\d+)(\\D*)");
         Matcher matcher = pattern.matcher(fileName);
 
         String num;

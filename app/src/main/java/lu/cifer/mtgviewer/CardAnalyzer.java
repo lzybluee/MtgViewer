@@ -253,8 +253,8 @@ public class CardAnalyzer {
     }
 
     private static boolean nearlyEquals(String str1, String str2) {
-        String s1 = str1.toLowerCase().replaceAll("[^a-z0-9]", "");
-        String s2 = str2.toLowerCase().replaceAll("[^a-z0-9]", "");
+        String s1 = str1.toLowerCase().replaceAll("[^a-z\\d]", "");
+        String s2 = str2.toLowerCase().replaceAll("[^a-z\\d]", "");
 
         if (s1.equals(s2)) {
             return true;
@@ -292,7 +292,7 @@ public class CardAnalyzer {
     }
 
     private static String getFormattedNumber(String name) {
-        Pattern pattern = Pattern.compile("([^\\d]*)(\\d+)([^\\d]*)");
+        Pattern pattern = Pattern.compile("(\\D*)(\\d+)(\\D*)");
         Matcher matcher = pattern.matcher(name);
 
         if (matcher.find()) {
