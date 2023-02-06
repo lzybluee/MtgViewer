@@ -47,6 +47,7 @@ public class CardAnalyzer {
     static boolean unique = true;
     static boolean includeOther = false;
     static boolean showResults = false;
+    static boolean tokenSearch = false;
 
     static Comparator<ReprintInfo> editionComparator = new Comparator<ReprintInfo>() {
         @Override
@@ -740,6 +741,8 @@ public class CardAnalyzer {
     }
 
     public static void setFilter(String sets) {
+        tokenSearch = "Token".equals(sets);
+
         if (sets == null || sets.equals("")) {
             filterString = "All";
             filter.clear();
