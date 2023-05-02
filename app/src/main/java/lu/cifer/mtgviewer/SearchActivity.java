@@ -378,10 +378,10 @@ public class SearchActivity extends Activity {
         });
 
         final Button otherButton = findViewById(R.id.other_button);
-        otherButton.setText(CardAnalyzer.getIncludeOther() ? "Other" : "Face");
+        otherButton.setText(CardAnalyzer.getIncludeOther() ? "Card" : "Face");
         otherButton.setOnClickListener(view -> {
             boolean other = CardAnalyzer.switchIncludeOther();
-            otherButton.setText(other ? "Other" : "Face");
+            otherButton.setText(other ? "Card" : "Face");
         });
 
         final Button cleanButton = findViewById(R.id.clear_button);

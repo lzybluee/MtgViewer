@@ -44,8 +44,8 @@ public class CardAnalyzer {
     static boolean stop;
     static Vector<ReprintInfo> resultCards;
     static String lastCode;
-    static boolean unique = true;
-    static boolean includeOther = false;
+    static boolean unique = false;
+    static boolean includeOther = true;
     static boolean showResults = false;
     static boolean tokenSearch = false;
 
