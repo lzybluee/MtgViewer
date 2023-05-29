@@ -118,7 +118,8 @@ end
 
 pn = str_to_number(power)
 tn = str_to_number(toughness)
-ln = str_to_number(loyalty)
+
+ln = tonumber(loyalty) or 0
 
 common = (rarity == "Common")
 uncommon = (rarity == "Uncommon")

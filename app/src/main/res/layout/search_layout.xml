@@ -174,8 +174,8 @@
             android:id="@+id/not_equal_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" != "
-            android:hint=" != " />
+            android:text=" ~= "
+            android:hint=" ~= " />
 
         <Button
             android:id="@+id/quote_button"
