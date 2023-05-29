@@ -116,9 +116,9 @@ function containstype(str)
 	return table_contains_str(types, str) or table_contains_str(subTypes, str) or table_contains_str(superTypes, str)
 end
 
-pn = tonumber(power)
-tn = tonumber(toughness)
-ln = tonumber(loyalty)
+pn = str_to_number(power)
+tn = str_to_number(toughness)
+ln = str_to_number(loyalty)
 
 common = (rarity == "Common")
 uncommon = (rarity == "Uncommon")

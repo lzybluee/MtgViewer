@@ -60,7 +60,7 @@ public class LuaScript {
 
     public static int checkCard(CardAnalyzer.ReprintInfo reprint, String script) {
         initCard(reprint.card, reprint);
-        output = runScript(composeScript(script), MainActivity.SDPath + "/MTG/Script/card.lua");
+        output = runScript(reprint.picture + " : " + composeScript(script), MainActivity.SDPath + "/MTG/Script/card.lua");
         return getResult();
     }
 

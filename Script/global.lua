@@ -73,8 +73,27 @@ function count_str(s, str)
 	if(not s) then
 		return 0
 	end
-	for _,_ in string.gmatch(s, str) do
+	for _, _ in string.gmatch(s, str) do
 		n = n + 1
+	end
+	return n
+end
+
+function str_to_number(str)
+	if(not str) then
+		return 0
+	end
+	n = tonumber(str)
+	if(not n) then
+		if(str == '*' or string.find(str, '%^')) then
+			return 0
+		elseif(string.find(str, '%*') == 1) then
+			s = string.gsub(str, '%*', '')
+			return tonumber(s)
+		else
+			s = string.gsub(str, '[-+*]', '')
+			return tonumber(s)
+		end
 	end
 	return n
 end
