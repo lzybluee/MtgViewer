@@ -43,8 +43,10 @@ public class CardParser {
             String s = url.substring(0, url.lastIndexOf("/"));
             s = s.substring(s.lastIndexOf("/") + 1);
             file = loadOracle(s);
-        } else if (!file.exists()) {
-            return url;
+        }
+
+        if (file == null || !file.exists()) {
+            return url.substring((MainActivity.SDPath + "/MTG/").length());
         }
 
         String fileName = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf("."));
@@ -55,11 +57,10 @@ public class CardParser {
         if (matcher.find()) {
             num = matcher.group(1) + matcher.group(2) + matcher.group(3);
         } else {
-            return url;
+            return url.substring((MainActivity.SDPath + "/MTG/").length());
         }
 
-        StringBuilder card = new StringBuilder(url.substring(MainActivity.SDPath.toString().length())
-                + "\n\n");
+        StringBuilder card = new StringBuilder(url.substring((MainActivity.SDPath + "/MTG/").length()) + "\n\n");
 
         if (justRule) {
             card = new StringBuilder();
