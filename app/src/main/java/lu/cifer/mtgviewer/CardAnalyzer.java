@@ -363,6 +363,12 @@ public class CardAnalyzer {
             if (left.multiverseId == right.multiverseId) {
                 return left.formattedNumber.compareTo(right.formattedNumber);
             }
+            if (left.multiverseId == 0) {
+                return 1;
+            }
+            if (right.multiverseId == 0) {
+                return -1;
+            }
             return left.multiverseId - right.multiverseId;
         });
     }
